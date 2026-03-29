@@ -180,6 +180,7 @@ td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--te
     <a href="#week-1-summary">Week 1 Summary</a>
     <a href="#after-week-1">After Week 1</a>
     <a href="#html-widgets">HTML Widgets</a>
+    <a href="#n8n-workflows">N8N Workflows</a>
     <a href="#folder-structure">Folder Structure</a>
   </nav>
   <div class="sb-label" style="margin-top:24px;">All Docs</div>
@@ -204,6 +205,7 @@ td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--te
   <a href="#week-1-summary">Week 1 Summary</a>
   <a href="#after-week-1">After Week 1</a>
   <a href="#html-widgets">HTML Widgets</a>
+  <a href="#n8n-workflows">N8N Workflows</a>
   <a href="#folder-structure">Folder Structure</a>
 </nav>
 
@@ -561,6 +563,114 @@ CREATE INDEX idx_my_items_is_active ON my_items(is_active);</code></pre>
   <li><code>projects/safegroup/.../ashp_checklist_report.html</code></li>
   <li><code>projects/Waterade/.../service_report_template.html</code></li>
   <li><code>projects/SEC Datacom/email_templates/job_scheduled_reseller_template.html</code></li>
+</ul>
+
+<hr>
+
+<!-- ─────────────────────── -->
+<h2 id="n8n-workflows">N8N Workflows</h2>
+
+<p>FieldProxy uses <strong>N8N</strong> (self-hosted workflow automation) for everything that happens <em>outside</em> the JSON views &mdash; PDF generation, email processing, external integrations, and scheduled jobs.</p>
+
+<h3>What N8N Does in FieldProxy</h3>
+
+<table>
+  <thead><tr><th>Category</th><th>What it does</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td><strong>PDF Generation</strong></td><td>Fetch data from DB, inject into HTML template, render PDF, store/return URL</td><td>Quote PDFs, ASHP/MPHW checklist reports, service reports</td></tr>
+    <tr><td><strong>Email Processing</strong></td><td>IMAP polling, thread parsing, AI draft generation, inbound/outbound routing</td><td>Safegroup enquiry email conversations</td></tr>
+    <tr><td><strong>External Integration</strong></td><td>Sync data between FieldProxy and external systems via webhooks/APIs</td><td>Freshdesk ticket sync, cloud image upload</td></tr>
+    <tr><td><strong>Notifications</strong></td><td>Send emails, SMS, or push notifications triggered by app actions</td><td>Job scheduled notification to reseller</td></tr>
+    <tr><td><strong>Scheduled Jobs</strong></td><td>Cron-based tasks &mdash; data cleanup, report generation, status updates</td><td>Daily attendance summary, overdue job alerts</td></tr>
+  </tbody>
+</table>
+
+<h3>How N8N Connects to FieldProxy</h3>
+
+<p>The typical flow:</p>
+
+<ol>
+  <li>User clicks a button in a FieldProxy view (e.g., &ldquo;Generate PDF&rdquo;)</li>
+  <li>The button&rsquo;s <code>onclick</code> triggers an <code>api_call</code> action to an N8N webhook URL</li>
+  <li>N8N receives the request, runs the workflow (DB queries, HTML templating, API calls)</li>
+  <li>N8N returns the result (PDF URL, success status) back to FieldProxy</li>
+  <li>FieldProxy shows the result (opens PDF, shows toast, refreshes data)</li>
+</ol>
+
+<pre><code>// FieldProxy button onclick → triggers N8N
+{
+  "type": "api_call",
+  "url": "https://your-n8n.com/webhook/generate-quote-pdf",
+  "method": "POST",
+  "body": {
+    "quote_id": "{{arguments.quote_id}}"
+  },
+  "element_id": "trigger_pdf_gen"
+}</code></pre>
+
+<h3>PDF Generation Pattern (Most Common)</h3>
+
+<p>Every PDF workflow follows the same 4-step pattern:</p>
+
+<ol>
+  <li><strong>Webhook trigger</strong> &mdash; receives entity ID (quote_id, visit_id, etc.)</li>
+  <li><strong>PostgreSQL query</strong> &mdash; fetches all data needed for the PDF</li>
+  <li><strong>HTML template</strong> &mdash; JavaScript code node builds HTML string with data injected</li>
+  <li><strong>PDF render + return</strong> &mdash; converts HTML to PDF, uploads to storage, returns URL</li>
+</ol>
+
+<p><strong>Reference workflows in the codebase:</strong></p>
+
+<table>
+  <thead><tr><th>Workflow</th><th>What it generates</th><th>File</th></tr></thead>
+  <tbody>
+    <tr><td>Generate Quote PDF</td><td>Customer quote with line items, T&amp;C, branding</td><td><code>projects/safegroup/Steve Electricals/generate_quote_pdf_n8n_workflow.json</code></td></tr>
+    <tr><td>ASHP Checklist Report</td><td>Commissioning checklist PDF (A4, multi-section)</td><td><code>projects/safegroup/.../ashp_checklist_n8n_workflow.json</code></td></tr>
+    <tr><td>MPHW Checklist Report</td><td>Hot water commissioning PDF</td><td><code>projects/safegroup/.../mphw_checklist_n8n_workflow.json</code></td></tr>
+    <tr><td>Service Report</td><td>Waterade service report with brand theme</td><td><code>projects/Waterade/.../n8n_service_report_workflow.json</code></td></tr>
+    <tr><td>Ticket Sync + Images</td><td>Freshdesk → FieldProxy with cloud image upload</td><td><code>projects/EMI Clean/workflow/ticket_creation_with_image_storage.json</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Email Processing Pattern (Safegroup)</h3>
+
+<p>The Safegroup enquiry system uses N8N for full email lifecycle:</p>
+
+<table>
+  <thead><tr><th>Workflow</th><th>What it does</th><th>File</th></tr></thead>
+  <tbody>
+    <tr><td>IMAP Polling</td><td>Checks inbox every 5 min, extracts new emails</td><td><code>n8n_smtp_polling_workflow.json</code></td></tr>
+    <tr><td>Inbound Email</td><td>Parses sender, matches to customer/enquiry, stores in DB</td><td><code>n8n_inbound_email_workflow.json</code></td></tr>
+    <tr><td>Thread Detection</td><td>Parses email thread history, deduplicates, routes inbound vs outbound</td><td><code>n8n_thread_detection_nodes.json</code></td></tr>
+    <tr><td>AI Draft</td><td>Generates reply draft using AI based on enquiry context</td><td><code>n8n_ai_draft_workflow.json</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Key Lessons from N8N Development</h3>
+
+<ul>
+  <li><strong>Always COALESCE</strong> &mdash; NULL values in N8N break JavaScript expressions. Wrap every column with <code>COALESCE(col, '')</code></li>
+  <li><strong>SQL escape <code>$</code> signs</strong> &mdash; PostgreSQL&rsquo;s pg library interprets <code>$N</code> as parameter placeholders. Use <code>CHR(36)</code> for literal <code>$</code> in dynamic SQL</li>
+  <li><strong>Encoding issues</strong> &mdash; Outlook emails use Windows-1252. Add <code>fixEncoding()</code> to handle mojibake from UTF-8/Latin-1 mismatch</li>
+  <li><strong>Webhook response</strong> &mdash; Always use &ldquo;Respond to Webhook&rdquo; node at the end, not just the workflow finishing</li>
+  <li><strong>Error handling</strong> &mdash; Add an error handler workflow for production N8N instances (see EMI Clean&rsquo;s <code>error_handler_workflow.json</code>)</li>
+</ul>
+
+<h3>HTML Templates for PDFs</h3>
+
+<p>PDF templates are standard HTML/CSS files (not FieldProxy JSON). They use:</p>
+<ul>
+  <li><code>@page { size: A4; margin: 12mm; }</code> for print sizing</li>
+  <li>Standard CSS for styling (flexbox, tables, colors)</li>
+  <li>Placeholder variables like <code>{{ $json.quote_number }}</code> injected by N8N code node</li>
+  <li>Checkbox pattern: <code>&lt;span class="cb checked"&gt;&lt;/span&gt;</code> for yes/no fields</li>
+</ul>
+
+<p><strong>Template examples:</strong></p>
+<ul>
+  <li><code>projects/safegroup/.../ashp_checklist_report.html</code> &mdash; A4 commissioning checklist</li>
+  <li><code>projects/Waterade/.../service_report_template.html</code> &mdash; branded service report</li>
+  <li><code>projects/SEC Datacom/email_templates/job_scheduled_reseller_template.html</code> &mdash; email notification</li>
 </ul>
 
 <hr>
