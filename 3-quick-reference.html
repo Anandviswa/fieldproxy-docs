@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Reference — FieldProxy Docs</title>
+<link rel="icon" href="https://www.fieldproxy.ai/images/design-mode/Favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --text: #1a1a2e;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --border: #e2e8f0;
+  --bg: #ffffff;
+  --bg-subtle: #f7fafc;
+  --bg-code: #0f172a;
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --sidebar-w: 240px;
+  --toc-w: 200px;
+  --content-max: 720px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 24px 0;
+  z-index: 50;
+  font-size: 14px;
+}
+.sidebar::-webkit-scrollbar { width: 0; }
+.sb-brand { display: flex; align-items: center; gap: 8px; padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.sb-brand img { width: 20px; height: 20px; border-radius: 4px; }
+.sb-brand span { font-weight: 700; font-size: 13px; color: var(--text); letter-spacing: .3px; }
+.sb-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: 16px 20px 6px; }
+.sb-nav a {
+  display: block; padding: 6px 20px; color: var(--text-secondary); text-decoration: none;
+  font-size: 13.5px; font-weight: 500; transition: color .15s;
+}
+.sb-nav a:hover { color: var(--text); }
+.sb-nav a.active { color: var(--blue); font-weight: 600; }
+
+/* ── Right TOC ── */
+.toc {
+  position: fixed; top: 80px; right: max(24px, calc((100vw - var(--sidebar-w) - var(--content-max) - var(--toc-w)) / 2));
+  width: var(--toc-w);
+  font-size: 12.5px;
+  z-index: 40;
+}
+.toc-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px; }
+.toc a {
+  display: block; padding: 4px 0 4px 12px; color: var(--text-muted); text-decoration: none;
+  border-left: 2px solid var(--border); transition: all .15s; font-weight: 500;
+}
+.toc a:hover { color: var(--text-secondary); }
+.toc a.active { color: var(--blue); border-left-color: var(--blue); font-weight: 600; }
+
+/* ── Main content ── */
+.main {
+  margin-left: var(--sidebar-w);
+  max-width: var(--content-max);
+  padding: 48px 40px 120px;
+}
+
+/* ── Typography ── */
+h1 { font-size: 32px; font-weight: 800; letter-spacing: -.5px; color: var(--text); margin-bottom: 8px; }
+.page-desc { font-size: 16px; color: var(--text-muted); margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+h2 { font-size: 22px; font-weight: 700; color: var(--text); margin: 56px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); letter-spacing: -.3px; }
+h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 32px 0 12px; }
+p { margin-bottom: 16px; color: var(--text-secondary); }
+strong { color: var(--text); font-weight: 600; }
+em { font-style: italic; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+ul, ol { margin: 0 0 16px 24px; color: var(--text-secondary); }
+li { margin-bottom: 6px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+/* ── Code ── */
+code {
+  font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 500;
+  background: var(--bg-subtle); padding: 2px 6px; border-radius: 4px; color: var(--red);
+}
+pre {
+  background: var(--bg-code); color: #e2e8f0; padding: 20px 24px; border-radius: 8px;
+  overflow-x: auto; margin: 16px 0 20px; font-size: 13.5px; line-height: 1.6;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* ── Tables ── */
+table { width: 100%; border-collapse: collapse; margin: 16px 0 20px; font-size: 14px; }
+th { text-align: left; padding: 10px 16px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); border-bottom: 2px solid var(--border); background: var(--bg-subtle); }
+td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+
+/* ── Callouts ── */
+.callout { padding: 14px 18px; border-radius: 6px; margin: 20px 0; font-size: 14.5px; line-height: 1.6; border-left: 3px solid; }
+.callout-info { background: var(--blue-light); border-color: var(--blue); }
+.callout-warn { background: var(--amber-light); border-color: var(--amber); }
+.callout-danger { background: var(--red-light); border-color: var(--red); }
+.callout p { margin: 0; color: var(--text-secondary); }
+
+/* ── Footer nav ── */
+.footer-nav { display: flex; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+.footer-nav a { flex: 1; padding: 16px; border: 1px solid var(--border); border-radius: 8px; text-decoration: none; transition: border-color .2s; }
+.footer-nav a:hover { border-color: var(--blue); }
+.fn-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+.fn-title { font-size: 14px; color: var(--text); font-weight: 600; margin-top: 2px; }
+
+/* ── Search ── */
+.search-trigger { display:flex; align-items:center; gap:8px; margin:0 12px 12px; padding:8px 12px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:13px; color:var(--text-muted); transition:border-color .15s; }
+.search-trigger:hover { border-color:var(--blue); color:var(--text-secondary); }
+.search-trigger kbd { margin-left:auto; font-family:'Inter',sans-serif; font-size:11px; padding:2px 6px; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text-muted); }
+.search-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:200; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+.search-overlay.open { display:flex; align-items:flex-start; justify-content:center; padding-top:min(20vh,160px); }
+.search-box { background:var(--bg); border:1px solid var(--border); border-radius:12px; width:560px; max-height:480px; display:flex; flex-direction:column; box-shadow:0 16px 48px rgba(0,0,0,.15); overflow:hidden; }
+.search-input-wrap { display:flex; align-items:center; gap:8px; padding:14px 18px; border-bottom:1px solid var(--border); }
+.search-input-wrap svg { flex-shrink:0; color:var(--text-muted); }
+.search-input { flex:1; border:none; outline:none; font-size:15px; font-family:'Inter',sans-serif; color:var(--text); background:transparent; }
+.search-input::placeholder { color:var(--text-muted); }
+.search-results { overflow-y:auto; max-height:380px; padding:8px; }
+.search-results:empty::after { content:'Type to search...'; display:block; padding:24px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-result { display:block; padding:10px 14px; border-radius:6px; text-decoration:none; cursor:pointer; transition:background .1s; }
+.search-result:hover, .search-result.selected { background:var(--blue-light); }
+.search-result-title { font-size:14px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.search-result-context { font-size:12.5px; color:var(--text-muted); line-height:1.4; }
+.search-result-context mark { background:#fef08a; color:var(--text); border-radius:2px; padding:0 1px; }
+.search-empty { padding:32px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-footer { padding:8px 14px; border-top:1px solid var(--border); display:flex; gap:12px; font-size:11px; color:var(--text-muted); }
+.search-footer kbd { font-family:'Inter',sans-serif; font-size:10px; padding:1px 5px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:3px; }
+
+/* ── Responsive ── */
+@media (max-width: 1100px) { .toc { display: none; } }
+@media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 24px 20px 80px; } .search-box { width:calc(100% - 32px); } }
+@media print { .sidebar, .toc, .search-overlay { display: none; } .main { margin-left: 0; max-width: 100%; } }
+</style>
+</head>
+<body>
+
+<!-- Left sidebar -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <img src="https://www.fieldproxy.ai/images/design-mode/Favicon.png" alt="FP">
+    <span>FieldProxy Docs</span>
+  </div>
+  <div class="search-trigger" onclick="openSearch()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    Search...
+    <kbd>⌘K</kbd>
+  </div>
+  <div class="sb-label">Quick Reference</div>
+  <nav class="sb-nav">
+    <a href="#shared" class="active">Shared (Web + Mobile)</a>
+    <a href="#web-widgets">Web Widgets</a>
+    <a href="#mobile-elements">Mobile Elements</a>
+    <a href="#top-10-mistakes">Top 10 Mistakes</a>
+    <a href="#verification-checklist">Verification Checklist</a>
+    <a href="#resources-map">Resources Map</a>
+  </nav>
+  <div class="sb-label" style="margin-top:24px;">All Docs</div>
+  <nav class="sb-nav">
+    <a href="onboarding-guide.html">Home</a>
+    <a href="1-getting-started.html">Getting Started</a>
+    <a href="2-build-guide.html">Build Guide</a>
+    <a href="3-quick-reference.html" class="active">Quick Reference</a>
+  </nav>
+</aside>
+
+<!-- Right TOC -->
+<nav class="toc">
+  <div class="toc-title">On this page</div>
+  <a href="#shared" class="active">Shared (Web + Mobile)</a>
+  <a href="#web-widgets">Web Widgets</a>
+  <a href="#mobile-elements">Mobile Elements</a>
+  <a href="#top-10-mistakes">Top 10 Mistakes</a>
+  <a href="#verification-checklist">Verification Checklist</a>
+  <a href="#resources-map">Resources Map</a>
+</nav>
+
+<!-- Main content -->
+<main class="main">
+
+<h1>Quick Reference</h1>
+<p class="page-desc">Print this or keep it open. Use it every day.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="shared">Shared (Web + Mobile)</h2>
+
+<h3>Action Types</h3>
+
+<table>
+  <thead><tr><th>Type</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td><code>navigation</code></td><td>Go to another view (pass <code>arguments</code>)</td></tr>
+    <tr><td><code>execute_query</code></td><td>Run SQL (INSERT, UPDATE, DELETE)</td></tr>
+    <tr><td><code>popup</code></td><td>Open a popup dialog</td></tr>
+    <tr><td><code>toast</code></td><td>Show success/error/warning message</td></tr>
+    <tr><td><code>confirm</code></td><td>&ldquo;Are you sure?&rdquo; dialog</td></tr>
+    <tr><td><code>update_data</code></td><td>Re-fetch specific data key (preferred)</td></tr>
+    <tr><td><code>refresh_data</code></td><td>Re-fetch all queries on the page</td></tr>
+    <tr><td><code>api_call</code></td><td>Call external API (N8N, webhooks, etc.)</td></tr>
+  </tbody>
+</table>
+
+<h3>Template Expressions</h3>
+
+<table>
+  <thead><tr><th>Pattern</th><th>When to use</th></tr></thead>
+  <tbody>
+    <tr><td><code>{{query_name.data.[0].field}}</code></td><td>Display value from query (first row)</td></tr>
+    <tr><td><code>{{query_name.data.[index].field}}</code></td><td>Inside a list &mdash; current item</td></tr>
+    <tr><td><code>{{arguments.param_name}}</code></td><td>Value passed via navigation</td></tr>
+    <tr><td><code>{{input_data.element_id.0}}</code></td><td>Value from an input field</td></tr>
+    <tr><td><code>{{input_data.element_id.[index]}}</code></td><td>Input inside a list context</td></tr>
+    <tr><td><code>{{rowData.field}}</code></td><td>Inside a table &mdash; current row (web)</td></tr>
+  </tbody>
+</table>
+
+<h3>Database Schema Conventions</h3>
+
+<pre><code>ID:        INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY  (never SERIAL)
+Strings:   TEXT                                               (never VARCHAR)
+Timestamps:TIMESTAMP WITH TIME ZONE                          (never bare TIMESTAMP)
+Decimals:  DOUBLE PRECISION
+Booleans:  BOOLEAN NOT NULL DEFAULT TRUE/FALSE
+Standard:  is_active, delete, deletedat, createdat, updatedat</code></pre>
+
+<hr>
+
+<!-- ─────────────────────── -->
+<h2 id="web-widgets">Web Widgets</h2>
+
+<table>
+  <thead><tr><th>Type</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td><code>container</code></td><td>Box with color, border, padding, border_radius. Width: 1-12 grid</td></tr>
+    <tr><td><code>row</code></td><td>Horizontal layout (set <code>main_axis_alignment</code>). Ignores own <code>width</code></td></tr>
+    <tr><td><code>column</code></td><td>Vertical layout. Ignores own <code>width</code></td></tr>
+    <tr><td><code>text</code></td><td>Display text (<code>font_size</code>, <code>color</code>, <code>font_weight</code>, <code>expanded: true</code>)</td></tr>
+    <tr><td><code>button</code></td><td>btn_type: <code>filled_button</code>, <code>text_button</code>, <code>outlined_button</code>, <code>dropdown_button</code></td></tr>
+    <tr><td><code>input</code></td><td>input_type: <code>text</code>, <code>number</code>, <code>date</code>, <code>dropdown</code>, <code>checkbox</code></td></tr>
+    <tr><td><code>space_widget</code></td><td>Spacing &mdash; add <code>alignment: "horizontal"</code> inside rows</td></tr>
+    <tr><td><code>spacer</code></td><td>Flexible space (pushes items apart in a row)</td></tr>
+    <tr><td><code>gutter</code></td><td>Fixed 16px horizontal gap between row children</td></tr>
+    <tr><td><code>tab_group</code></td><td>Tabbed content</td></tr>
+    <tr><td><code>list</code></td><td>Dynamic list bound to query data</td></tr>
+    <tr><td><code>table</code></td><td>Data table with columns</td></tr>
+    <tr><td><code>popup</code></td><td>Modal dialog</td></tr>
+    <tr><td><code>html_display</code></td><td>Render rich HTML content. <code>data</code> or <code>html</code>, <code>width</code>, <code>height</code>, <code>padding</code></td></tr>
+    <tr><td><code>html_text</code></td><td>HTML &rarr; plain text (strips tags)</td></tr>
+    <tr><td><code>webview</code></td><td>Embed external URL</td></tr>
+    <tr><td><code>pdf</code></td><td>PDF viewer &mdash; <code>pdf_type: "url"</code> with <code>height</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Top 5 Web Rules</h3>
+
+<ol>
+  <li>Every element needs a unique <code>element_id</code></li>
+  <li><code>space_widget</code> in a row needs <code>alignment: "horizontal"</code></li>
+  <li>Use <code>border_color</code> + <code>border_width</code> &mdash; NOT CSS <code>border: "1px solid ..."</code></li>
+  <li><code>row</code> and <code>column</code> ignore their own <code>width</code> &mdash; wrap them in a container</li>
+  <li>onclick keys are numeric strings: <code>"1"</code>, <code>"2"</code>, <code>"3"</code> &mdash; never <code>"1a"</code>, <code>"1b"</code></li>
+</ol>
+
+<hr>
+
+<!-- ─────────────────────── -->
+<h2 id="mobile-elements">Mobile Elements</h2>
+
+<table>
+  <thead><tr><th>Type</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td><code>container</code></td><td>Box with color, padding, border_radius. Use <code>color</code> NOT <code>background_color</code></td></tr>
+    <tr><td><code>row</code></td><td>Horizontal layout. Does NOT support onclick &mdash; wrap in container</td></tr>
+    <tr><td><code>column</code></td><td>Vertical layout</td></tr>
+    <tr><td><code>text</code></td><td>Display text. Use <code>expanded: true</code> for dynamic/long content</td></tr>
+    <tr><td><code>icon</code></td><td>Feather icons. Use <code>icon_size</code>, <code>color</code>, <code>margin_right</code></td></tr>
+    <tr><td><code>input</code></td><td>All web types PLUS: <code>image</code>, <code>signature</code>, <code>mcq</code>, <code>file</code>, <code>location</code>, <code>scan</code></td></tr>
+    <tr><td><code>list</code></td><td>Dynamic list. Set <code>height</code> directly on list for scrolling</td></tr>
+    <tr><td><code>space_widget</code></td><td>Spacing &mdash; vertical by default</td></tr>
+    <tr><td><code>html_display</code></td><td>Render HTML content. Same as web</td></tr>
+    <tr><td><code>webview</code></td><td>Embed external URL</td></tr>
+    <tr><td><code>pdf</code></td><td>PDF viewer</td></tr>
+  </tbody>
+</table>
+
+<h3>Mobile Patterns</h3>
+
+<table>
+  <thead><tr><th>Pattern</th><th>How to do it</th></tr></thead>
+  <tbody>
+    <tr><td>Tappable row</td><td>Wrap <code>row</code> in <code>container</code> with <code>onclick</code></td></tr>
+    <tr><td>Status badge</td><td>Inner container (pill) inside outer with <code>main_axis_size: "min"</code></td></tr>
+    <tr><td>Divider line</td><td>Container <code>height: 1</code>, <code>width: 4000</code>, dummy <code>text</code> child inside</td></tr>
+    <tr><td>Button with icon</td><td>Container &rarr; row (<code>main_axis_size: "min"</code>) &rarr; icon + text</td></tr>
+    <tr><td>Close popup</td><td><code>{ "type": "navigation", "back": true }</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Mobile System Variables</h3>
+
+<table>
+  <thead><tr><th>Variable</th><th>What it returns</th></tr></thead>
+  <tbody>
+    <tr><td><code>&lt;!getUserId()!&gt;</code></td><td>Current logged-in user's ID</td></tr>
+    <tr><td><code>&lt;!getLocation().latitude!&gt;</code></td><td>Device GPS latitude</td></tr>
+    <tr><td><code>&lt;!getLocation().longitude!&gt;</code></td><td>Device GPS longitude</td></tr>
+  </tbody>
+</table>
+
+<h3>Top 5 Mobile Rules</h3>
+
+<ol>
+  <li>Row <code>onclick</code> doesn't work &mdash; wrap in container</li>
+  <li><code>expanded: true</code> only on <code>text</code> &mdash; use it for all dynamic content in rows</li>
+  <li>Badge containers need <code>main_axis_size: "min"</code> wrapper in rows</li>
+  <li>Use <code>navigation</code> + <code>back: true</code> to close popups &mdash; not <code>close_popup</code></li>
+  <li><code>color: "transparent"</code> doesn't work &mdash; just omit the color property</li>
+</ol>
+
+<h3>Mobile Card Spacing</h3>
+
+<table>
+  <thead><tr><th>Element</th><th>Value</th></tr></thead>
+  <tbody>
+    <tr><td>Card padding</td><td>16 all sides</td></tr>
+    <tr><td>Card border_radius</td><td>16</td></tr>
+    <tr><td>Card border</td><td><code>border_color: "#E5E7EB"</code>, <code>border_width: 1</code></td></tr>
+    <tr><td>Section header</td><td>font_size: 11, font_weight: "700", color: "#6B7280"</td></tr>
+    <tr><td>Badge padding</td><td>6 top/bottom, 14 left/right</td></tr>
+    <tr><td>Badge border_radius (pill)</td><td>20</td></tr>
+    <tr><td>Icon-to-text gap</td><td>margin_right: 10-12 on icon</td></tr>
+    <tr><td>Row gap inside card</td><td>margin_bottom: 6-8</td></tr>
+    <tr><td>Button font_size</td><td>11</td></tr>
+    <tr><td>Button padding</td><td>10 top/bottom, 20 left/right</td></tr>
+    <tr><td>Button border_radius (pill)</td><td>24</td></tr>
+    <tr><td>Page margin</td><td>16 all sides</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- ─────────────────────── -->
+<h2 id="top-10-mistakes">Top 10 Repeated Mistakes</h2>
+
+<ol>
+  <li>CSS <code>border</code> doesn't work &mdash; use <code>border_color</code> + <code>border_width</code></li>
+  <li><code>icon_button</code> uses <code>bg_color</code>/<code>color</code>/<code>size</code> &mdash; NOT <code>background_color</code>/<code>icon_color</code></li>
+  <li><code>input_type: "search"</code> doesn't exist &mdash; use <code>"text"</code></li>
+  <li><code>visibility_condition</code> on inputs is ignored &mdash; wrap in container</li>
+  <li><code>expanded: true</code> only works on <code>text</code> &mdash; not containers/buttons</li>
+  <li>Container bg uses <code>color</code> &mdash; NOT <code>background_color</code></li>
+  <li><code>show_if</code> doesn't exist &mdash; use <code>visibility_condition</code></li>
+  <li><code>fixed_height</code> doesn't exist &mdash; use <code>height</code></li>
+  <li><code>type: "divider"</code> doesn't render &mdash; use container with height:1</li>
+  <li><code>input_data</code> keyed by <code>element_id</code> &mdash; NEVER by <code>field_name</code></li>
+</ol>
+
+<hr>
+
+<!-- ─────────────────────── -->
+<h2 id="verification-checklist">Verification Checklist (Run Before Shipping)</h2>
+
+<h3>Web</h3>
+
+<ul>
+  <li>Every element has unique <code>element_id</code></li>
+  <li>No CSS <code>border</code> &mdash; uses <code>border_color</code> + <code>border_width</code></li>
+  <li><code>expanded: true</code> only on <code>text</code></li>
+  <li><code>space_widget</code> in rows has <code>alignment: "horizontal"</code></li>
+  <li>Container backgrounds use <code>color</code>, not <code>background_color</code></li>
+  <li>Data queries are SELECT-only (mutations in <code>execute_query</code>)</li>
+  <li>Popup grid widths scaled for popup size</li>
+  <li><code>grouped_counter_1</code> has all 5 required props</li>
+</ul>
+
+<h3>Mobile</h3>
+
+<ul>
+  <li>Colored badges wrapped with <code>main_axis_size: "min"</code> parent</li>
+  <li>Dynamic text has <code>expanded: true</code></li>
+  <li>Dividers use container + text child pattern</li>
+  <li>Tappable rows wrapped in container with onclick</li>
+  <li>Popup close uses <code>navigation</code> + <code>back: true</code></li>
+  <li>No <code>color: "transparent"</code> (omit property instead)</li>
+  <li>No <code>expanded: true</code> on containers or buttons</li>
+</ul>
+
+<hr>
+
+<!-- ─────────────────────── -->
+<h2 id="resources-map">Resources Map</h2>
+
+<table>
+  <thead><tr><th>Resource</th><th>Path</th></tr></thead>
+  <tbody>
+    <tr><td colspan="2"><strong>Skills &amp; Rules</strong></td></tr>
+    <tr><td>Widget Rules (34 rules)</td><td><code>.claude/skills/fieldproxy-widget-rules.md</code></td></tr>
+    <tr><td>Error Log (86+ bugs)</td><td><code>.claude/skills/fieldproxy-error-log.md</code></td></tr>
+    <tr><td>Mobile Spacing (10 patterns)</td><td><code>.claude/skills/fieldproxy-mobile-spacing.md</code></td></tr>
+    <tr><td>Project Instructions</td><td><code>CLAUDE.md</code></td></tr>
+    <tr><td colspan="2"><strong>Mobile Knowledge</strong></td></tr>
+    <tr><td>Architecture Analysis</td><td><code>Mobile App Knowledge/Mobile_Application_Architecture_Analysis.md</code></td></tr>
+    <tr><td>Component Index</td><td><code>Mobile App Knowledge/Component_JSON_Structure_Index.md</code></td></tr>
+    <tr><td>Input Components</td><td><code>Mobile App Knowledge/Input_Components_JSON_Structure.json</code></td></tr>
+    <tr><td>Display Components</td><td><code>Mobile App Knowledge/Display_Components_JSON_Structure.json</code></td></tr>
+    <tr><td>Layout Components</td><td><code>Mobile App Knowledge/Layout_Components_JSON_Structure.json</code></td></tr>
+    <tr><td>Interactive Components</td><td><code>Mobile App Knowledge/Interactive_Components_JSON_Structure.json</code></td></tr>
+    <tr><td>OnClick Actions</td><td><code>Mobile App Knowledge/OnClick_Actions_JSON_Structure.json</code></td></tr>
+    <tr><td>Composite Examples</td><td><code>Mobile App Knowledge/Composite_Components_JSON_Structure.json</code></td></tr>
+    <tr><td colspan="2"><strong>Reference Apps</strong></td></tr>
+    <tr><td>Safegroup Mobile</td><td><code>projects/safegroup/Safegroup Web App/Mobile App/</code></td></tr>
+    <tr><td>EFS Cleaner</td><td><code>projects/EFS/cleaner app/</code></td></tr>
+    <tr><td>SEC Datacom Mobile</td><td><code>projects/SEC Datacom/Mobile app/</code></td></tr>
+    <tr><td>Chat Samples</td><td><code>Mobile App Knowledge/Mobile App Samples/Chat/</code></td></tr>
+    <tr><td>Web App Samples</td><td><code>Web App Knowledge/samples/</code></td></tr>
+    <tr><td colspan="2"><strong>Library Source Code</strong></td></tr>
+    <tr><td>Flutter Renderer</td><td><code>Web App Knowledge/lib 2/</code></td></tr>
+    <tr><td>HTML Display Widget</td><td><code>Web App Knowledge/lib 2/view/screens/elements/html_display.dart</code></td></tr>
+    <tr><td>PDF Widget</td><td><code>Web App Knowledge/lib 2/view/screens/elements/pdf_widget.dart</code></td></tr>
+    <tr><td>WebView Widget</td><td><code>Web App Knowledge/lib 2/view/screens/elements/web_view_screen.dart</code></td></tr>
+    <tr><td>View Controller</td><td><code>Web App Knowledge/lib 2/view/controllers/view_controller.dart</code></td></tr>
+    <tr><td colspan="2"><strong>HTML Report Templates</strong></td></tr>
+    <tr><td>ASHP Checklist</td><td><code>projects/safegroup/.../ashp_checklist_report.html</code></td></tr>
+    <tr><td>MPHW Checklist</td><td><code>projects/safegroup/.../mphw_checklist_report.html</code></td></tr>
+    <tr><td>Service Report</td><td><code>projects/Waterade/.../service_report_template.html</code></td></tr>
+    <tr><td>Email Template</td><td><code>projects/SEC Datacom/email_templates/job_scheduled_reseller_template.html</code></td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<p><em>Last updated: March 2026</em></p>
+
+<!-- Footer nav -->
+<div class="footer-nav">
+  <a href="2-build-guide.html">
+    <div class="fn-label">&larr; Previous</div>
+    <div class="fn-title">Build Guide</div>
+  </a>
+  <a href="onboarding-guide.html">
+    <div class="fn-label">Home &rarr;</div>
+    <div class="fn-title">All Documentation</div>
+  </a>
+</div>
+
+</main>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search..." autofocus>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+    <div class="search-footer">
+      <span><kbd>↑↓</kbd> Navigate</span>
+      <span><kbd>↵</kbd> Open</span>
+      <span><kbd>Esc</kbd> Close</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const sections = document.querySelectorAll('h2[id]');
+const sideLinks = document.querySelectorAll('.sb-nav a[href^="#"]');
+const tocLinks = document.querySelectorAll('.toc a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  sideLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+  tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+});
+let searchIndex = [];
+function buildIndex() {
+  const main = document.querySelector('.main');
+  let c = 0;
+  main.querySelectorAll('h2, h3, h4').forEach(h => { if (!h.id) h.id = 'search-' + (c++); });
+  main.querySelectorAll('h2, h3, h4').forEach(h => {
+    let text = '';
+    let el = h.nextElementSibling;
+    while (el && !['H2','H3','H4'].includes(el.tagName)) { text += ' ' + el.textContent; el = el.nextElementSibling; }
+    searchIndex.push({ title: h.textContent.trim(), content: text.trim().substring(0, 800), id: h.id, level: h.tagName });
+  });
+}
+buildIndex();
+let selectedIdx = -1;
+function openSearch() { document.getElementById('searchOverlay').classList.add('open'); const i = document.getElementById('searchInput'); i.value=''; i.focus(); document.getElementById('searchResults').innerHTML=''; selectedIdx=-1; }
+function closeSearch() { document.getElementById('searchOverlay').classList.remove('open'); }
+function navigateTo(id) { closeSearch(); const el = document.getElementById(id); if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); el.style.transition='background .3s'; el.style.background='rgba(37,99,235,0.1)'; el.style.borderRadius='4px'; el.style.padding='2px 6px'; el.style.margin='-2px -6px'; setTimeout(()=>{el.style.background='';el.style.padding='';el.style.margin='';},2000); } }
+document.addEventListener('keydown', e => {
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openSearch();}
+  if(e.key==='Escape')closeSearch();
+  if(!document.getElementById('searchOverlay').classList.contains('open'))return;
+  const r=document.querySelectorAll('.search-result');
+  if(e.key==='ArrowDown'){e.preventDefault();selectedIdx=Math.min(selectedIdx+1,r.length-1);updateSel(r);}
+  if(e.key==='ArrowUp'){e.preventDefault();selectedIdx=Math.max(selectedIdx-1,0);updateSel(r);}
+  if(e.key==='Enter'&&selectedIdx>=0&&r[selectedIdx]){const t=r[selectedIdx].getAttribute('data-target');if(t)navigateTo(t);}
+});
+function updateSel(r){r.forEach((x,i)=>x.classList.toggle('selected',i===selectedIdx));if(r[selectedIdx])r[selectedIdx].scrollIntoView({block:'nearest'});}
+document.getElementById('searchInput').addEventListener('input', function(){
+  const q=this.value.toLowerCase().trim(), box=document.getElementById('searchResults'); selectedIdx=-1;
+  if(!q){box.innerHTML='';return;}
+  const m=searchIndex.filter(i=>i.title.toLowerCase().includes(q)||i.content.toLowerCase().includes(q)).slice(0,20);
+  if(!m.length){box.innerHTML='<div class="search-empty">No results for "'+q.replace(/</g,'&lt;')+'"</div>';return;}
+  const esc=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), re=new RegExp('('+esc+')','gi');
+  box.innerHTML=m.map(i=>{
+    let ctx=''; const idx=i.content.toLowerCase().indexOf(q);
+    if(idx>=0){const s=Math.max(0,idx-50),e=Math.min(i.content.length,idx+q.length+80);ctx=(s>0?'...':'')+i.content.substring(s,e).replace(re,'<mark>$1</mark>')+(e<i.content.length?'...':'');}
+    return '<div class="search-result" data-target="'+i.id+'" onclick="navigateTo(\''+i.id+'\')"><div class="search-result-title">'+i.title.replace(re,'<mark>$1</mark>')+'</div>'+(ctx?'<div class="search-result-context">'+ctx+'</div>':'')+'</div>';
+  }).join('');
+});
+</script>
+</body>
+</html>

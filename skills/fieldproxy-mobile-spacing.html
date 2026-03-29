@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Spacing &mdash; FieldProxy Docs</title>
+<link rel="icon" href="https://www.fieldproxy.ai/images/design-mode/Favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --text: #1a1a2e;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --border: #e2e8f0;
+  --bg: #ffffff;
+  --bg-subtle: #f7fafc;
+  --bg-code: #0f172a;
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --sidebar-w: 240px;
+  --toc-w: 200px;
+  --content-max: 720px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 24px 0;
+  z-index: 50;
+  font-size: 14px;
+}
+.sidebar::-webkit-scrollbar { width: 0; }
+.sb-brand { display: flex; align-items: center; gap: 8px; padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.sb-brand img { width: 20px; height: 20px; border-radius: 4px; }
+.sb-brand span { font-weight: 700; font-size: 13px; color: var(--text); letter-spacing: .3px; }
+.sb-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: 16px 20px 6px; }
+.sb-nav a {
+  display: block; padding: 6px 20px; color: var(--text-secondary); text-decoration: none;
+  font-size: 13.5px; font-weight: 500; transition: color .15s;
+}
+.sb-nav a:hover { color: var(--text); }
+.sb-nav a.active { color: var(--blue); font-weight: 600; }
+
+/* ── Right TOC ── */
+.toc {
+  position: fixed; top: 80px; right: max(24px, calc((100vw - var(--sidebar-w) - var(--content-max) - var(--toc-w)) / 2));
+  width: var(--toc-w);
+  font-size: 12.5px;
+  z-index: 40;
+}
+.toc-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px; }
+.toc a {
+  display: block; padding: 4px 0 4px 12px; color: var(--text-muted); text-decoration: none;
+  border-left: 2px solid var(--border); transition: all .15s; font-weight: 500;
+}
+.toc a:hover { color: var(--text-secondary); }
+.toc a.active { color: var(--blue); border-left-color: var(--blue); font-weight: 600; }
+
+/* ── Main content ── */
+.main {
+  margin-left: var(--sidebar-w);
+  max-width: var(--content-max);
+  padding: 48px 40px 120px;
+}
+
+/* ── Typography ── */
+h1 { font-size: 32px; font-weight: 800; letter-spacing: -.5px; color: var(--text); margin-bottom: 8px; }
+.page-desc { font-size: 16px; color: var(--text-muted); margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+h2 { font-size: 22px; font-weight: 700; color: var(--text); margin: 56px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); letter-spacing: -.3px; }
+h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 32px 0 12px; }
+p { margin-bottom: 16px; color: var(--text-secondary); }
+strong { color: var(--text); font-weight: 600; }
+em { font-style: italic; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+ul, ol { margin: 0 0 16px 24px; color: var(--text-secondary); }
+li { margin-bottom: 6px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+/* ── Code ── */
+code {
+  font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 500;
+  background: var(--bg-subtle); padding: 2px 6px; border-radius: 4px; color: var(--red);
+}
+pre {
+  background: var(--bg-code); color: #e2e8f0; padding: 20px 24px; border-radius: 8px;
+  overflow-x: auto; margin: 16px 0 20px; font-size: 13.5px; line-height: 1.6;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* ── Tables ── */
+table { width: 100%; border-collapse: collapse; margin: 16px 0 20px; font-size: 14px; }
+th { text-align: left; padding: 10px 16px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); border-bottom: 2px solid var(--border); background: var(--bg-subtle); }
+td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+
+/* ── Callouts ── */
+.callout { padding: 14px 18px; border-radius: 6px; margin: 20px 0; font-size: 14.5px; line-height: 1.6; border-left: 3px solid; }
+.callout-info { background: var(--blue-light); border-color: var(--blue); }
+.callout-warn { background: var(--amber-light); border-color: var(--amber); }
+.callout-danger { background: var(--red-light); border-color: var(--red); }
+.callout p { margin: 0; color: var(--text-secondary); }
+
+/* ── Checklist ── */
+.checklist { list-style: none; margin-left: 0; padding-left: 0; }
+.checklist li { position: relative; padding-left: 28px; margin-bottom: 8px; }
+.checklist li::before { content: ''; position: absolute; left: 0; top: 6px; width: 16px; height: 16px; border: 2px solid var(--border); border-radius: 3px; background: var(--bg); }
+
+/* ── Footer nav ── */
+.footer-nav { display: flex; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+.footer-nav a { flex: 1; padding: 16px; border: 1px solid var(--border); border-radius: 8px; text-decoration: none; transition: border-color .2s; }
+.footer-nav a:hover { border-color: var(--blue); }
+.fn-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+.fn-title { font-size: 14px; color: var(--text); font-weight: 600; margin-top: 2px; }
+
+/* ── Search ── */
+.search-trigger { display:flex; align-items:center; gap:8px; margin:0 12px 12px; padding:8px 12px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:13px; color:var(--text-muted); transition:border-color .15s; }
+.search-trigger:hover { border-color:var(--blue); color:var(--text-secondary); }
+.search-trigger kbd { margin-left:auto; font-family:'Inter',sans-serif; font-size:11px; padding:2px 6px; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text-muted); }
+.search-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:200; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+.search-overlay.open { display:flex; align-items:flex-start; justify-content:center; padding-top:min(20vh,160px); }
+.search-box { background:var(--bg); border:1px solid var(--border); border-radius:12px; width:560px; max-height:480px; display:flex; flex-direction:column; box-shadow:0 16px 48px rgba(0,0,0,.15); overflow:hidden; }
+.search-input-wrap { display:flex; align-items:center; gap:8px; padding:14px 18px; border-bottom:1px solid var(--border); }
+.search-input-wrap svg { flex-shrink:0; color:var(--text-muted); }
+.search-input { flex:1; border:none; outline:none; font-size:15px; font-family:'Inter',sans-serif; color:var(--text); background:transparent; }
+.search-input::placeholder { color:var(--text-muted); }
+.search-results { overflow-y:auto; max-height:380px; padding:8px; }
+.search-results:empty::after { content:'Type to search...'; display:block; padding:24px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-result { display:block; padding:10px 14px; border-radius:6px; text-decoration:none; cursor:pointer; transition:background .1s; }
+.search-result:hover, .search-result.selected { background:var(--blue-light); }
+.search-result-title { font-size:14px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.search-result-context { font-size:12.5px; color:var(--text-muted); line-height:1.4; }
+.search-result-context mark { background:#fef08a; color:var(--text); border-radius:2px; padding:0 1px; }
+.search-empty { padding:32px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-footer { padding:8px 14px; border-top:1px solid var(--border); display:flex; gap:12px; font-size:11px; color:var(--text-muted); }
+.search-footer kbd { font-family:'Inter',sans-serif; font-size:10px; padding:1px 5px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:3px; }
+
+/* ── Responsive ── */
+@media (max-width: 1100px) { .toc { display: none; } }
+@media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 24px 20px 80px; } .search-box { width:calc(100% - 32px); } }
+@media print { .sidebar, .toc, .search-overlay { display: none; } .main { margin-left: 0; max-width: 100%; } }
+</style>
+</head>
+<body>
+
+<!-- Left sidebar -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <img src="https://www.fieldproxy.ai/images/design-mode/Favicon.png" alt="FP">
+    <span>FieldProxy Docs</span>
+  </div>
+  <div class="search-trigger" onclick="openSearch()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    Search...
+    <kbd>&amp;#8984;K</kbd>
+  </div>
+  <div class="sb-label">Mobile Spacing</div>
+  <nav class="sb-nav">
+    <a href="#empty-spacers" class="active">Empty Container Spacers</a>
+    <a href="#divider">Divider / Horizontal Line</a>
+    <a href="#badge-pill">Badge / Pill</a>
+    <a href="#row-onclick">Row onclick</a>
+    <a href="#icon-text-spacing">Icon + Text Spacing</a>
+    <a href="#text-wrapping">Long Text Wrapping</a>
+    <a href="#info-card">Info Card Pattern</a>
+    <a href="#button-icon">Button with Icon</a>
+    <a href="#popup-close">Popup Close Pattern</a>
+    <a href="#cheat-sheet">Spacing Cheat Sheet</a>
+  </nav>
+  <div class="sb-label" style="margin-top:24px;">All Docs</div>
+  <nav class="sb-nav">
+    <a href="../onboarding-guide.html">Home</a>
+    <a href="../1-getting-started.html">Getting Started</a>
+    <a href="../2-build-guide.html">Build Guide</a>
+    <a href="../3-quick-reference.html">Quick Reference</a>
+    <a href="fieldproxy-mobile-spacing.html" class="active">Mobile Spacing</a>
+  </nav>
+</aside>
+
+<!-- Right TOC -->
+<nav class="toc">
+  <div class="toc-title">On this page</div>
+  <a href="#empty-spacers" class="active">Empty Container Spacers</a>
+  <a href="#divider">Divider / Horizontal Line</a>
+  <a href="#badge-pill">Badge / Pill</a>
+  <a href="#row-onclick">Row onclick</a>
+  <a href="#icon-text-spacing">Icon + Text Spacing</a>
+  <a href="#text-wrapping">Long Text Wrapping</a>
+  <a href="#info-card">Info Card Pattern</a>
+  <a href="#button-icon">Button with Icon</a>
+  <a href="#popup-close">Popup Close Pattern</a>
+  <a href="#cheat-sheet">Spacing Cheat Sheet</a>
+</nav>
+
+<!-- Main content -->
+<main class="main">
+
+<h1>Mobile Spacing</h1>
+<p class="page-desc">Verified alignment &amp; spacing patterns from EFS Cleaner home screen and other mobile builds. These solve real rendering issues on mobile.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="empty-spacers">1. Empty Container Spacers</h2>
+
+<p>Empty containers (<code>"ui": []</code>) provide margin-based spacing but <strong>will not render color or background</strong>. Use them purely as invisible spacers.</p>
+
+<pre><code>{
+  "ui": [],
+  "type": "container",
+  "element_id": "spacer_example",
+  "margin_bottom": 6
+}</code></pre>
+
+<div class="callout callout-warn">
+  <p><strong>Rule:</strong> If you need a visible colored spacer, you MUST put a child element inside (see Divider pattern below).</p>
+</div>
+
+<!-- ─────────────────────── -->
+<h2 id="divider">2. Divider / Horizontal Line</h2>
+
+<p><code>type: "divider"</code> does not render on mobile. Use a container with <code>height: 1</code> and a dummy text child inside &mdash; without the child, the color won't render.</p>
+
+<pre><code>{
+  "ui": [
+    {
+      "text": " ",
+      "type": "text",
+      "color": "#F0ECEB",
+      "font_size": 14,
+      "element_id": "divider_text",
+      "font_weight": "600"
+    }
+  ],
+  "type": "container",
+  "color": "#C6C6C3",
+  "width": 4000,
+  "height": 1,
+  "element_id": "divider_line",
+  "margin_top": 8,
+  "margin_bottom": 16
+}</code></pre>
+
+<h3>Key Points</h3>
+
+<ul>
+  <li><code>width: 4000</code> forces the line to span full width (overflows are clipped)</li>
+  <li><code>height: 1</code> keeps it thin like a real divider</li>
+  <li>The text child color should be close to the container color so it's invisible</li>
+  <li><code>margin_top</code> / <code>margin_bottom</code> control breathing room above and below</li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="badge-pill">3. Badge / Pill &mdash; Prevent Color Expansion</h2>
+
+<p>When a colored badge container sits inside a <code>row</code>, the badge background can stretch to match the row height (e.g., matching a taller button). Fix this by wrapping the badge in a parent container with <code>main_axis_size: "min"</code>.</p>
+
+<pre><code>{
+  "ui": [
+    {
+      "ui": [
+        {
+          "text": "Not Clocked In",
+          "type": "text",
+          "color": "#92400E",
+          "font_size": 13,
+          "element_id": "badge_text",
+          "font_weight": "600"
+        }
+      ],
+      "type": "container",
+      "color": "#FEF3C7",
+      "element_id": "badge_inner",
+      "padding_top": 6,
+      "padding_bottom": 6,
+      "padding_left": 14,
+      "padding_right": 14,
+      "border_radius": 20
+    }
+  ],
+  "type": "container",
+  "element_id": "badge_wrap",
+  "main_axis_size": "min"
+}</code></pre>
+
+<div class="callout callout-info">
+  <p><strong>Rule:</strong> Always wrap colored pill/badge containers in a parent with <code>main_axis_size: "min"</code> when placed inside a row alongside taller elements.</p>
+</div>
+
+<!-- ─────────────────────── -->
+<h2 id="row-onclick">4. Row onclick Does NOT Work</h2>
+
+<p>Rows (<code>type: "row"</code>) do not support <code>onclick</code> on mobile. If you need a tappable row, wrap it in a container and put the <code>onclick</code> on the container.</p>
+
+<pre><code>{
+  "ui": [
+    {
+      "ui": [
+        { "icon": "alert-triangle", "type": "icon", ... },
+        { "text": "Report a Missed Punch", "type": "text", ... }
+      ],
+      "type": "row",
+      "element_id": "inner_row",
+      "cross_axis_alignment": "center"
+    }
+  ],
+  "type": "container",
+  "element_id": "tappable_container",
+  "onclick": {
+    "1": {
+      "type": "navigation",
+      "app_id": "xxx",
+      "view_id": "target_view",
+      "element_id": "nav_action"
+    }
+  }
+}</code></pre>
+
+<div class="callout callout-danger">
+  <p><strong>Never</strong> put <code>onclick</code> directly on a <code>type: "row"</code> in mobile. It will silently fail.</p>
+</div>
+
+<!-- ─────────────────────── -->
+<h2 id="icon-text-spacing">5. Icon + Text Spacing in Rows</h2>
+
+<p>When placing an icon next to text in a row, use <code>margin_right</code> on the icon AND an empty spacer container between them for fine-tuned control.</p>
+
+<pre><code>{
+  "icon": "alert-triangle",
+  "type": "icon",
+  "color": "#F97316",
+  "icon_size": 14,
+  "element_id": "my_icon",
+  "margin_right": 12
+},
+{
+  "ui": [],
+  "type": "container",
+  "element_id": "icon_text_spacer",
+  "margin_right": 10
+},
+{
+  "text": "Label Text",
+  "type": "text",
+  "color": "#78350F",
+  "font_size": 13,
+  "element_id": "my_label",
+  "font_weight": "600"
+}</code></pre>
+
+<p><strong>Why both?</strong> <code>margin_right</code> on the icon provides base spacing. The spacer container gives additional fine-tuned gap that's easier to adjust without touching the icon definition.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="text-wrapping">6. Long Text Wrapping with <code>expanded: true</code></h2>
+
+<p>On mobile, text in a row will overflow horizontally if the content is too long. Add <code>expanded: true</code> to the text widget so it wraps to the next line.</p>
+
+<pre><code>{
+  "text": "{{data.facility_name}}",
+  "type": "text",
+  "color": "#1F2937",
+  "font_size": 13,
+  "expanded": true,
+  "element_id": "facility_name",
+  "font_weight": "600"
+}</code></pre>
+
+<div class="callout callout-warn">
+  <p><strong>Rule:</strong> <code>expanded: true</code> only works on <code>type: "text"</code> &mdash; it is silently ignored on containers and buttons. Use it whenever text content comes from dynamic data that could be long.</p>
+</div>
+
+<!-- ─────────────────────── -->
+<h2 id="info-card">7. Info Card Pattern (Grouped Details)</h2>
+
+<p>When showing related info (e.g., facility + time), wrap them in a single colored container with padding and <code>border_radius</code>. Add spacer containers between rows for fine spacing.</p>
+
+<pre><code>{
+  "ui": [
+    {
+      "ui": [
+        { "icon": "map-pin", "type": "icon", "color": "#059669", "icon_size": 18, ... },
+        { "text": "{{facility_name}}", "type": "text", "expanded": true, ... }
+      ],
+      "type": "row",
+      "element_id": "facility_row",
+      "margin_bottom": 8,
+      "cross_axis_alignment": "center"
+    },
+    {
+      "ui": [],
+      "type": "container",
+      "element_id": "info_spacer",
+      "padding_bottom": 2
+    },
+    {
+      "ui": [
+        { "icon": "clock", "type": "icon", "color": "#6B7280", "icon_size": 16, ... },
+        { "text": "Started at {{time}}", "type": "text", ... }
+      ],
+      "type": "row",
+      "element_id": "time_row",
+      "cross_axis_alignment": "center"
+    }
+  ],
+  "type": "container",
+  "color": "#ECFDF5",
+  "element_id": "info_card",
+  "padding_top": 14,
+  "padding_bottom": 14,
+  "padding_left": 16,
+  "padding_right": 16,
+  "border_radius": 12,
+  "margin_bottom": 14
+}</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="button-icon">8. Button with Icon (Container-based)</h2>
+
+<p>For buttons with icons on mobile, use a container (not <code>type: "button"</code>) with a row inside. This gives full control over padding, <code>border_radius</code>, and colors. Use <code>main_axis_size: "min"</code> on the inner row so it doesn't stretch.</p>
+
+<pre><code>{
+  "ui": [
+    {
+      "ui": [
+        { "icon": "log-in", "type": "icon", "color": "#FFFFFF", "icon_size": 12, "margin_right": 8, ... },
+        { "text": "Clock In", "type": "text", "color": "#FFFFFF", "font_size": 11, "font_weight": "700", ... }
+      ],
+      "type": "row",
+      "element_id": "btn_inner",
+      "main_axis_size": "min",
+      "cross_axis_alignment": "center"
+    }
+  ],
+  "type": "container",
+  "color": "#14532D",
+  "element_id": "btn_container",
+  "padding_top": 10,
+  "padding_bottom": 10,
+  "padding_left": 20,
+  "padding_right": 20,
+  "border_radius": 24,
+  "onclick": { ... }
+}</code></pre>
+
+<p><strong>Why container instead of button?</strong> Container gives you <code>color</code> for background (not <code>background_color</code>), precise padding control, and the ability to put icons + text in a row.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="popup-close">9. Popup Close Pattern</h2>
+
+<p>Do NOT use <code>type: "close_popup"</code> &mdash; it doesn't work reliably. Use navigation with <code>back: true</code> instead.</p>
+
+<pre><code>{
+  "type": "navigation",
+  "back": true,
+  "element_id": "close_popup_action"
+}</code></pre>
+
+<h3>Standard Popup Action Sequence</h3>
+
+<ol>
+  <li><code>execute_query</code> &mdash; INSERT/UPDATE/DELETE</li>
+  <li><code>update_data</code> &mdash; refresh specific data keys with <code>key</code> + <code>query</code></li>
+  <li><code>navigation</code> with <code>back: true</code> &mdash; close popup and refresh page</li>
+</ol>
+
+<!-- ─────────────────────── -->
+<h2 id="cheat-sheet">10. Mobile Card Spacing Cheat Sheet</h2>
+
+<table>
+  <thead>
+    <tr><th>Element</th><th>Recommended Values</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Card padding (all sides)</td><td><code>16</code></td></tr>
+    <tr><td>Card border_radius</td><td><code>16</code></td></tr>
+    <tr><td>Card border</td><td><code>border_color: "#E5E7EB"</code>, <code>border_width: 1</code></td></tr>
+    <tr><td>Section header font_size</td><td><code>11</code>, <code>font_weight: "700"</code>, <code>color: "#6B7280"</code></td></tr>
+    <tr><td>Section header margin_bottom</td><td><code>12</code></td></tr>
+    <tr><td>Badge padding (top/bottom)</td><td><code>6</code></td></tr>
+    <tr><td>Badge padding (left/right)</td><td><code>14</code></td></tr>
+    <tr><td>Badge border_radius (pill)</td><td><code>20</code></td></tr>
+    <tr><td>Badge border_radius (rect)</td><td><code>8</code></td></tr>
+    <tr><td>Icon-to-text gap</td><td><code>margin_right: 10&ndash;12</code> on icon</td></tr>
+    <tr><td>Row-to-row gap inside card</td><td><code>margin_bottom: 6&ndash;8</code></td></tr>
+    <tr><td>Divider margin_top</td><td><code>4&ndash;8</code></td></tr>
+    <tr><td>Divider margin_bottom</td><td><code>14&ndash;16</code></td></tr>
+    <tr><td>Button font_size (compact)</td><td><code>11</code></td></tr>
+    <tr><td>Button padding (top/bottom)</td><td><code>10</code></td></tr>
+    <tr><td>Button padding (left/right)</td><td><code>20</code></td></tr>
+    <tr><td>Button border_radius (pill)</td><td><code>24</code></td></tr>
+    <tr><td>Background container padding</td><td><code>12</code> (left/right), <code>16</code> (top/bottom)</td></tr>
+    <tr><td>Background container border_radius</td><td><code>16</code></td></tr>
+    <tr><td>Page margin (all sides)</td><td><code>16</code></td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>Quick Checklist Before Shipping Mobile UI</h3>
+
+<ul class="checklist">
+  <li>All colored badges wrapped with <code>main_axis_size: "min"</code> parent</li>
+  <li>Dynamic text fields have <code>expanded: true</code></li>
+  <li>Dividers use container + text child pattern (not empty container)</li>
+  <li>Tappable rows wrapped in container with onclick</li>
+  <li>Icon-text pairs have spacer between them</li>
+  <li>Popup actions use <code>navigation</code> + <code>back: true</code> (not <code>close_popup</code>)</li>
+  <li><code>color</code> used for container background (not <code>background_color</code>)</li>
+  <li>No <code>expanded: true</code> on containers or buttons</li>
+</ul>
+
+<!-- Footer nav -->
+<div class="footer-nav">
+  <a href="fieldproxy-error-log.html">
+    <div class="fn-label">&larr; Previous</div>
+    <div class="fn-title">Error Log</div>
+  </a>
+  <a href="../onboarding-guide.html">
+    <div class="fn-label">Next &rarr;</div>
+    <div class="fn-title">Home</div>
+  </a>
+</div>
+
+</main>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search..." autofocus>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+    <div class="search-footer">
+      <span><kbd>&uarr;&darr;</kbd> Navigate</span>
+      <span><kbd>&crarr;</kbd> Open</span>
+      <span><kbd>Esc</kbd> Close</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Scrollspy
+const sections = document.querySelectorAll('h2[id]');
+const sideLinks = document.querySelectorAll('.sb-nav a[href^="#"]');
+const tocLinks = document.querySelectorAll('.toc a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  sideLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+  tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+});
+
+// Search
+let searchIndex = [];
+function buildIndex() {
+  const main = document.querySelector('.main');
+  let c = 0;
+  main.querySelectorAll('h2, h3, h4').forEach(h => { if (!h.id) h.id = 'search-' + (c++); });
+  main.querySelectorAll('h2, h3, h4').forEach(h => {
+    let text = '';
+    let el = h.nextElementSibling;
+    while (el && !['H2','H3','H4'].includes(el.tagName)) { text += ' ' + el.textContent; el = el.nextElementSibling; }
+    searchIndex.push({ title: h.textContent.trim(), content: text.trim().substring(0, 800), id: h.id, level: h.tagName });
+  });
+}
+buildIndex();
+let selectedIdx = -1;
+function openSearch() { document.getElementById('searchOverlay').classList.add('open'); const i = document.getElementById('searchInput'); i.value=''; i.focus(); document.getElementById('searchResults').innerHTML=''; selectedIdx=-1; }
+function closeSearch() { document.getElementById('searchOverlay').classList.remove('open'); }
+function navigateTo(id) { closeSearch(); const el = document.getElementById(id); if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); el.style.transition='background .3s'; el.style.background='rgba(37,99,235,0.1)'; el.style.borderRadius='4px'; el.style.padding='2px 6px'; el.style.margin='-2px -6px'; setTimeout(()=>{el.style.background='';el.style.padding='';el.style.margin='';},2000); } }
+document.addEventListener('keydown', e => {
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openSearch();}
+  if(e.key==='Escape')closeSearch();
+  if(!document.getElementById('searchOverlay').classList.contains('open'))return;
+  const r=document.querySelectorAll('.search-result');
+  if(e.key==='ArrowDown'){e.preventDefault();selectedIdx=Math.min(selectedIdx+1,r.length-1);updateSel(r);}
+  if(e.key==='ArrowUp'){e.preventDefault();selectedIdx=Math.max(selectedIdx-1,0);updateSel(r);}
+  if(e.key==='Enter'&&selectedIdx>=0&&r[selectedIdx]){const t=r[selectedIdx].getAttribute('data-target');if(t)navigateTo(t);}
+});
+function updateSel(r){r.forEach((x,i)=>x.classList.toggle('selected',i===selectedIdx));if(r[selectedIdx])r[selectedIdx].scrollIntoView({block:'nearest'});}
+document.getElementById('searchInput').addEventListener('input', function(){
+  const q=this.value.toLowerCase().trim(), box=document.getElementById('searchResults'); selectedIdx=-1;
+  if(!q){box.innerHTML='';return;}
+  const m=searchIndex.filter(i=>i.title.toLowerCase().includes(q)||i.content.toLowerCase().includes(q)).slice(0,20);
+  if(!m.length){box.innerHTML='<div class="search-empty">No results for "'+q.replace(/</g,'&lt;')+'"</div>';return;}
+  const esc=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), re=new RegExp('('+esc+')','gi');
+  box.innerHTML=m.map(i=>{
+    let ctx=''; const idx=i.content.toLowerCase().indexOf(q);
+    if(idx>=0){const s=Math.max(0,idx-50),e=Math.min(i.content.length,idx+q.length+80);ctx=(s>0?'...':'')+i.content.substring(s,e).replace(re,'<mark>$1</mark>')+(e<i.content.length?'...':'');}
+    return '<div class="search-result" data-target="'+i.id+'" onclick="navigateTo(\''+i.id+'\')"><div class="search-result-title">'+i.title.replace(re,'<mark>$1</mark>')+'</div>'+(ctx?'<div class="search-result-context">'+ctx+'</div>':'')+'</div>';
+  }).join('');
+});
+</script>
+</body>
+</html>

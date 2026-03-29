@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Getting Started — FieldProxy Docs</title>
+<link rel="icon" href="https://www.fieldproxy.ai/images/design-mode/Favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --text: #1a1a2e;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --border: #e2e8f0;
+  --bg: #ffffff;
+  --bg-subtle: #f7fafc;
+  --bg-code: #0f172a;
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --sidebar-w: 240px;
+  --toc-w: 200px;
+  --content-max: 720px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 24px 0;
+  z-index: 50;
+  font-size: 14px;
+}
+.sidebar::-webkit-scrollbar { width: 0; }
+.sb-brand { display: flex; align-items: center; gap: 8px; padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.sb-brand img { width: 20px; height: 20px; border-radius: 4px; }
+.sb-brand span { font-weight: 700; font-size: 13px; color: var(--text); letter-spacing: .3px; }
+.sb-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: 16px 20px 6px; }
+.sb-nav a {
+  display: block; padding: 6px 20px; color: var(--text-secondary); text-decoration: none;
+  font-size: 13.5px; font-weight: 500; transition: color .15s;
+}
+.sb-nav a:hover { color: var(--text); }
+.sb-nav a.active { color: var(--blue); font-weight: 600; }
+
+/* ── Right TOC ── */
+.toc {
+  position: fixed; top: 80px; right: max(24px, calc((100vw - var(--sidebar-w) - var(--content-max) - var(--toc-w)) / 2));
+  width: var(--toc-w);
+  font-size: 12.5px;
+  z-index: 40;
+}
+.toc-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px; }
+.toc a {
+  display: block; padding: 4px 0 4px 12px; color: var(--text-muted); text-decoration: none;
+  border-left: 2px solid var(--border); transition: all .15s; font-weight: 500;
+}
+.toc a:hover { color: var(--text-secondary); }
+.toc a.active { color: var(--blue); border-left-color: var(--blue); font-weight: 600; }
+
+/* ── Main content ── */
+.main {
+  margin-left: var(--sidebar-w);
+  max-width: var(--content-max);
+  padding: 48px 40px 120px;
+}
+
+/* ── Typography ── */
+h1 { font-size: 32px; font-weight: 800; letter-spacing: -.5px; color: var(--text); margin-bottom: 8px; }
+.page-desc { font-size: 16px; color: var(--text-muted); margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+h2 { font-size: 22px; font-weight: 700; color: var(--text); margin: 56px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); letter-spacing: -.3px; }
+h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 32px 0 12px; }
+p { margin-bottom: 16px; color: var(--text-secondary); }
+strong { color: var(--text); font-weight: 600; }
+em { font-style: italic; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+ul, ol { margin: 0 0 16px 24px; color: var(--text-secondary); }
+li { margin-bottom: 6px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+/* ── Code ── */
+code {
+  font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 500;
+  background: var(--bg-subtle); padding: 2px 6px; border-radius: 4px; color: var(--red);
+}
+pre {
+  background: var(--bg-code); color: #e2e8f0; padding: 20px 24px; border-radius: 8px;
+  overflow-x: auto; margin: 16px 0 20px; font-size: 13.5px; line-height: 1.6;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* ── Tables ── */
+table { width: 100%; border-collapse: collapse; margin: 16px 0 20px; font-size: 14px; }
+th { text-align: left; padding: 10px 16px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); border-bottom: 2px solid var(--border); background: var(--bg-subtle); }
+td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+
+/* ── Callouts ── */
+.callout { padding: 14px 18px; border-radius: 6px; margin: 20px 0; font-size: 14.5px; line-height: 1.6; border-left: 3px solid; }
+.callout-info { background: var(--blue-light); border-color: var(--blue); }
+.callout-warn { background: var(--amber-light); border-color: var(--amber); }
+.callout-danger { background: var(--red-light); border-color: var(--red); }
+.callout p { margin: 0; color: var(--text-secondary); }
+
+/* ── Footer nav ── */
+.footer-nav { display: flex; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+.footer-nav a { flex: 1; padding: 16px; border: 1px solid var(--border); border-radius: 8px; text-decoration: none; transition: border-color .2s; }
+.footer-nav a:hover { border-color: var(--blue); }
+.fn-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+.fn-title { font-size: 14px; color: var(--text); font-weight: 600; margin-top: 2px; }
+
+/* ── Search ── */
+.search-trigger { display:flex; align-items:center; gap:8px; margin:0 12px 12px; padding:8px 12px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:13px; color:var(--text-muted); transition:border-color .15s; }
+.search-trigger:hover { border-color:var(--blue); color:var(--text-secondary); }
+.search-trigger kbd { margin-left:auto; font-family:'Inter',sans-serif; font-size:11px; padding:2px 6px; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text-muted); }
+.search-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:200; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+.search-overlay.open { display:flex; align-items:flex-start; justify-content:center; padding-top:min(20vh,160px); }
+.search-box { background:var(--bg); border:1px solid var(--border); border-radius:12px; width:560px; max-height:480px; display:flex; flex-direction:column; box-shadow:0 16px 48px rgba(0,0,0,.15); overflow:hidden; }
+.search-input-wrap { display:flex; align-items:center; gap:8px; padding:14px 18px; border-bottom:1px solid var(--border); }
+.search-input-wrap svg { flex-shrink:0; color:var(--text-muted); }
+.search-input { flex:1; border:none; outline:none; font-size:15px; font-family:'Inter',sans-serif; color:var(--text); background:transparent; }
+.search-input::placeholder { color:var(--text-muted); }
+.search-results { overflow-y:auto; max-height:380px; padding:8px; }
+.search-results:empty::after { content:'Type to search...'; display:block; padding:24px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-result { display:block; padding:10px 14px; border-radius:6px; text-decoration:none; cursor:pointer; transition:background .1s; }
+.search-result:hover, .search-result.selected { background:var(--blue-light); }
+.search-result-title { font-size:14px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.search-result-context { font-size:12.5px; color:var(--text-muted); line-height:1.4; }
+.search-result-context mark { background:#fef08a; color:var(--text); border-radius:2px; padding:0 1px; }
+.search-empty { padding:32px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-footer { padding:8px 14px; border-top:1px solid var(--border); display:flex; gap:12px; font-size:11px; color:var(--text-muted); }
+.search-footer kbd { font-family:'Inter',sans-serif; font-size:10px; padding:1px 5px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:3px; }
+
+/* ── Responsive ── */
+@media (max-width: 1100px) { .toc { display: none; } }
+@media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 24px 20px 80px; } .search-box { width:calc(100% - 32px); } }
+@media print { .sidebar, .toc, .search-overlay { display: none; } .main { margin-left: 0; max-width: 100%; } }
+</style>
+</head>
+<body>
+
+<!-- Left sidebar -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <img src="https://www.fieldproxy.ai/images/design-mode/Favicon.png" alt="FP">
+    <span>FieldProxy Docs</span>
+  </div>
+  <div class="search-trigger" onclick="openSearch()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    Search...
+    <kbd>⌘K</kbd>
+  </div>
+  <div class="sb-label">Getting Started</div>
+  <nav class="sb-nav">
+    <a href="#welcome" class="active">Welcome to FieldProxy</a>
+    <a href="#foundation">The Technical Foundation</a>
+    <a href="#concepts">The Three Concepts</a>
+    <a href="#ai-usage">When NOT to Use AI</a>
+    <a href="#toolkit">Your Toolkit</a>
+    <a href="#claude-code">How to Use Claude Code</a>
+    <a href="#web-vs-mobile">Web vs Mobile</a>
+    <a href="#why-it-matters">Why This Matters</a>
+  </nav>
+  <div class="sb-label" style="margin-top:24px;">All Docs</div>
+  <nav class="sb-nav">
+    <a href="onboarding-guide.html">Home</a>
+    <a href="1-getting-started.html" class="active">Getting Started</a>
+    <a href="2-build-guide.html">Build Guide</a>
+    <a href="3-quick-reference.html">Quick Reference</a>
+  </nav>
+</aside>
+
+<!-- Right TOC -->
+<nav class="toc">
+  <div class="toc-title">On this page</div>
+  <a href="#welcome" class="active">Welcome to FieldProxy</a>
+  <a href="#foundation">The Technical Foundation</a>
+  <a href="#concepts">The Three Concepts</a>
+  <a href="#ai-usage">When NOT to Use AI</a>
+  <a href="#toolkit">Your Toolkit</a>
+  <a href="#claude-code">How to Use Claude Code</a>
+  <a href="#web-vs-mobile">Web vs Mobile</a>
+  <a href="#why-it-matters">Why This Matters</a>
+</nav>
+
+<!-- Main content -->
+<main class="main">
+
+<h1>Getting Started</h1>
+<p class="page-desc">Read this end-to-end on Day 1. It takes about 30 minutes.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="welcome">Welcome to FieldProxy</h2>
+
+<p>FieldProxy is a <strong>Field Service Management (FSM) platform</strong> &mdash; the system that companies use to manage their entire field operations: jobs, technicians, checklists, schedules, invoices, and customer communication.</p>
+
+<p>We're not a traditional FSM tool. We're building the <strong>most powerful agentic FSM platform in the world.</strong></p>
+
+<h3>How We Got Here</h3>
+
+<p>FieldProxy went through three eras:</p>
+
+<ol>
+  <li><strong>Drag &amp; Drop Era</strong> &mdash; A visual builder. Worked for simple setups, but couldn't handle complex field operations. Customisation hit a wall.</li>
+  <li><strong>Everything Became Configuration</strong> &mdash; We made a radical choice: every screen, workflow, field, view, and business rule is defined as structured, machine-readable JSON config. The entire application is a definition file.</li>
+  <li><strong>Then AI Arrived</strong> &mdash; AI models are exceptionally good at reading and writing structured config. Our architecture turned out to be exactly what AI needs to not just assist &mdash; but actually operate.</li>
+</ol>
+
+<div class="callout callout-info">
+  <p><strong>Key insight:</strong> We didn't plan to build an AI-native platform. We built for flexibility &mdash; and flexibility is what AI runs on.</p>
+</div>
+
+<h3>The Template Account Model</h3>
+
+<p>This is critical to understand. It changes how you think about every project.</p>
+
+<p>The <strong>old way</strong> was to build from scratch for every client. Weeks turning into months. Expensive, slow, doesn't scale.</p>
+
+<p>The <strong>new way</strong> is one deep, mature Template Account &mdash; a production-ready FSM with agentic workflows on top. Every new client starts from this template.</p>
+
+<pre><code>Clone Template → Configure on Top (AI agent helps) → Live in 1-2 weeks</code></pre>
+
+<p>Why this matters for you:</p>
+
+<ul>
+  <li><strong>You don't start from a blank canvas.</strong> Every project starts from the template.</li>
+  <li><strong>Every deployment feeds back.</strong> What you build for Client A makes the template smarter for Client B.</li>
+  <li><strong>AI agents handle customisation.</strong> Need a new workflow? Tell the agent.</li>
+  <li><strong>One product to demo, one story to sell.</strong> Every sales call shows the same mature platform.</li>
+</ul>
+
+<p>Every client makes the template smarter. Every rollout gets faster. This is a compounding loop.</p>
+
+<h3>What's Possible with AI</h3>
+
+<p>The entire application is config. AI doesn't sit on top &mdash; it reaches into every layer:</p>
+
+<table>
+  <thead><tr><th>Capability</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Voice &rarr; Jobs</strong></td><td>Technician speaks, agent creates structured work orders instantly</td></tr>
+    <tr><td><strong>Photo &rarr; Data</strong></td><td>Technician uploads a photo, agent extracts fields, fills forms</td></tr>
+    <tr><td><strong>Bulk Operations</strong></td><td>Create, assign, reassign hundreds of jobs in seconds</td></tr>
+    <tr><td><strong>Smart Routing</strong></td><td>Agent plans a tech's full day &mdash; optimised routes, realistic timelines</td></tr>
+    <tr><td><strong>Knowledge Chat</strong></td><td>Ask the system anything &mdash; SOPs, templates, job history</td></tr>
+    <tr><td><strong>Zero-Code Config</strong></td><td>New workflows, screens, fields &mdash; agents build them, not developers</td></tr>
+    <tr><td><strong>Instant Iteration</strong></td><td>Change a workflow, deploy immediately. No release cycles.</td></tr>
+  </tbody>
+</table>
+
+<h3>Team Structure &amp; Escalation</h3>
+
+<table>
+  <thead><tr><th>Role</th><th>Person</th><th>Responsibility</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Template Owner</strong></td><td>Swaroop</td><td>Owns the template. All product features flow into it.</td></tr>
+    <tr><td><strong>Product Owner</strong></td><td>Bala</td><td>Owns the base product and platform infrastructure.</td></tr>
+    <tr><td><strong>Solutions Architects</strong></td><td>You + team</td><td>Tie customer requirements back into the template. Think agent-first.</td></tr>
+    <tr><td><strong>Customer Success</strong></td><td>Vasanth</td><td>Adoption, value delivery, retention.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warn">
+  <p><strong>Escalation via Linear:</strong> Base product issues &rarr; <strong>Bala</strong> &middot; Template issues &rarr; <strong>Swaroop</strong></p>
+</div>
+
+<h3>Your Market</h3>
+
+<table>
+  <thead><tr><th>Global Markets</th><th>Strategic Markets (US / Europe)</th></tr></thead>
+  <tbody>
+    <tr><td>Nandhini &mdash; SA Lead</td><td>Anand &mdash; SA Lead</td></tr>
+    <tr><td>Keerthana &mdash; SA</td><td>Ajay &mdash; Sr. SA</td></tr>
+    <tr><td>Vasanth &mdash; Sr. CS</td><td>Kishore &mdash; SA</td></tr>
+    <tr><td>9 AM &ndash; 6 PM / 12:30 &ndash; 9:30 PM</td><td>3:30 PM &ndash; 12:30 AM</td></tr>
+  </tbody>
+</table>
+
+<h3>Daily Rhythms</h3>
+
+<ul>
+  <li><strong>Standups:</strong> Mon&ndash;Thu at 5:30 PM. Friday at 5:30 PM with a weekly progress slider.</li>
+  <li><strong>Client onboarding flow:</strong> Clone template &rarr; Configure (1-2 weeks) &rarr; Escalate smart (Linear)</li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="foundation">The Technical Foundation</h2>
+
+<p>FieldProxy lets you build complete <strong>web applications</strong> AND <strong>mobile applications</strong> purely through JSON configuration. No HTML, no CSS, no React, no Flutter. You write JSON, bind it to SQL queries, and the platform renders it.</p>
+
+<pre><code>JSON (layout + widgets) + SQL (data) = Working app (web or mobile)</code></pre>
+
+<p>Both web and mobile apps share the same foundation:</p>
+
+<ul>
+  <li><strong>Same SQL database</strong> &mdash; both read and write to the same tables</li>
+  <li><strong>Same data binding</strong> &mdash; both use template expressions to display query results</li>
+  <li><strong>Same action system</strong> &mdash; both use numbered onclick chains for user interactions</li>
+  <li><strong>Same API capability</strong> &mdash; both can trigger external APIs via onclick actions</li>
+</ul>
+
+<p>The difference is in <strong>layout and rendering</strong> &mdash; web uses a 12-column grid with sidebar navigation, mobile uses full-width layouts with scroll-based navigation.</p>
+
+<p>Each day in Week 1 you'll build the <strong>same feature</strong> on both web and mobile &mdash; so you learn the differences by direct comparison. Follow the <a href="2-build-guide.html">Build Guide</a> day by day.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="concepts">The Three Concepts</h2>
+
+<h3>1. Skills &mdash; The universal rules</h3>
+
+<p>Skills are the rules of the FieldProxy framework. They apply to every view &mdash; web AND mobile &mdash; every project, every team member.</p>
+
+<ul>
+  <li>&ldquo;Buttons use grid width 1-12, not fixed_width&rdquo;</li>
+  <li>&ldquo;space_widget inside a row needs alignment: horizontal&rdquo;</li>
+  <li>&ldquo;onclick keys must be pure numeric strings: 1, 2, 3&rdquo;</li>
+  <li>&ldquo;Row onclick doesn't work on mobile &mdash; wrap in container&rdquo;</li>
+</ul>
+
+<p>Breaking a skill rule = your view breaks or looks wrong. No exceptions. <strong>Think of skills as traffic rules.</strong> Everyone follows them.</p>
+
+<h3>2. Recipes &mdash; Other people's working views</h3>
+
+<p>Recipes are real views that someone on the team built and extracted as templates:</p>
+
+<ul>
+  <li>&ldquo;Here's how Anand built an enquiry detail page with email threads&rdquo; (web)</li>
+  <li>&ldquo;Here's how the EFS cleaner home screen was built with clock-in/out&rdquo; (mobile)</li>
+  <li>&ldquo;Here's how the Safegroup ASHP checklist works across 9 sections&rdquo; (mobile)</li>
+</ul>
+
+<p>You can follow a recipe exactly, adapt it, or ignore it entirely. <strong>Think of recipes as route suggestions.</strong></p>
+
+<h3>3. Your creativity &mdash; The destination</h3>
+
+<p>Skills keep you safe (no layout bugs). Recipes save you time (don't start from scratch). But what you're building and how it looks? That's your design.</p>
+
+<pre><code>Skills  = Prevent bugs      (everyone follows)
+Recipes = Save time         (pick and adapt, or ignore)
+You     = Design the product (your vision)</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="ai-usage">When NOT to Use AI</h2>
+
+<p>This is critical. Read this before your first day.</p>
+
+<table>
+  <thead><tr><th>Situation</th><th>Why you should NOT use AI</th></tr></thead>
+  <tbody>
+    <tr><td>You don't understand what the JSON output means</td><td>You can't debug what you can't read</td></tr>
+    <tr><td>You can't describe what you want in specific words</td><td>&ldquo;Make it look nice&rdquo; produces garbage</td></tr>
+    <tr><td>You're learning a new widget type for the first time</td><td>Build it by hand first. Break it. Fix it.</td></tr>
+    <tr><td>You're debugging a layout issue</td><td>Read the rules yourself, find the violation</td></tr>
+    <tr><td>The view is simple enough to write manually</td><td>Over-relying on AI kills your muscle memory</td></tr>
+  </tbody>
+</table>
+
+<h3>The progression</h3>
+
+<pre><code>Week 1-2:  Build by hand. Read skills as DOCUMENTATION, not as AI tools.
+Week 3-4:  Use AI for repetitive parts. Build complex parts by hand.
+Month 2+:  Use AI freely — you know enough to verify and fix the output.</code></pre>
+
+<div class="callout callout-danger">
+  <p><strong>The danger sign:</strong> If you can't look at a generated JSON and spot a mistake &mdash; you're using AI too early. Understanding first, speed second.</p>
+</div>
+
+<!-- ─────────────────────── -->
+<h2 id="toolkit">Your Toolkit</h2>
+
+<h3>Files You Must Know</h3>
+
+<table>
+  <thead><tr><th>File</th><th>What it is</th><th>When to read it</th></tr></thead>
+  <tbody>
+    <tr><td><code>fieldproxy-widget-rules.md</code></td><td>34 verified rules + pre-flight checklist</td><td><strong>Before writing ANY JSON</strong></td></tr>
+    <tr><td><code>fieldproxy-error-log.md</code></td><td>86+ past bugs with root causes and fixes</td><td><strong>Before writing ANY JSON</strong></td></tr>
+    <tr><td><code>fieldproxy-mobile-spacing.md</code></td><td>10 mobile-specific spacing &amp; alignment patterns</td><td><strong>Before mobile JSON</strong></td></tr>
+    <tr><td><code>CLAUDE.md</code></td><td>Project-wide instructions and top 10 mistakes</td><td>Day 1, re-read weekly</td></tr>
+  </tbody>
+</table>
+
+<h3>Top 10 Most Repeated Mistakes</h3>
+
+<p>Every bug in the error log was caused by a real person on this team. Reading it saves you from the same mistakes.</p>
+
+<ol>
+  <li>CSS <code>border</code> doesn't work &mdash; use <code>border_color</code> + <code>border_width</code> separately</li>
+  <li><code>icon_button</code> uses <code>bg_color</code>/<code>color</code>/<code>size</code> &mdash; NOT <code>background_color</code>/<code>icon_color</code></li>
+  <li><code>input_type: "search"</code> doesn't exist &mdash; use <code>"text"</code></li>
+  <li><code>visibility_condition</code> on inputs is ignored &mdash; wrap in container</li>
+  <li><code>expanded: true</code> only works on <code>text</code> &mdash; not containers/buttons</li>
+  <li>Container bg uses <code>color</code> &mdash; NOT <code>background_color</code></li>
+  <li><code>show_if</code> doesn't exist &mdash; use <code>visibility_condition</code></li>
+  <li><code>fixed_height</code> doesn't exist &mdash; use <code>height</code></li>
+  <li><code>type: "divider"</code> doesn't render &mdash; use container with height:1</li>
+  <li><code>input_data</code> keyed by <code>element_id</code> &mdash; NEVER by <code>field_name</code></li>
+</ol>
+
+<!-- ─────────────────────── -->
+<h2 id="claude-code">How to Use Claude Code</h2>
+
+<p>Claude Code is the AI assistant integrated into VS Code. It reads <code>CLAUDE.md</code> automatically &mdash; so it knows our project rules.</p>
+
+<h3>The Golden Rule</h3>
+
+<p><strong>Claude Code reads the skills and error log before writing any JSON.</strong> This is enforced in <code>CLAUDE.md</code>. If you ask Claude to build a view, it will:</p>
+
+<ol>
+  <li>Load <code>fieldproxy-widget-rules.md</code> (34 rules)</li>
+  <li>Load <code>fieldproxy-error-log.md</code> (86+ past bugs)</li>
+  <li>THEN generate the JSON</li>
+</ol>
+
+<h3>What Claude is Good At</h3>
+
+<table>
+  <thead><tr><th>Task</th><th>Example prompt</th></tr></thead>
+  <tbody>
+    <tr><td><strong>New screen</strong></td><td>&ldquo;Build a list view for tickets with search, status filter, and a table showing title, status, assigned_to, created_date&rdquo;</td></tr>
+    <tr><td><strong>Add widget</strong></td><td>&ldquo;Add a status badge pill to the header row in visit_detail_screen.json&rdquo;</td></tr>
+    <tr><td><strong>SQL queries</strong></td><td>&ldquo;Write a query that counts open/closed/overdue tickets grouped by assigned_to&rdquo;</td></tr>
+    <tr><td><strong>Fix layout</strong></td><td>&ldquo;The columns are overlapping in the facility list card &mdash; address text runs into the actions&rdquo;</td></tr>
+    <tr><td><strong>Onclick chains</strong></td><td>&ldquo;When the user clicks Save, INSERT into tickets, show a success toast, close the popup, and refresh the list&rdquo;</td></tr>
+  </tbody>
+</table>
+
+<h3>What Claude is BAD At (During Your First 2 Weeks)</h3>
+
+<ul>
+  <li><strong>&ldquo;Build me the whole app&rdquo;</strong> &mdash; you won't understand the output, can't debug it</li>
+  <li><strong>&ldquo;Fix this&rdquo;</strong> (without symptoms) &mdash; vague prompts produce vague fixes</li>
+  <li><strong>Letting it design the UX</strong> &mdash; it follows patterns, not design briefs. Check with Afrin.</li>
+  <li><strong>Trusting output without reading it</strong> &mdash; YOU must verify every time</li>
+</ul>
+
+<h3>Commands</h3>
+
+<table>
+  <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td><code>/fieldproxy-app-builder</code></td><td>Loads the full FieldProxy framework skill</td></tr>
+    <tr><td><code>/fieldproxy-widget-rules</code></td><td>Loads just the validation rules</td></tr>
+  </tbody>
+</table>
+
+<h3>Verification Checklist</h3>
+
+<p>Run this after Claude generates JSON:</p>
+
+<ul>
+  <li>Every element has a unique <code>element_id</code>?</li>
+  <li>No CSS <code>border</code> &mdash; uses <code>border_color</code> + <code>border_width</code>?</li>
+  <li><code>expanded: true</code> only on <code>text</code> widgets?</li>
+  <li><code>input_data</code> references use <code>element_id</code>, not <code>field_name</code>?</li>
+  <li><code>space_widget</code> in rows has <code>alignment: "horizontal"</code>?</li>
+  <li>Container backgrounds use <code>color</code>, not <code>background_color</code>?</li>
+  <li>Data queries are SELECT-only? (mutations in <code>onclick</code> &rarr; <code>execute_query</code>)</li>
+  <li><strong>Mobile:</strong> Row onclick wrapped in container? Badges wrapped with <code>main_axis_size: "min"</code>?</li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="web-vs-mobile">Web vs Mobile</h2>
+
+<p>Both platforms share the same SQL database and action system. The differences are in layout and rendering.</p>
+
+<table>
+  <thead><tr><th>Aspect</th><th>Web App</th><th>Mobile App</th></tr></thead>
+  <tbody>
+    <tr><td><strong>App shell</strong></td><td><code>"type": "web"</code> + sidebar</td><td><code>"type": "mobile"</code> + screens</td></tr>
+    <tr><td><strong>Data source</strong></td><td>SQL queries in <code>data</code> object</td><td>SQL queries in <code>data</code> object</td></tr>
+    <tr><td><strong>Width</strong></td><td>12-column grid</td><td>Full-width, use <code>expanded: true</code></td></tr>
+    <tr><td><strong>Navigation</strong></td><td><code>navigation_type: "view"</code></td><td><code>navigation</code> with <code>app_id</code> + <code>view_id</code></td></tr>
+    <tr><td><strong>Popup close</strong></td><td><code>close_popup</code> or <code>back: true</code></td><td><code>navigation</code> + <code>back: true</code> only</td></tr>
+    <tr><td><strong>Divider</strong></td><td>Container with <code>height: 1</code></td><td>Container <code>height: 1</code> + text child</td></tr>
+    <tr><td><strong>Row onclick</strong></td><td>Works</td><td>Does NOT work &mdash; wrap in container</td></tr>
+    <tr><td><strong>Transparent</strong></td><td><code>color: "transparent"</code></td><td>Just omit the property</td></tr>
+    <tr><td><strong>Buttons</strong></td><td><code>type: "button"</code> + <code>btn_type</code></td><td>Container &rarr; row &rarr; icon + text</td></tr>
+    <tr><td><strong>System vars</strong></td><td>N/A</td><td><code>&lt;!getUserId()!&gt;</code>, <code>&lt;!getLocation()!&gt;</code></td></tr>
+  </tbody>
+</table>
+
+<h3>What's Shared</h3>
+
+<ul>
+  <li><strong>Database schema</strong> &mdash; same tables for both web and mobile</li>
+  <li><strong>SQL queries</strong> &mdash; often identical or very similar</li>
+  <li><strong>Business logic</strong> &mdash; same INSERT/UPDATE/DELETE in onclick chains</li>
+  <li><strong>Template expressions</strong> &mdash; same <code>{{query.data.[0].field}}</code> syntax</li>
+  <li><strong>Action types</strong> &mdash; same <code>execute_query</code>, <code>toast</code>, <code>navigation</code>, <code>confirm</code>, <code>api_call</code></li>
+</ul>
+
+<h3>What's Different</h3>
+
+<ul>
+  <li><strong>Layout approach</strong> &mdash; web uses grid widths, mobile uses full-width + padding</li>
+  <li><strong>Navigation</strong> &mdash; web uses sidebar + view switching, mobile uses screen-to-screen</li>
+  <li><strong>Mobile-only features</strong> &mdash; GPS location, camera/image input, signature capture, barcode scanning</li>
+  <li><strong>Rendering quirks</strong> &mdash; mobile has specific rules about row onclick, badge stretching, dividers, transparent colors</li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="why-it-matters">Why This Context Matters</h2>
+
+<p>You're not just writing JSON. You're building the screens that field technicians, managers, and operations teams use every day to run their businesses.</p>
+
+<p>Every view you build:</p>
+
+<ul>
+  <li>Gets used by real people in the field</li>
+  <li>Feeds back into a template that gets smarter</li>
+  <li>Makes the next rollout faster</li>
+  <li>Sits on a platform where AI can read, modify, and extend what you built</li>
+</ul>
+
+<p>Understanding the product, the mission, and the compounding loop is what separates a good Solutions Architect from a great one.</p>
+
+<!-- Footer nav -->
+<div class="footer-nav">
+  <a href="onboarding-guide.html">
+    <div class="fn-label">&larr; Home</div>
+    <div class="fn-title">All Documentation</div>
+  </a>
+  <a href="2-build-guide.html">
+    <div class="fn-label">Next &rarr;</div>
+    <div class="fn-title">Build Guide</div>
+  </a>
+</div>
+
+</main>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search..." autofocus>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+    <div class="search-footer">
+      <span><kbd>↑↓</kbd> Navigate</span>
+      <span><kbd>↵</kbd> Open</span>
+      <span><kbd>Esc</kbd> Close</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Scrollspy
+const sections = document.querySelectorAll('h2[id]');
+const sideLinks = document.querySelectorAll('.sb-nav a[href^="#"]');
+const tocLinks = document.querySelectorAll('.toc a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  sideLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+  tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+});
+
+// Search
+let searchIndex = [];
+function buildIndex() {
+  const main = document.querySelector('.main');
+  let c = 0;
+  main.querySelectorAll('h2, h3, h4').forEach(h => { if (!h.id) h.id = 'search-' + (c++); });
+  main.querySelectorAll('h2, h3, h4').forEach(h => {
+    let text = '';
+    let el = h.nextElementSibling;
+    while (el && !['H2','H3','H4'].includes(el.tagName)) { text += ' ' + el.textContent; el = el.nextElementSibling; }
+    searchIndex.push({ title: h.textContent.trim(), content: text.trim().substring(0, 800), id: h.id, level: h.tagName });
+  });
+}
+buildIndex();
+let selectedIdx = -1;
+function openSearch() { document.getElementById('searchOverlay').classList.add('open'); const i = document.getElementById('searchInput'); i.value=''; i.focus(); document.getElementById('searchResults').innerHTML=''; selectedIdx=-1; }
+function closeSearch() { document.getElementById('searchOverlay').classList.remove('open'); }
+function navigateTo(id) { closeSearch(); const el = document.getElementById(id); if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); el.style.transition='background .3s'; el.style.background='rgba(37,99,235,0.1)'; el.style.borderRadius='4px'; el.style.padding='2px 6px'; el.style.margin='-2px -6px'; setTimeout(()=>{el.style.background='';el.style.padding='';el.style.margin='';},2000); } }
+document.addEventListener('keydown', e => {
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openSearch();}
+  if(e.key==='Escape')closeSearch();
+  if(!document.getElementById('searchOverlay').classList.contains('open'))return;
+  const r=document.querySelectorAll('.search-result');
+  if(e.key==='ArrowDown'){e.preventDefault();selectedIdx=Math.min(selectedIdx+1,r.length-1);updateSel(r);}
+  if(e.key==='ArrowUp'){e.preventDefault();selectedIdx=Math.max(selectedIdx-1,0);updateSel(r);}
+  if(e.key==='Enter'&&selectedIdx>=0&&r[selectedIdx]){const t=r[selectedIdx].getAttribute('data-target');if(t)navigateTo(t);}
+});
+function updateSel(r){r.forEach((x,i)=>x.classList.toggle('selected',i===selectedIdx));if(r[selectedIdx])r[selectedIdx].scrollIntoView({block:'nearest'});}
+document.getElementById('searchInput').addEventListener('input', function(){
+  const q=this.value.toLowerCase().trim(), box=document.getElementById('searchResults'); selectedIdx=-1;
+  if(!q){box.innerHTML='';return;}
+  const m=searchIndex.filter(i=>i.title.toLowerCase().includes(q)||i.content.toLowerCase().includes(q)).slice(0,20);
+  if(!m.length){box.innerHTML='<div class="search-empty">No results for "'+q.replace(/</g,'&lt;')+'"</div>';return;}
+  const esc=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), re=new RegExp('('+esc+')','gi');
+  box.innerHTML=m.map(i=>{
+    let ctx=''; const idx=i.content.toLowerCase().indexOf(q);
+    if(idx>=0){const s=Math.max(0,idx-50),e=Math.min(i.content.length,idx+q.length+80);ctx=(s>0?'...':'')+i.content.substring(s,e).replace(re,'<mark>$1</mark>')+(e<i.content.length?'...':'');}
+    return '<div class="search-result" data-target="'+i.id+'" onclick="navigateTo(\''+i.id+'\')"><div class="search-result-title">'+i.title.replace(re,'<mark>$1</mark>')+'</div>'+(ctx?'<div class="search-result-context">'+ctx+'</div>':'')+'</div>';
+  }).join('');
+});
+</script>
+</body>
+</html>

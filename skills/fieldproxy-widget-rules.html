@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Widget Rules — FieldProxy Docs</title>
+<link rel="icon" href="https://www.fieldproxy.ai/images/design-mode/Favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --text: #1a1a2e;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --border: #e2e8f0;
+  --bg: #ffffff;
+  --bg-subtle: #f7fafc;
+  --bg-code: #0f172a;
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --sidebar-w: 240px;
+  --toc-w: 200px;
+  --content-max: 720px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 24px 0;
+  z-index: 50;
+  font-size: 14px;
+}
+.sidebar::-webkit-scrollbar { width: 0; }
+.sb-brand { display: flex; align-items: center; gap: 8px; padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.sb-brand img { width: 20px; height: 20px; border-radius: 4px; }
+.sb-brand span { font-weight: 700; font-size: 13px; color: var(--text); letter-spacing: .3px; }
+.sb-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: 16px 20px 6px; }
+.sb-nav a {
+  display: block; padding: 6px 20px; color: var(--text-secondary); text-decoration: none;
+  font-size: 13.5px; font-weight: 500; transition: color .15s;
+}
+.sb-nav a:hover { color: var(--text); }
+.sb-nav a.active { color: var(--blue); font-weight: 600; }
+
+/* ── Right TOC ── */
+.toc {
+  position: fixed; top: 80px; right: max(24px, calc((100vw - var(--sidebar-w) - var(--content-max) - var(--toc-w)) / 2));
+  width: var(--toc-w);
+  font-size: 12.5px;
+  z-index: 40;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+.toc::-webkit-scrollbar { width: 0; }
+.toc-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px; }
+.toc a {
+  display: block; padding: 4px 0 4px 12px; color: var(--text-muted); text-decoration: none;
+  border-left: 2px solid var(--border); transition: all .15s; font-weight: 500;
+}
+.toc a:hover { color: var(--text-secondary); }
+.toc a.active { color: var(--blue); border-left-color: var(--blue); font-weight: 600; }
+
+/* ── Main content ── */
+.main {
+  margin-left: var(--sidebar-w);
+  max-width: var(--content-max);
+  padding: 48px 40px 120px;
+}
+
+/* ── Typography ── */
+h1 { font-size: 32px; font-weight: 800; letter-spacing: -.5px; color: var(--text); margin-bottom: 8px; }
+.page-desc { font-size: 16px; color: var(--text-muted); margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+h2 { font-size: 22px; font-weight: 700; color: var(--text); margin: 56px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); letter-spacing: -.3px; }
+h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 32px 0 12px; }
+p { margin-bottom: 16px; color: var(--text-secondary); }
+strong { color: var(--text); font-weight: 600; }
+em { font-style: italic; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+ul, ol { margin: 0 0 16px 24px; color: var(--text-secondary); }
+li { margin-bottom: 6px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+/* ── Code ── */
+code {
+  font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 500;
+  background: var(--bg-subtle); padding: 2px 6px; border-radius: 4px; color: var(--red);
+}
+pre {
+  background: var(--bg-code); color: #e2e8f0; padding: 20px 24px; border-radius: 8px;
+  overflow-x: auto; margin: 16px 0 20px; font-size: 13.5px; line-height: 1.6;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* ── Tables ── */
+table { width: 100%; border-collapse: collapse; margin: 16px 0 20px; font-size: 14px; }
+th { text-align: left; padding: 10px 16px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); border-bottom: 2px solid var(--border); background: var(--bg-subtle); }
+td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+
+/* ── Callouts ── */
+.callout { padding: 14px 18px; border-radius: 6px; margin: 20px 0; font-size: 14.5px; line-height: 1.6; border-left: 3px solid; }
+.callout-info { background: var(--blue-light); border-color: var(--blue); }
+.callout-warn { background: var(--amber-light); border-color: var(--amber); }
+.callout-danger { background: var(--red-light); border-color: var(--red); }
+.callout p { margin: 0; color: var(--text-secondary); }
+
+/* ── Footer nav ── */
+.footer-nav { display: flex; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+.footer-nav a { flex: 1; padding: 16px; border: 1px solid var(--border); border-radius: 8px; text-decoration: none; transition: border-color .2s; }
+.footer-nav a:hover { border-color: var(--blue); }
+.fn-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+.fn-title { font-size: 14px; color: var(--text); font-weight: 600; margin-top: 2px; }
+
+/* ── Search ── */
+.search-trigger { display:flex; align-items:center; gap:8px; margin:0 12px 12px; padding:8px 12px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:13px; color:var(--text-muted); transition:border-color .15s; }
+.search-trigger:hover { border-color:var(--blue); color:var(--text-secondary); }
+.search-trigger kbd { margin-left:auto; font-family:'Inter',sans-serif; font-size:11px; padding:2px 6px; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text-muted); }
+.search-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:200; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+.search-overlay.open { display:flex; align-items:flex-start; justify-content:center; padding-top:min(20vh,160px); }
+.search-box { background:var(--bg); border:1px solid var(--border); border-radius:12px; width:560px; max-height:480px; display:flex; flex-direction:column; box-shadow:0 16px 48px rgba(0,0,0,.15); overflow:hidden; }
+.search-input-wrap { display:flex; align-items:center; gap:8px; padding:14px 18px; border-bottom:1px solid var(--border); }
+.search-input-wrap svg { flex-shrink:0; color:var(--text-muted); }
+.search-input { flex:1; border:none; outline:none; font-size:15px; font-family:'Inter',sans-serif; color:var(--text); background:transparent; }
+.search-input::placeholder { color:var(--text-muted); }
+.search-results { overflow-y:auto; max-height:380px; padding:8px; }
+.search-results:empty::after { content:'Type to search...'; display:block; padding:24px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-result { display:block; padding:10px 14px; border-radius:6px; text-decoration:none; cursor:pointer; transition:background .1s; }
+.search-result:hover, .search-result.selected { background:var(--blue-light); }
+.search-result-title { font-size:14px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.search-result-context { font-size:12.5px; color:var(--text-muted); line-height:1.4; }
+.search-result-context mark { background:#fef08a; color:var(--text); border-radius:2px; padding:0 1px; }
+.search-empty { padding:32px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-footer { padding:8px 14px; border-top:1px solid var(--border); display:flex; gap:12px; font-size:11px; color:var(--text-muted); }
+.search-footer kbd { font-family:'Inter',sans-serif; font-size:10px; padding:1px 5px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:3px; }
+
+/* ── Checklist ── */
+.checklist { list-style: none; margin-left: 0; padding-left: 0; }
+.checklist li { position: relative; padding-left: 28px; margin-bottom: 8px; }
+.checklist li::before { content: '\2610'; position: absolute; left: 0; color: var(--text-muted); font-size: 16px; }
+
+/* ── Responsive ── */
+@media (max-width: 1100px) { .toc { display: none; } }
+@media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 24px 20px 80px; } .search-box { width:calc(100% - 32px); } }
+@media print { .sidebar, .toc, .search-overlay { display: none; } .main { margin-left: 0; max-width: 100%; } }
+</style>
+</head>
+<body>
+
+<!-- Left sidebar -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <img src="https://www.fieldproxy.ai/images/design-mode/Favicon.png" alt="FP">
+    <span>Widget Rules</span>
+  </div>
+  <div class="search-trigger" onclick="openSearch()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    Search...
+    <kbd>&lceil;K</kbd>
+  </div>
+  <div class="sb-label">Rules</div>
+  <nav class="sb-nav">
+    <a href="#rule-1" class="active">Rule 1 &mdash; column/row width</a>
+    <a href="#rule-2">Rule 2 &mdash; Absolute width</a>
+    <a href="#rule-3">Rule 3 &mdash; CSS border</a>
+    <a href="#rule-4">Rule 4 &mdash; expanded: true</a>
+    <a href="#rule-5">Rule 5 &mdash; space_widget</a>
+    <a href="#rule-6">Rule 6 &mdash; element_id</a>
+    <a href="#rule-7">Rule 7 &mdash; Centering</a>
+    <a href="#rule-8">Rule 8 &mdash; onclick hover</a>
+    <a href="#rule-9">Rule 9 &mdash; transparent</a>
+    <a href="#rule-10">Rule 10 &mdash; main_axis_size</a>
+    <a href="#rule-11">Rule 11 &mdash; show_if</a>
+    <a href="#rule-12">Rule 12 &mdash; Single quotes</a>
+    <a href="#rule-13">Rule 13 &mdash; Button width</a>
+    <a href="#rule-14">Rule 14 &mdash; input_type</a>
+    <a href="#rule-15">Rule 15 &mdash; input_data paths</a>
+    <a href="#rule-16">Rule 16 &mdash; wrap vs row</a>
+    <a href="#rule-17">Rule 17 &mdash; icon_button</a>
+    <a href="#rule-18">Rule 18 &mdash; List element_ids</a>
+    <a href="#rule-19">Rule 19 &mdash; input_data keys</a>
+    <a href="#rule-20">Rule 20 &mdash; Feather icons</a>
+    <a href="#rule-21">Rule 21 &mdash; Small containers</a>
+    <a href="#rule-22">Rule 22 &mdash; Nested rows</a>
+    <a href="#rule-23">Rule 23 &mdash; Filled dots</a>
+    <a href="#rule-24">Rule 24 &mdash; grouped_counter</a>
+    <a href="#rule-25">Rule 25 &mdash; Popup widths</a>
+    <a href="#rule-27">Rule 27 &mdash; List scrolling</a>
+    <a href="#rule-28">Rule 28 &mdash; Card height</a>
+    <a href="#rule-29">Rule 29 &mdash; Container height</a>
+    <a href="#rule-30">Rule 30 &mdash; update_data</a>
+    <a href="#rule-31">Rule 31 &mdash; Divider on web</a>
+    <a href="#rule-32">Rule 32 &mdash; Container color</a>
+    <a href="#rule-33">Rule 33 &mdash; List borders</a>
+    <a href="#rule-34">Rule 34 &mdash; Button colors</a>
+    <a href="#rule-35">Rule 35 &mdash; Nested widths</a>
+    <a href="#rule-36">Rule 36 &mdash; Dropdown init</a>
+    <a href="#rule-37">Rule 37 &mdash; Popup scroll</a>
+    <a href="#rule-38">Rule 38 &mdash; default_value</a>
+    <a href="#rule-39">Rule 39 &mdash; Status badges</a>
+    <a href="#rule-40">Rule 40 &mdash; List stretch</a>
+    <a href="#rule-41">Rule 41 &mdash; Popup init index</a>
+    <a href="#rule-42">Rule 42 &mdash; MCQ multi-select</a>
+    <a href="#preflight">Pre-flight Checklist</a>
+  </nav>
+  <div class="sb-label" style="margin-top:24px;">All Docs</div>
+  <nav class="sb-nav">
+    <a href="../onboarding-guide.html">Home</a>
+    <a href="../1-getting-started.html">Getting Started</a>
+    <a href="../2-build-guide.html">Build Guide</a>
+    <a href="../3-quick-reference.html">Quick Reference</a>
+    <a href="fieldproxy-error-log.html">Error Log</a>
+    <a href="fieldproxy-widget-rules.html" class="active">Widget Rules</a>
+  </nav>
+</aside>
+
+<!-- Right TOC -->
+<nav class="toc">
+  <div class="toc-title">On this page</div>
+  <a href="#rule-1" class="active">Rule 1 &mdash; column/row width</a>
+  <a href="#rule-2">Rule 2 &mdash; Absolute width</a>
+  <a href="#rule-3">Rule 3 &mdash; CSS border</a>
+  <a href="#rule-4">Rule 4 &mdash; expanded: true</a>
+  <a href="#rule-5">Rule 5 &mdash; space_widget</a>
+  <a href="#rule-6">Rule 6 &mdash; element_id</a>
+  <a href="#rule-7">Rule 7 &mdash; Centering</a>
+  <a href="#rule-8">Rule 8 &mdash; onclick hover</a>
+  <a href="#rule-9">Rule 9 &mdash; transparent</a>
+  <a href="#rule-10">Rule 10 &mdash; main_axis_size</a>
+  <a href="#rule-11">Rule 11 &mdash; show_if</a>
+  <a href="#rule-12">Rule 12 &mdash; Single quotes</a>
+  <a href="#rule-13">Rule 13 &mdash; Button width</a>
+  <a href="#rule-14">Rule 14 &mdash; input_type</a>
+  <a href="#rule-15">Rule 15 &mdash; input_data paths</a>
+  <a href="#rule-16">Rule 16 &mdash; wrap vs row</a>
+  <a href="#rule-17">Rule 17 &mdash; icon_button</a>
+  <a href="#rule-18">Rule 18 &mdash; List element_ids</a>
+  <a href="#rule-19">Rule 19 &mdash; input_data keys</a>
+  <a href="#rule-20">Rule 20 &mdash; Feather icons</a>
+  <a href="#rule-21">Rule 21 &mdash; Small containers</a>
+  <a href="#rule-22">Rule 22 &mdash; Nested rows</a>
+  <a href="#rule-23">Rule 23 &mdash; Filled dots</a>
+  <a href="#rule-24">Rule 24 &mdash; grouped_counter</a>
+  <a href="#rule-25">Rule 25 &mdash; Popup widths</a>
+  <a href="#rule-27">Rule 27 &mdash; List scrolling</a>
+  <a href="#rule-28">Rule 28 &mdash; Card height</a>
+  <a href="#rule-29">Rule 29 &mdash; Container height</a>
+  <a href="#rule-30">Rule 30 &mdash; update_data</a>
+  <a href="#rule-31">Rule 31 &mdash; Divider on web</a>
+  <a href="#rule-32">Rule 32 &mdash; Container color</a>
+  <a href="#rule-33">Rule 33 &mdash; List borders</a>
+  <a href="#rule-34">Rule 34 &mdash; Button colors</a>
+  <a href="#rule-35">Rule 35 &mdash; Nested widths</a>
+  <a href="#rule-36">Rule 36 &mdash; Dropdown init</a>
+  <a href="#rule-37">Rule 37 &mdash; Popup scroll</a>
+  <a href="#rule-38">Rule 38 &mdash; default_value</a>
+  <a href="#rule-39">Rule 39 &mdash; Status badges</a>
+  <a href="#rule-40">Rule 40 &mdash; List stretch</a>
+  <a href="#rule-41">Rule 41 &mdash; Popup init index</a>
+  <a href="#rule-42">Rule 42 &mdash; MCQ multi-select</a>
+  <a href="#preflight">Pre-flight Checklist</a>
+</nav>
+
+<!-- Main content -->
+<main class="main">
+
+<h1>Widget Rules</h1>
+<p class="page-desc">Validation &amp; Debug Skill (Tier 1) &mdash; Run this checklist before outputting any view JSON. Every rule is verified against source code.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-1">RULE 1 &mdash; <code>column</code> and <code>row</code> ignore their own <code>width</code></h2>
+
+<p>column/row render as Flutter Column/Row &mdash; width is never applied to themselves.</p>
+
+<pre><code>// WRONG
+{ "type": "column", "width": 10, "ui": [...] }
+{ "type": "row",    "width": 10, "ui": [...] }
+
+// CORRECT — wrap in container
+{ "type": "container", "width": 10, "element_id": "wrapper", "ui": [
+    { "type": "column", "element_id": "col_inner", "ui": [...] }
+]}</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-2">RULE 2 &mdash; Width is always absolute (against screenWidth)</h2>
+
+<p><code>calculateDynamicWidth</code> ALWAYS uses screenWidth as reference &mdash; not the parent's width. Nested elements don't inherit parent width.</p>
+
+<p>Elements that must align should be at the SAME nesting level with matching width values.</p>
+
+<p><strong>Nested overflow rule:</strong> When children are inside a container with <code>width: N</code>, the sum of all children widths must be &le; N. Since widths are absolute against screenWidth, children summing to 12 (100% screen) inside a <code>width: 7.5</code> parent will overflow by 37.5% &mdash; causing items to be clipped/hidden. Scale children proportionally to fit the parent.</p>
+
+<p><strong>Combining with Rule 1:</strong> <code>column</code>/<code>row</code> children inside a row will NOT have their width applied (Rule 1). To give a column or row child a fixed width inside a parent row, wrap it in a <code>container</code> with the desired width, then nest the column/row inside. Otherwise the child takes its natural content width, not the specified grid width.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-3">RULE 3 &mdash; CSS <code>border</code> syntax doesn't work</h2>
+
+<p>The renderer reads <code>border_color</code> and <code>border_width</code> separately. The CSS <code>border</code> string is ignored.</p>
+
+<pre><code>// WRONG
+{ "border": "1px solid #E5E7EB" }
+
+// CORRECT
+{ "border_color": "#E5E7EB", "border_width": 1 }</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-4">RULE 4 &mdash; <code>expanded: true</code> only works on <code>text</code></h2>
+
+<p>Only the "text" case in <code>getChildren()</code> checks <code>expanded</code>. On buttons, containers, icons &mdash; silently ignored.</p>
+
+<pre><code>// WRONG
+{ "type": "button", "expanded": true }
+
+// CORRECT alternatives
+{ "type": "text",   "expanded": true, "element_id": "txt" }
+{ "type": "button", "width": 2, "element_id": "btn" }
+{ "type": "spacer", "element_id": "gap" }</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-5">RULE 5 &mdash; <code>space_widget</code> default alignment is vertical</h2>
+
+<p>Default is <code>SizedBox(height: N)</code>. Inside a row, a vertical spacer adds height, not horizontal gap.</p>
+
+<pre><code>// WRONG — inside a row this does nothing visible
+{ "type": "space_widget", "space": 16, "element_id": "sp" }
+
+// CORRECT — inside a row
+{ "type": "space_widget", "space": 16, "alignment": "horizontal", "element_id": "sp" }</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-6">RULE 6 &mdash; Every element MUST have a unique <code>element_id</code></h2>
+
+<p>Missing element_id &rarr; fallback <code>unknown_&lt;timestamp&gt;</code> &rarr; rebuild flicker, broken visibility conditions, state collision.</p>
+
+<p>Forbidden element_id values: <code>index</code>, <code>[index]</code>, <code>[0]</code>, <code>0</code>, or anything containing <code>.</code> (dots).</p>
+
+<p><strong>When modifying an existing file:</strong> New elements must be checked against ALL existing element_ids in the file, not just other new elements. Duplicate IDs across old + new elements cause the same state collision bugs. Before adding any element_id, search the full file for that string.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-7">RULE 7 &mdash; Centering in a row needs TWO spacers</h2>
+
+<p>One spacer pushes element right. Two spacers (before + after) split space 50/50.</p>
+
+<pre><code>// WRONG — pushes to right
+{ "type": "spacer" }, { "type": "text", "text": "Title" }
+
+// CORRECT — true center
+{ "type": "spacer", "element_id": "sp_l" },
+{ "type": "text", "text": "Title", "element_id": "title" },
+{ "type": "spacer", "element_id": "sp_r" }</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-8">RULE 8 &mdash; <code>onclick</code> on container auto-triggers hover</h2>
+
+<p>ContainerWidget auto-adds shadow + 2px lift + pointer cursor when onclick is present. No way to disable. Only add onclick on containers where full-area hover is intentional.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-9">RULE 9 &mdash; <code>color: "transparent"</code> must be explicit</h2>
+
+<p>Default container color is <code>#FFFFFF</code> (white). Inner containers that should show parent background must set <code>"color": "transparent"</code>.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-10">RULE 10 &mdash; <code>main_axis_size: "min"</code> on inner rows</h2>
+
+<p>Default <code>main_axis_size</code> is <code>"max"</code> &mdash; inner rows stretch full width. Set <code>"min"</code> on rows that should only take their content's natural width (pills, badges, icon+text groups).</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-11">RULE 11 &mdash; <code>show_if</code> does not exist &mdash; use <code>visibility_condition</code></h2>
+
+<p>The renderer only checks <code>visibility_condition</code>. <code>show_if</code> is silently ignored &mdash; element always visible.</p>
+
+<pre><code>// WRONG
+{ "show_if": "'{{data}}' != '0'" }
+
+// CORRECT
+{ "visibility_condition": "'{{data}}' != '0'" }</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-12">RULE 12 &mdash; Template values in visibility conditions MUST be in single quotes</h2>
+
+<p>After template resolution, unquoted values cause unreliable comparisons.</p>
+
+<pre><code>// WRONG
+{ "visibility_condition": "{{stats.data.[0].count}} != '0'" }
+
+// CORRECT
+{ "visibility_condition": "'{{stats.data.[0].count}}' != '0'" }</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-13">RULE 13 &mdash; Buttons use <code>width</code> (grid 1-12) &mdash; <code>fixed_width</code> does not exist for buttons</h2>
+
+<p><code>fixed_width</code> is ContainerWidget-only. Buttons use grid width resolved via <code>calculateDynamicWidth()</code>.</p>
+
+<pre><code>// WRONG
+{ "type": "button", "fixed_width": 120 }
+
+// CORRECT
+{ "type": "button", "width": 2, "element_id": "btn" }</code></pre>
+
+<p>Button width reference (1440px screen, 220px sidebar):</p>
+<ul>
+  <li>width 1 &asymp; 95px</li>
+  <li>width 2 &asymp; 190px</li>
+  <li>width 3 &asymp; 285px</li>
+  <li>width 4 &asymp; 380px</li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-14">RULE 14 &mdash; Valid <code>input_type</code> values &mdash; <code>textarea</code> and <code>select</code> do not exist</h2>
+
+<p>Unknown input types produce a null widget &mdash; input silently disappears.</p>
+
+<pre><code>// WRONG
+{ "input_type": "textarea" }
+{ "input_type": "select" }
+
+// CORRECT
+{ "input_type": "text", "max_lines": 5 }
+{ "input_type": "dropdown", "show_key": false }</code></pre>
+
+<p>Valid types: <code>text</code>, <code>number</code>, <code>email</code>, <code>phone</code>, <code>date</code>, <code>dropdown</code>, <code>checkbox</code>, <code>file</code>, <code>image</code>, <code>mcq</code>, <code>rating</code>, <code>signature</code>, <code>location</code>, <code>scan</code>, <code>step_counter</code>, <code>table</code>, <code>catalogue</code></p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-15">RULE 15 &mdash; <code>input_data</code> path syntax: <code>.0</code> vs <code>.[index]</code> vs <code>.[0]</code></h2>
+
+<table>
+  <thead><tr><th>Syntax</th><th>Resolves to</th><th>Use when</th></tr></thead>
+  <tbody>
+    <tr><td><code>.0</code></td><td>String key <code>"0"</code> in map</td><td>Popup/form (non-list) &mdash; always row 0</td></tr>
+    <tr><td><code>.[index]</code></td><td>Runtime row index integer</td><td>Inside list &mdash; current row</td></tr>
+    <tr><td><code>.[0]</code></td><td>Integer index 0 on a List</td><td>Indexing into array values (date range, file URLs)</td></tr>
+  </tbody>
+</table>
+
+<p>NEVER use <code>.[0]</code> when you mean <code>.0</code> for input_data access.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-16">RULE 16 &mdash; Use <code>type: "wrap"</code> (not <code>type: "row"</code>) for multi-column layouts inside padded containers</h2>
+
+<p><code>calculateDynamicWidth()</code> in <code>container_widget.dart</code> <strong>always</strong> calculates from <code>widget.controller.screenWidth</code> &mdash; never from the parent's actual pixel constraints. This means children inside a padded parent container can overflow even when their grid widths sum to less than the parent's grid width, because the parent's padding reduces available pixels but children don't know about it.</p>
+
+<p>A <code>type: "row"</code> (Flutter Row) <strong>silently clips</strong> overflow &mdash; hidden items just disappear. A <code>type: "wrap"</code> (Flutter Wrap) <strong>wraps</strong> overflow to the next line &mdash; items are always visible.</p>
+
+<pre><code>// WRONG — children may overflow and be clipped inside a padded parent
+{ "type": "row", "element_id": "data_row", "ui": [
+    { "type": "container", "width": 2 },
+    { "type": "container", "width": 1 },
+    { "type": "container", "width": 1 },
+    { "type": "container", "width": 1 },
+    { "type": "container", "width": 2 }
+]}
+
+// CORRECT — wrap ensures items are always visible
+{ "type": "wrap", "element_id": "data_row", "ui": [
+    { "type": "container", "width": 2 },
+    { "type": "container", "width": 1 },
+    { "type": "container", "width": 1 },
+    { "type": "container", "width": 1 },
+    { "type": "container", "width": 2 }
+]}</code></pre>
+
+<p><strong>When to use <code>row</code> vs <code>wrap</code>:</strong></p>
+<ul>
+  <li><code>row</code>: 2-3 items that are guaranteed to fit (e.g., label + value), or items using <code>spacer</code>/<code>expanded</code></li>
+  <li><code>wrap</code>: 4+ items with explicit widths, especially inside padded parent containers</li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-17">RULE 17 &mdash; <code>icon_button</code> uses <code>bg_color</code>, <code>color</code>, and <code>size</code> &mdash; NOT <code>background_color</code> or <code>icon_color</code></h2>
+
+<p><code>btn_type: "icon_button"</code> renders as a Flutter <code>CircleAvatar</code> + <code>IconButton</code>. The source code reads:</p>
+<ul>
+  <li><code>bg_color</code> (default <code>#FFFFFF</code>) &rarr; CircleAvatar background color</li>
+  <li><code>color</code> (default <code>#FFFFFF</code>) &rarr; icon color</li>
+  <li><code>size</code> (default <code>20</code>) &rarr; both CircleAvatar radius AND icon size</li>
+</ul>
+
+<p><strong><code>background_color</code></strong>, <strong><code>icon_color</code></strong>, <strong><code>border_radius</code></strong> are all <strong>silently ignored</strong> &mdash; the button renders white-on-white (invisible).</p>
+
+<pre><code>// WRONG — properties silently ignored, icon invisible
+{
+  "type": "button",
+  "btn_type": "icon_button",
+  "icon": "check-square",
+  "background_color": "#E0F2FE",
+  "icon_color": "#0891B2"
+}
+
+// CORRECT
+{
+  "type": "button",
+  "btn_type": "icon_button",
+  "icon": "check-square",
+  "bg_color": "#E0F2FE",
+  "color": "#0891B2",
+  "size": 16
+}</code></pre>
+
+<div class="callout callout-warn">
+  <p><strong>Note:</strong> <code>filled_button</code> uses <code>background_color</code> and <code>text_color</code>. <code>icon_button</code> uses <code>bg_color</code> and <code>color</code>. Different property names for different btn_types.</p>
+</div>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-18">RULE 18 &mdash; List item element_ids must NOT contain <code>_[index]</code></h2>
+
+<p>Inside a <code>type: "list"</code>, every child element_id should be a <strong>stable string</strong> (e.g., <code>"btn_verify"</code>, <code>"mach_serial"</code>). The framework passes the row index separately as a parameter and uses <code>visibilityConditions[element_id]["$index"]</code> / <code>inputData[element_id]["$index"]</code> to differentiate rows.</p>
+
+<p><strong><code>_[index]</code> in element_ids is NOT replaced by the framework</strong> &mdash; it stays as the literal string <code>"btn_verify_[index]"</code> for ALL rows, which:</p>
+<ol>
+  <li>Causes state collision (all rows share the exact same element_id string)</li>
+  <li>Breaks <code>input_data</code> access (path segment <code>verify_notes_[index]</code> is not just <code>[index]</code>, so <code>getNestedData</code> tries <code>int.parse("verify_notes_index")</code> &rarr; crashes silently)</li>
+</ol>
+
+<pre><code>// WRONG — _[index] stays as literal string, collisions + broken input_data
+{
+  "element_id": "btn_verify_[index]",
+  "field_name": "verify_notes_[index]"
+}
+// query: "{{input_data.verify_notes_[index].0}}"  → FAILS
+
+// CORRECT — stable element_id, framework differentiates via $index internally
+{
+  "element_id": "btn_verify",
+  "field_name": "verify_notes"
+}
+// query: "{{input_data.verify_notes.[index]}}"  → WORKS</code></pre>
+
+<h3>Input data access inside list popups</h3>
+<ul>
+  <li>Non-list popup (index always 0): <code>input_data.element_id.0</code></li>
+  <li>List popup (index = row index): <code>input_data.element_id.[index]</code></li>
+</ul>
+
+<h3>Data paths in templates still use <code>[index]</code></h3>
+<ul>
+  <li><code>{{ticket_machines.data.[index].serial_number}}</code> &mdash; CORRECT, this is a data path resolved by <code>getNestedData</code></li>
+  <li><code>element_id: "mach_serial"</code> &mdash; CORRECT, no <code>_[index]</code> suffix</li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-19">RULE 19 &mdash; <code>input_data</code> is ALWAYS keyed by <code>element_id</code>, NEVER by <code>field_name</code></h2>
+
+<p><strong>Critical</strong>: <code>field_name</code> is used for form submission/validation labels only. <code>input_data</code> in template expressions ALWAYS uses <code>element_id</code> as the key.</p>
+
+<pre><code>// Input widget definition:
+{ "element_id": "rpl_machine_input", "field_name": "rpl_machine", "input_type": "dropdown" }
+
+// WRONG — field_name as key, always null
+"{{input_data.rpl_machine.[index]}}"
+
+// CORRECT — element_id as key
+"{{input_data.rpl_machine_input.[index]}}"</code></pre>
+
+<h3>Access patterns by input type</h3>
+
+<table>
+  <thead><tr><th>Input type</th><th>Context</th><th>Template</th></tr></thead>
+  <tbody>
+    <tr><td>Text / Date / Number</td><td>Normal popup</td><td><code>{{input_data.ELEMENT_ID.0}}</code></td></tr>
+    <tr><td>Text / Date / Number</td><td>List popup</td><td><code>{{input_data.ELEMENT_ID.[index]}}</code></td></tr>
+    <tr><td>Dropdown (simple value)</td><td>Normal popup</td><td><code>{{input_data.ELEMENT_ID.0}}</code></td></tr>
+    <tr><td>Dropdown (object-data)</td><td>List popup</td><td><code>{{input_data.ELEMENT_ID.[index].FIELD_NAME}}</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Confirmed working example (Waterade replacement_job)</h3>
+<pre><code>element_id: "rpl_machine_input", field_name: "rpl_machine"
+Query: {{input_data.rpl_machine_input.[index].machine_id}}  ✓ WORKS
+Query: {{input_data.rpl_machine.[index]}}                   ✗ ALWAYS NULL</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-20">RULE 20 &mdash; FieldProxy uses Feather icons &mdash; unrecognized names render as star fallback</h2>
+
+<p><strong>Verified icons from working screens:</strong> <code>map-pin</code>, <code>package</code>, <code>alert-circle</code>, <code>layers</code>, <code>clock</code>, <code>truck</code>, <code>check-circle</code>, <code>refresh-cw</code>, <code>eye</code>, <code>edit</code>, <code>edit-3</code>, <code>trash-2</code>, <code>clipboard</code>, <code>users</code>, <code>file-text</code>, <code>columns</code>, <code>alert-triangle</code>, <code>check</code>, <code>plus-circle</code>, <code>user-plus</code>, <code>save</code>, <code>send</code>, <code>info</code>, <code>mail</code>, <code>inbox</code>, <code>x-circle</code>, <code>home</code>, <code>box</code>, <code>briefcase</code>, <code>calendar</code>, <code>shield</code>.</p>
+
+<p><strong>NOT valid:</strong> <code>building</code>, <code>warehouse</code>, <code>factory</code>, <code>office</code>. These are NOT in the Feather icon set.</p>
+
+<p><strong>For facility/building concepts, use:</strong> <code>home</code> (house icon).</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-21">RULE 21 &mdash; Small containers inside rows: do NOT set <code>width</code> &mdash; let them shrink-wrap</h2>
+
+<p><code>calculateDynamicWidth()</code> always uses <code>screenWidth</code>. Even <code>width: 1</code> = <code>1/12 &times; screenWidth &asymp; 120px</code> &mdash; far too large for a small icon wrapper or badge.</p>
+
+<p><strong>Inside a row (especially with <code>main_axis_size: "min"</code>):</strong> A container <strong>without</strong> an explicit <code>width</code> property will shrink-wrap to its content size. Use <code>padding</code> to control the size instead.</p>
+
+<pre><code>// WRONG — 120px wide blue rectangle
+{ "type": "container", "width": 1, "color": "#EFF6FF",
+  "padding_top": 8, "padding_bottom": 8, "padding_left": 8, "padding_right": 8 }
+
+// CORRECT — shrink-wraps to icon (36px square)
+{ "type": "container", "color": "#EFF6FF", "border_radius": 8,
+  "padding_top": 8, "padding_bottom": 8, "padding_left": 8, "padding_right": 8 }</code></pre>
+
+<p><strong>Exception:</strong> Containers that ARE intended to take grid-column width (e.g., <code>width: 6</code> for a half-width card) should still use explicit width.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-22">RULE 22 &mdash; Avoid nested rows with grid-width children inside a parent row</h2>
+
+<p>When you nest <code>type: "row"</code> widgets inside a parent <code>type: "row"</code>, each inner row's children calculate their <code>width</code> against <code>screenWidth</code>. Multiple nested rows with grid-width children will almost always exceed the screen width &rarr; text overlap and horizontal overflow.</p>
+
+<h3>BAD pattern (3 inner rows in 1 parent row)</h3>
+<pre><code>Parent row [space_between]:
+  ├─ Inner row (identity):  icon + name     → ~200px
+  ├─ Inner row (details):   width:2.5 + 1.5 + 1.5 + 2 = 7.5 grid cols → ~900px
+  └─ Inner row (actions):   3 buttons        → ~150px
+  TOTAL: ~1250px → OVERFLOWS on most screens</code></pre>
+
+<h3>GOOD pattern (2 stacked rows)</h3>
+<pre><code>Row 1 [space_between]:  [Icon + Name/subtitle]  ────────  [Action buttons]
+Row 2 [left-aligned]:   Address  ·  City  ·  Frequency badge  ·  Geofence status</code></pre>
+
+<p>This mirrors the proven Safegroup enquiries_view pattern where each list card has stacked rows (top, middle, bottom) with <code>space_between</code>.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-23">RULE 23 &mdash; Filled dot indicators: use text <code>"&bull;"</code> not icon <code>"circle"</code></h2>
+
+<p>The Feather <code>circle</code> icon is an <strong>outline/stroke</strong> circle, not a filled dot. For status dot indicators (active/inactive), use a text widget with the Unicode filled circle character:</p>
+
+<pre><code>// WRONG — renders as hollow outline ring
+{ "type": "icon", "icon": "circle", "size": 8, "color": "#22C55E" }
+
+// CORRECT — renders as filled dot ●
+{ "type": "text", "text": "●", "font_size": 8, "color": "#22C55E",
+  "color_key": "data.[index].status",
+  "color_map": { "active": "#22C55E", "inactive": "#9CA3AF" },
+  "element_id": "status_dot" }</code></pre>
+
+<p>Alternative: Use the text dot separator <code>&middot;</code> (U+00B7) for inline metadata separators (font_size: 13, color: #D1D5DB).</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-24">RULE 24 &mdash; <code>grouped_counter_1</code> requires 5 properties beyond <code>cards</code> array</h2>
+
+<p>The <code>cards</code> array alone is insufficient. Missing properties cause the widget to not render at all.</p>
+
+<h3>Required properties</h3>
+<pre><code>{
+  "type": "grouped_counter_1",
+  "width": 12,
+  "columns": 4,
+  "element_count": 4,
+  "isBackground": true,
+  "customAspectRatio": 1.3,
+  "element_id": "my_kpi_cards",
+  "cards": [...]
+}</code></pre>
+
+<table>
+  <thead><tr><th>Property</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>width</code></td><td>Grid width (always <code>12</code> for full-width)</td></tr>
+    <tr><td><code>columns</code></td><td>Number of cards per row</td></tr>
+    <tr><td><code>element_count</code></td><td>Total number of cards</td></tr>
+    <tr><td><code>isBackground</code></td><td>Enables card background tinting</td></tr>
+    <tr><td><code>customAspectRatio</code></td><td>Controls card height ratio (1.3 is standard)</td></tr>
+  </tbody>
+</table>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-25">RULE 25 &mdash; Popup children width is calculated against screenWidth, NOT popup width</h2>
+
+<p><code>calculateDynamicWidth()</code> ALWAYS uses <code>widget.controller.screenWidth</code>. A popup with <code>width: 700</code> does NOT create a 700px-wide grid for its children. Children with <code>width: 4</code> still calculate as <code>4/12 &times; screenWidth</code>.</p>
+
+<p><strong>Formula:</strong> max grid columns that fit inside popup = <code>popupWidth / screenWidth &times; 12</code></p>
+
+<table>
+  <thead><tr><th>Screen Width</th><th>Popup Width</th><th>Max Usable Grid Cols</th><th>Safe per-column width (3-col)</th><th>Safe per-column width (2-col)</th></tr></thead>
+  <tbody>
+    <tr><td>1440px</td><td>700px</td><td>&sim;5.8</td><td><code>2</code> (=240px)</td><td><code>3</code> (=360px)</td></tr>
+    <tr><td>1280px</td><td>700px</td><td>&sim;6.6</td><td><code>2</code> (=213px)</td><td><code>3</code> (=320px)</td></tr>
+    <tr><td>1920px</td><td>700px</td><td>&sim;4.4</td><td><code>1.5</code> (=240px)</td><td><code>2</code> (=320px)</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-info">
+  <p><strong>Safe approach:</strong> For popups with <code>width: 700</code>, use <code>width: 2</code> for 3-column rows and <code>width: 3</code> for 2-column rows. Or increase popup width to accommodate larger grid columns.</p>
+</div>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-27">RULE 27 &mdash; List scrolling requires <code>height</code> on the LIST widget, NOT on the parent container</h2>
+
+<p>A <code>type: "list"</code> only becomes a bounded scrollable area when <code>height</code> is set <strong>directly on the list widget</strong>. Setting <code>height</code> on the parent <code>container</code> constrains the container's box but does NOT make the list inside scroll &mdash; items will overflow or be clipped.</p>
+
+<pre><code>// WRONG — container height doesn't enable list scrolling
+{
+  "type": "container", "height": 280, "element_id": "panel",
+  "ui": [
+    { "type": "list", "data": "items.data", "element_id": "my_list", "ui": [...] }
+  ]
+}
+
+// CORRECT — height on the list widget directly
+{
+  "type": "container", "element_id": "panel",
+  "ui": [
+    { "type": "list", "data": "items.data", "height": 200,
+      "element_id": "my_list", "search": true, "pagination_count": 5, "ui": [...] }
+  ]
+}</code></pre>
+
+<h3>List scrolling properties</h3>
+<ul>
+  <li><code>height</code> (number) &mdash; constrains the list to a fixed pixel height, enabling vertical scroll</li>
+  <li><code>search: true</code> &mdash; adds a search bar above the list</li>
+  <li><code>pagination_count: N</code> &mdash; limits visible items per page with pagination controls</li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-28">RULE 28 &mdash; Side-by-side card height matching: use <code>cross_axis_alignment: "start"</code> + manual <code>padding_bottom</code></h2>
+
+<p>When two cards sit side-by-side in a <code>type: "row"</code>, do NOT use <code>cross_axis_alignment: "stretch"</code> to match heights &mdash; it forces cards to stretch to the tallest card's height, distributing empty space unpredictably inside the shorter card.</p>
+
+<p><strong>Correct approach:</strong> Use <code>"start"</code> so each card takes its natural height, then add <code>padding_bottom</code> to the shorter card to visually match the taller card's height.</p>
+
+<pre><code>// CORRECT — manual height matching
+{
+  "type": "row", "cross_axis_alignment": "start", "element_id": "side_by_side",
+  "ui": [
+    { "type": "container", "width": 6, "padding_bottom": 105,
+      "element_id": "shorter_card", "ui": [...] },
+    { "type": "gutter", "element_id": "gutter_cards" },
+    { "type": "container", "width": 5.5,
+      "element_id": "taller_card", "ui": [...] }
+  ]
+}</code></pre>
+
+<p><strong>When both cards have an empty state</strong> (e.g., "No items" message): Apply the same <code>padding_bottom</code> to the empty state container so it also matches the other card's height.</p>
+
+<p><strong>Padding estimation:</strong> Start with 80-120px and let the user fine-tune. Don't guess conservatively (e.g., 40-60px) &mdash; it usually needs more padding than expected.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-29">RULE 29 &mdash; Container <code>height</code> property &mdash; <code>fixed_height</code> does NOT exist</h2>
+
+<p><code>fixed_height</code> is <strong>not a valid FieldProxy container property</strong> &mdash; it is silently ignored, causing the container to collapse to 0px height (invisible).</p>
+
+<p><strong>Correct property:</strong> <code>height</code></p>
+
+<p>This is especially critical for <strong>horizontal divider lines</strong> (1px containers used as visual separators).</p>
+
+<pre><code>// WRONG — container renders as 0px (invisible)
+{ "type": "container", "color": "#E5E7EB", "width": 7.0,
+  "fixed_height": 1, "element_id": "divider" }
+
+// CORRECT — renders as 1px gray line
+{ "type": "container", "color": "#E5E7EB", "width": 7.0,
+  "height": 1, "element_id": "divider" }</code></pre>
+
+<h3>Common use cases for <code>height</code> on containers</h3>
+<ul>
+  <li>Horizontal divider lines: <code>"height": 1</code></li>
+  <li>Timeline connector lines: <code>"height": 40</code></li>
+  <li>Fixed-height sections: <code>"height": 200</code></li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-30">RULE 30 &mdash; <code>update_data</code> uses <code>key</code> + <code>query</code> (single data key per action) &mdash; NOT <code>queries</code> object</h2>
+
+<p>After an <code>execute_query</code> mutation, use <code>type: "update_data"</code> to re-fetch specific data keys so the UI reflects the change. Each <code>update_data</code> action refreshes ONE data key. For multiple keys, use separate numbered onclick steps.</p>
+
+<div class="callout callout-danger">
+  <p><strong>Do NOT use <code>refresh_data</code></strong> &mdash; it reloads the entire page, resets all dropdown/filter selections, and flashes the UI. Use <code>update_data</code> for targeted, in-place data refresh. This applies to ALL buttons including "Clear filter" buttons &mdash; use <code>update_data</code> with the default (unfiltered) queries, NOT <code>refresh_data</code>.</p>
+</div>
+
+<pre><code>// WRONG — queries object, refresh_data
+{
+  "type": "refresh_data",
+  "element_id": "refresh_after_save"
+}
+{
+  "type": "update_data",
+  "queries": {
+    "key1": "SELECT ...",
+    "key2": "SELECT ..."
+  }
+}
+
+// CORRECT — single key + query per step
+"4": {
+  "key": "enquiry_detail",
+  "type": "update_data",
+  "query": "SELECT ... WHERE id = {{arguments.enquiry_id}}",
+  "element_id": "update_enquiry_detail_after_save"
+},
+"5": {
+  "key": "audit_timeline",
+  "type": "update_data",
+  "query": "SELECT ... WHERE enquiry_id = {{arguments.enquiry_id}} ORDER BY created_at DESC LIMIT 20",
+  "element_id": "update_audit_after_save"
+}</code></pre>
+
+<h3>Properties</h3>
+<table>
+  <thead><tr><th>Property</th><th>Required</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>key</code></td><td>Yes</td><td>Name of the data key (must match a key in the view's <code>data</code> section)</td></tr>
+    <tr><td><code>type</code></td><td>Yes</td><td>Always <code>"update_data"</code></td></tr>
+    <tr><td><code>query</code></td><td>Yes</td><td>The SELECT query to re-fetch data for this key</td></tr>
+    <tr><td><code>element_id</code></td><td>Yes</td><td>Unique element ID for this action</td></tr>
+  </tbody>
+</table>
+
+<h3>Action ordering in popup onclick chains</h3>
+
+<p><code>close_popup</code> and <code>toast</code> must come AFTER all <code>update_data</code> steps. <code>close_popup</code> can kill the action chain, preventing subsequent <code>update_data</code> from executing.</p>
+
+<pre><code>// CORRECT order
+"1": execute_query (INSERT/UPDATE)
+"2": execute_query (audit log)
+"3": update_data (key 1)
+"4": update_data (key 2)
+"5": close_popup        ← AFTER all update_data
+"6": toast              ← AFTER close_popup</code></pre>
+
+<h3>Which keys to refresh per action type</h3>
+<ul>
+  <li>Status/triage changes &rarr; <code>enquiry_detail</code></li>
+  <li>Assignment changes &rarr; <code>enquiry_detail</code> + <code>audit_timeline</code></li>
+  <li>Escalation &rarr; <code>enquiry_detail</code> + <code>audit_timeline</code></li>
+  <li>Note added &rarr; <code>enquiry_notes</code> + <code>notes_stats</code> + <code>audit_timeline</code></li>
+  <li>Visit/job created &rarr; <code>enquiry_visits</code> + <code>visit_stats</code></li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-31">RULE 31 &mdash; <code>"type": "divider"</code> does NOT render on web &mdash; use container pattern</h2>
+
+<p>FieldProxy's web renderer does not support <code>"type": "divider"</code>. It renders nothing. Always use a 1px container instead.</p>
+
+<pre><code>// WRONG — silently renders nothing
+{ "type": "divider", "color": "#E5E7EB", "element_id": "my_divider" }
+
+// CORRECT — visible 1px line
+{ "type": "container", "color": "#E5E7EB", "width": 12,
+  "height": 1, "element_id": "my_divider" }</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-32">RULE 32 &mdash; Container <code>color</code> vs <code>background_color</code> vs <code>transparent</code></h2>
+
+<ul>
+  <li><strong><code>color</code></strong> &mdash; the correct property for container background color</li>
+  <li><strong><code>background_color</code></strong> &mdash; only valid on <code>sidebar</code>, <code>filled_button</code>, and list/card templates. Silently ignored on containers.</li>
+  <li><strong><code>"color": "transparent"</code></strong> &mdash; makes the container invisible (no fill). Use for wrapper containers that should not paint a background.</li>
+  <li><strong><code>"color": "#FFFFFF"</code></strong> &mdash; explicit white. Use for card containers that need a white fill against a grey page background (<code>#F1F5F9</code>).</li>
+</ul>
+
+<p><strong>Wrapper containers</strong> (like <code>bottom_section_wrapper</code> that only exists to group children) should always be <code>"color": "transparent"</code> so they don't paint an unwanted white rectangle.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-33">RULE 33 &mdash; Borders on list item containers create visual artifacts</h2>
+
+<p>When a list item wrapper has <code>border_color</code> + <code>border_width</code> but <code>color: "transparent"</code>, the border draws a visible rectangle against the page/card background that looks like an unwanted white box.</p>
+
+<pre><code>// WRONG — creates white bordered box artifact
+{ "type": "container", "color": "transparent",
+  "border_color": "#F3F4F6", "border_width": 1, ... }
+
+// CORRECT — subtle grey fill, no border
+{ "type": "container", "color": "#F9FAFB", "border_radius": 10, ... }</code></pre>
+
+<p>For list items that need visual separation: use <code>color: "#F9FAFB"</code> (light grey fill) with <code>border_radius</code> &mdash; no borders needed.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-34">RULE 34 &mdash; Button color patterns for detail view headers</h2>
+
+<table>
+  <thead><tr><th>Button Style</th><th><code>background_color</code></th><th><code>text_color</code></th><th><code>icon_color</code></th><th>Use Case</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Blue primary</strong></td><td><code>#2563EB</code></td><td><code>#FFFFFF</code></td><td><code>#FFFFFF</code></td><td>Actions dropdown (quote detail)</td></tr>
+    <tr><td><strong>Dark slate</strong></td><td><code>#374151</code></td><td><code>#FFFFFF</code></td><td><code>#F0EC84</code> (yellow)</td><td>Quick Actions dropdown (enquiry detail)</td></tr>
+    <tr><td><strong>Green confirm</strong></td><td><code>#059669</code></td><td><code>#FFFFFF</code></td><td>&mdash;</td><td>Resolve/Accept buttons</td></tr>
+    <tr><td><strong>Red destructive</strong></td><td><code>#DC2626</code></td><td><code>#FFFFFF</code></td><td>&mdash;</td><td>Archive/NFA/Escalate/Delete buttons</td></tr>
+  </tbody>
+</table>
+
+<p>Status badge in headers should use outlined style: <code>"color": "#FFFFFF"</code> + <code>"border_color": "#D1D5DB"</code> + <code>"border_width": 1</code> + <code>"border_radius": 20</code>.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-35">RULE 35 &mdash; Child widths inside nested containers overflow</h2>
+
+<p><code>calculateDynamicWidth()</code> ALWAYS uses <code>screenWidth</code>, even for children inside a nested container. A <code>width: 6</code> input inside a <code>width: 8.5</code> container calculates as 50% of screen &mdash; but the container is only 70% of screen &mdash; causing overflow.</p>
+
+<p><strong>Formula for safe child width:</strong> <code>desired_fraction &times; parent_grid_width</code></p>
+
+<table>
+  <thead><tr><th>Parent Container Width</th><th>2-column child width</th><th>Full-width child width</th></tr></thead>
+  <tbody>
+    <tr><td>12 (full screen)</td><td>6</td><td>12</td></tr>
+    <tr><td>8.5</td><td>4</td><td>8</td></tr>
+    <tr><td>8</td><td>4</td><td>7.5</td></tr>
+    <tr><td>6</td><td>3</td><td>5.5</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warn">
+  <p><strong>Rule:</strong> Never use <code>width: 6</code> for 2-column layouts inside containers smaller than <code>width: 12</code>. Use <code>width: 4</code> for containers around <code>width: 8-9</code>.</p>
+</div>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-36">RULE 36 &mdash; Dropdown init with display name breaks onchange</h2>
+
+<p>When a dropdown has <code>value_field: "id"</code> and <code>init</code> is set to a display name (e.g. "Steve Electricals"), FieldProxy stores the name as the selected value. Onchange queries like <code>WHERE id = 'Steve Electricals'</code> fail with type mismatch, causing "Processing" spinner.</p>
+
+<h3>Safe patterns</h3>
+<ul>
+  <li><strong>Don't prefill dropdowns on edit screens</strong> &mdash; show current values in a separate read-only panel</li>
+  <li>If you must prefill, use the ID: <code>"init": "{{data.[0].id}}"</code> (shows the raw ID number, not pretty but works)</li>
+  <li>For simple string arrays (no <code>value_field</code>), <code>init</code> with the string value works fine</li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-37">RULE 37 &mdash; Popups cannot scroll, use separate views for long forms</h2>
+
+<p>From source code: regular popups use <code>Column(mainAxisSize: min)</code> &mdash; content overflows with no scroll. <code>fullscreen: true</code> wraps in <code>SingleChildScrollView</code> but still unreliable for complex forms with dropdowns.</p>
+
+<p><strong>Fix:</strong> Move long edit forms to a dedicated view with <code>navigation</code> instead of a popup. Views scroll naturally. Pass the record ID via <code>arguments</code>.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-38">RULE 38 &mdash; <code>default_value</code> is not a valid property</h2>
+
+<p><code>default_value</code> is silently ignored on all input types. Use <code>init</code> for prefilling text inputs, number inputs, and dropdowns.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-39">RULE 39 &mdash; Status badges in lists: use separate containers with <code>visibility_condition</code>, NOT dynamic <code>color</code> templates</h2>
+
+<p><strong>Dynamic template values in container <code>color</code> do NOT render in list items.</strong> The template <code>{{data.[index].status_color}}</code> resolves to a hex string (confirmed via data inspection), but the container renderer does not repaint with the resolved color &mdash; badges appear invisible/white.</p>
+
+<h3>ONLY working pattern &mdash; visibility_condition per status</h3>
+
+<pre><code>// WRONG — dynamic color template, renders invisible
+{
+  "type": "container",
+  "color": "{{quotes.data.[index].status_color}}",
+  "border_radius": 12,
+  "element_id": "status_badge",
+  "ui": [{ "type": "text", "text": "{{quotes.data.[index].status_label}}" }]
+}
+
+// CORRECT — one container per status with hardcoded color + visibility_condition
+{
+  "type": "container",
+  "color": "#FEF3C7",
+  "border_radius": 12,
+  "visibility_condition": "'{{quotes.data.[index].status_code}}' == 'DRAFT'",
+  "element_id": "badge_draft",
+  "ui": [{ "type": "text", "text": "Draft", "color": "#92400E", "font_size": 11 }]
+},
+{
+  "type": "container",
+  "color": "#DBEAFE",
+  "border_radius": 12,
+  "visibility_condition": "'{{quotes.data.[index].status_code}}' == 'PENDING_APPROVAL'",
+  "element_id": "badge_pending",
+  "ui": [{ "type": "text", "text": "Pending Approval", "color": "#1E40AF", "font_size": 11 }]
+}
+// ... repeat for each status value</code></pre>
+
+<h3>Key rules</h3>
+<ul>
+  <li>Each status gets its own container with a <strong>static hardcoded <code>color</code></strong> (not a template)</li>
+  <li><code>visibility_condition</code> controls which container is shown based on the data value</li>
+  <li>Template values in <code>visibility_condition</code> MUST be in single quotes (Rule 12)</li>
+  <li>This is the SAME proven pattern used for visit status badges in the Visits &amp; Jobs tab</li>
+  <li>Works because <code>visibility_condition</code> is evaluated as a string comparison, while <code>color</code> template resolution fails in list item rendering context</li>
+</ul>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-40">RULE 40 &mdash; List without <code>height</code> stretches last item to fill viewport</h2>
+
+<p>When a <code>list</code> widget is a direct child of the root <code>ui</code> array without a <code>height</code> property, FieldProxy's flex layout stretches the last list item to fill remaining viewport space &mdash; creating large empty areas inside cards.</p>
+
+<pre><code>// WRONG — last card stretches to fill screen
+{ "type": "list", "data": "items.data", "element_id": "my_list", "ui": [...] }
+
+// CORRECT — list gets scrollable area, cards stay content-sized
+{ "type": "list", "data": "items.data", "element_id": "my_list",
+  "height": 700, "ui": [...] }</code></pre>
+
+<p><strong>Fix:</strong> Set <code>height</code> on the list widget (Rule 27 pattern). This creates a scrollable area where cards render at their natural content height. Use <code>700</code> as a good default for full-page lists.</p>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-41">RULE 41 &mdash; <code>init</code> in popup inputs resolves <code>[index]</code> at render time, not click time</h2>
+
+<p>When a popup is opened from a list item's onclick, <code>init</code> on inputs inside the popup evaluates <code>[index]</code> at <strong>list render time</strong> (always <code>0</code>), not at click time. Every row's edit popup pre-fills with the first row's data.</p>
+
+<p><strong>onclick actions</strong> (<code>execute_query</code>, <code>update_data</code>) resolve <code>[index]</code> correctly at click time &mdash; this is why delete works but init doesn't.</p>
+
+<pre><code>// WRONG — init always shows first row's data
+"init": "{{items.data.[index].name}}"
+
+// CORRECT — fetch the row first, then reference [0]
+"onclick": {
+  "1": {
+    "key": "edit_data",
+    "type": "update_data",
+    "query": "SELECT * FROM table WHERE id = {{items.data.[index].id}}",
+    "element_id": "fetch_row"
+  },
+  "2": {
+    "type": "popup",
+    "ui": [{
+      "type": "input",
+      "init": "{{edit_data.data.[0].name}}",
+      ...
+    }]
+  }
+}</code></pre>
+
+<p><strong>Pattern:</strong> Use <code>update_data</code> (step 1) to fetch the specific row by ID into a separate data key. The <code>[index]</code> in the query resolves correctly at click time. Then the popup's <code>init</code> uses <code>[0]</code> on the fetched single-row result.</p>
+
+<div class="callout callout-info">
+  <p><strong>Status:</strong> Ticket filed with product team (FIE-402). Workaround above not yet verified.</p>
+</div>
+
+<!-- ─────────────────────── -->
+<h2 id="rule-42">RULE 42 &mdash; MCQ multi-select: use <code>is_multi: true</code> + plain string arrays</h2>
+
+<p>MCQ inputs default to single-select (radio buttons). For multi-select (checkboxes), add <code>is_multi: true</code>.</p>
+
+<p>Static MCQ data must be <strong>plain string arrays</strong>, not <code>{label, value}</code> objects:</p>
+
+<pre><code>// WRONG — shows raw objects "{label: Monday, value: Monday}"
+"data": [{"label": "Monday", "value": "Monday"}, ...]
+
+// CORRECT — shows clean text "Monday"
+"data": ["Monday", "Tuesday", "Wednesday", ...]</code></pre>
+
+<p>For query-driven MCQ, return a single column (the display value):</p>
+<pre><code>"data": "facilities_list.data"
+// where query is: SELECT name FROM facilities ORDER BY name</code></pre>
+
+<h3>Web MCQ <code>init</code> limitation</h3>
+
+<p><code>init</code> with <code>ARRAY_AGG</code> only pre-selects the <strong>first</strong> value on web. Multi-value pre-fill does NOT work. <code>is_checklist: true</code> is mobile-only and breaks web MCQ completely. Workaround: show "Currently assigned" text above the MCQ for context.</p>
+
+<h3>SQL operators in JSON strings</h3>
+
+<p><code>!=</code> and <code>&lt;&gt;</code> get split with spaces by FieldProxy's JSON parser, causing SQL errors. Use <code>LENGTH(TRIM(val)) &gt; 0</code> instead of <code>TRIM(val) &lt;&gt; ''</code>.</p>
+
+<h3>Storing multi-select values</h3>
+
+<p>To store multi-select values, use <code>.0.formatted_value</code> in queries:</p>
+<pre><code>"query": "INSERT INTO table (days) VALUES ('{{input_data.weekly_days.0.formatted_value}}')"</code></pre>
+
+<div class="callout callout-warn">
+  <p><strong>Note:</strong> Values stored by MCQ may include <code>{</code> <code>}</code> braces. Strip them in display queries:</p>
+</div>
+
+<pre><code>REPLACE(REPLACE(COALESCE(weekly_days, ''), '{', ''), '}', '') AS weekly_days</code></pre>
+
+<!-- ─────────────────────── -->
+<h2 id="preflight">Pre-flight Checklist</h2>
+
+<p>Before submitting any view JSON, verify:</p>
+
+<ul class="checklist">
+  <li>No width on <code>type: "column"</code> or <code>type: "row"</code></li>
+  <li>No <code>"border": "..."</code> CSS strings &rarr; use <code>border_color</code> + <code>border_width</code></li>
+  <li>All <code>space_widget</code> inside rows have <code>alignment: "horizontal"</code></li>
+  <li>Every element has a unique <code>element_id</code> (no <code>index</code>, <code>[index]</code>, <code>[0]</code>, dots)</li>
+  <li>When modifying existing files: new element_ids checked against ALL existing IDs in the file</li>
+  <li><code>expanded: true</code> only on <code>type: "text"</code></li>
+  <li>Inner/wrapper containers have <code>color: "transparent"</code> where needed</li>
+  <li>No <code>"type": "divider"</code> &mdash; use container with <code>height: 1</code> instead (Rule 31)</li>
+  <li>List item containers: use color fill (<code>#F9FAFB</code>), NOT border on transparent (Rule 33)</li>
+  <li>Elements that must align are siblings at the same nesting level</li>
+  <li>Inner rows that wrap content use <code>main_axis_size: "min"</code></li>
+  <li>Centering = two spacers (before + after), not one</li>
+  <li><code>onclick</code> only on containers where full-area hover is intentional</li>
+  <li><code>visibility_condition</code> (NOT <code>show_if</code>) with single-quoted templates</li>
+  <li>Buttons use <code>width</code> (1-12), not <code>fixed_width</code></li>
+  <li>All <code>input_type</code> values are from the valid list</li>
+  <li>onclick keys are pure numeric strings: <code>"1"</code>, <code>"2"</code>, <code>"3"</code> (never <code>"1a"</code>)</li>
+  <li><code>show_key: false</code> on object-data dropdowns</li>
+  <li>Multi-column layouts (4+ items) inside padded parents use <code>type: "wrap"</code> not <code>"row"</code></li>
+  <li><code>icon_button</code> uses <code>bg_color</code> + <code>color</code> + <code>size</code> (NOT <code>background_color</code>/<code>icon_color</code>/<code>border_radius</code>)</li>
+  <li>List item element_ids have NO <code>_[index]</code> suffix (framework handles row differentiation via <code>$index</code>)</li>
+  <li>Input data in list popups uses <code>.[index]</code> not <code>.0</code> (popup renders at list item's index)</li>
+  <li>All icon names are valid Feather icons (no <code>"building"</code>, <code>"warehouse"</code>, <code>"factory"</code>)</li>
+  <li>Small containers in rows (icon wrappers, badges) have NO <code>width</code> &mdash; use padding to size</li>
+  <li>No nested rows-in-rows where inner children have grid widths (use stacked rows instead)</li>
+  <li>Status dot indicators use text <code>"&#x25CF;"</code> not icon <code>"circle"</code> (which renders as outline)</li>
+  <li><code>grouped_counter_1</code> has <code>width</code> + <code>columns</code> + <code>element_count</code> + <code>isBackground</code> + <code>customAspectRatio</code></li>
+  <li>Popup child widths account for screenWidth calculation (use <code>width:2</code> for 3-col in 700px popup)</li>
+  <li><code>visibility_condition</code> NEVER placed directly on <code>type: "input"</code> &mdash; wrap input in container with <code>visibility_condition</code> instead</li>
+  <li>List scrolling uses <code>height</code> on the list widget directly &mdash; NOT on parent container</li>
+  <li>Side-by-side card height matching uses <code>cross_axis_alignment: "start"</code> + <code>padding_bottom</code> (NOT <code>"stretch"</code>)</li>
+  <li>Container height uses <code>height</code> (NOT <code>fixed_height</code> &mdash; silently ignored)</li>
+  <li>Data refresh after mutations uses <code>update_data</code> with <code>key</code> + <code>query</code> (NOT <code>refresh_data</code> or <code>queries</code> object)</li>
+  <li><code>"Clear filter"</code> buttons use <code>update_data</code> with default queries (NOT <code>refresh_data</code> which resets all page state)</li>
+  <li>Child input widths inside nested containers account for parent grid width (Rule 35)</li>
+  <li>Dropdown <code>init</code> on dropdowns with <code>value_field</code> uses ID, not display name (Rule 36)</li>
+  <li>Edit forms with many fields use separate view (navigation), NOT popup &mdash; popups can't scroll (Rule 37)</li>
+  <li><code>default_value</code> is NOT a valid property &mdash; use <code>init</code> for prefilling inputs (Rule 38)</li>
+  <li>Status badges in list items use separate containers with <code>visibility_condition</code> + static color per status &mdash; NEVER dynamic color templates (Rule 39)</li>
+</ul>
+
+<!-- Footer nav -->
+<div class="footer-nav">
+  <a href="../3-quick-reference.html">
+    <div class="fn-label">&larr; Previous</div>
+    <div class="fn-title">Quick Reference</div>
+  </a>
+  <a href="fieldproxy-error-log.html">
+    <div class="fn-label">Next &rarr;</div>
+    <div class="fn-title">Error Log</div>
+  </a>
+</div>
+
+</main>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search..." autofocus>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+    <div class="search-footer">
+      <span><kbd>&uarr;&darr;</kbd> Navigate</span>
+      <span><kbd>&crarr;</kbd> Open</span>
+      <span><kbd>Esc</kbd> Close</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Scrollspy
+const sections = document.querySelectorAll('h2[id]');
+const sideLinks = document.querySelectorAll('.sb-nav a[href^="#"]');
+const tocLinks = document.querySelectorAll('.toc a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  sideLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+  tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+});
+
+// Search
+let searchIndex = [];
+function buildIndex() {
+  const main = document.querySelector('.main');
+  let c = 0;
+  main.querySelectorAll('h2, h3, h4').forEach(h => { if (!h.id) h.id = 'search-' + (c++); });
+  main.querySelectorAll('h2, h3, h4').forEach(h => {
+    let text = '';
+    let el = h.nextElementSibling;
+    while (el && !['H2','H3','H4'].includes(el.tagName)) { text += ' ' + el.textContent; el = el.nextElementSibling; }
+    searchIndex.push({ title: h.textContent.trim(), content: text.trim().substring(0, 800), id: h.id, level: h.tagName });
+  });
+}
+buildIndex();
+let selectedIdx = -1;
+function openSearch() { document.getElementById('searchOverlay').classList.add('open'); const i = document.getElementById('searchInput'); i.value=''; i.focus(); document.getElementById('searchResults').innerHTML=''; selectedIdx=-1; }
+function closeSearch() { document.getElementById('searchOverlay').classList.remove('open'); }
+function navigateTo(id) { closeSearch(); const el = document.getElementById(id); if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); el.style.transition='background .3s'; el.style.background='rgba(37,99,235,0.1)'; el.style.borderRadius='4px'; el.style.padding='2px 6px'; el.style.margin='-2px -6px'; setTimeout(()=>{el.style.background='';el.style.padding='';el.style.margin='';},2000); } }
+document.addEventListener('keydown', e => {
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openSearch();}
+  if(e.key==='Escape')closeSearch();
+  if(!document.getElementById('searchOverlay').classList.contains('open'))return;
+  const r=document.querySelectorAll('.search-result');
+  if(e.key==='ArrowDown'){e.preventDefault();selectedIdx=Math.min(selectedIdx+1,r.length-1);updateSel(r);}
+  if(e.key==='ArrowUp'){e.preventDefault();selectedIdx=Math.max(selectedIdx-1,0);updateSel(r);}
+  if(e.key==='Enter'&&selectedIdx>=0&&r[selectedIdx]){const t=r[selectedIdx].getAttribute('data-target');if(t)navigateTo(t);}
+});
+function updateSel(r){r.forEach((x,i)=>x.classList.toggle('selected',i===selectedIdx));if(r[selectedIdx])r[selectedIdx].scrollIntoView({block:'nearest'});}
+document.getElementById('searchInput').addEventListener('input', function(){
+  const q=this.value.toLowerCase().trim(), box=document.getElementById('searchResults'); selectedIdx=-1;
+  if(!q){box.innerHTML='';return;}
+  const m=searchIndex.filter(i=>i.title.toLowerCase().includes(q)||i.content.toLowerCase().includes(q)).slice(0,20);
+  if(!m.length){box.innerHTML='<div class="search-empty">No results for "'+q.replace(/</g,'&lt;')+'"</div>';return;}
+  const esc=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), re=new RegExp('('+esc+')','gi');
+  box.innerHTML=m.map(i=>{
+    let ctx=''; const idx=i.content.toLowerCase().indexOf(q);
+    if(idx>=0){const s=Math.max(0,idx-50),e=Math.min(i.content.length,idx+q.length+80);ctx=(s>0?'...':'')+i.content.substring(s,e).replace(re,'<mark>$1</mark>')+(e<i.content.length?'...':'');}
+    return '<div class="search-result" data-target="'+i.id+'" onclick="navigateTo(\''+i.id+'\')"><div class="search-result-title">'+i.title.replace(re,'<mark>$1</mark>')+'</div>'+(ctx?'<div class="search-result-context">'+ctx+'</div>':'')+'</div>';
+  }).join('');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,2922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Element Library — FieldProxy Docs</title>
+<link rel="icon" href="https://www.fieldproxy.ai/images/design-mode/Favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --text: #1a1a2e;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --border: #e2e8f0;
+  --bg: #ffffff;
+  --bg-subtle: #f7fafc;
+  --bg-code: #0f172a;
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --sidebar-w: 240px;
+  --toc-w: 200px;
+  --content-max: 720px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 24px 0;
+  z-index: 50;
+  font-size: 14px;
+}
+.sidebar::-webkit-scrollbar { width: 0; }
+.sb-brand { display: flex; align-items: center; gap: 8px; padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.sb-brand img { width: 20px; height: 20px; border-radius: 4px; }
+.sb-brand span { font-weight: 700; font-size: 13px; color: var(--text); letter-spacing: .3px; }
+.sb-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: 16px 20px 6px; }
+.sb-nav a {
+  display: block; padding: 6px 20px; color: var(--text-secondary); text-decoration: none;
+  font-size: 13.5px; font-weight: 500; transition: color .15s;
+}
+.sb-nav a:hover { color: var(--text); }
+.sb-nav a.active { color: var(--blue); font-weight: 600; }
+
+/* ── Right TOC ── */
+.toc {
+  position: fixed; top: 80px; right: max(24px, calc((100vw - var(--sidebar-w) - var(--content-max) - var(--toc-w)) / 2));
+  width: var(--toc-w);
+  font-size: 12.5px;
+  z-index: 40;
+}
+.toc-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px; }
+.toc a {
+  display: block; padding: 4px 0 4px 12px; color: var(--text-muted); text-decoration: none;
+  border-left: 2px solid var(--border); transition: all .15s; font-weight: 500;
+}
+.toc a:hover { color: var(--text-secondary); }
+.toc a.active { color: var(--blue); border-left-color: var(--blue); font-weight: 600; }
+
+/* ── Main content ── */
+.main {
+  margin-left: var(--sidebar-w);
+  max-width: var(--content-max);
+  padding: 48px 40px 120px;
+}
+
+/* ── Typography ── */
+h1 { font-size: 32px; font-weight: 800; letter-spacing: -.5px; color: var(--text); margin-bottom: 8px; }
+.page-desc { font-size: 16px; color: var(--text-muted); margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+h2 { font-size: 22px; font-weight: 700; color: var(--text); margin: 56px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); letter-spacing: -.3px; }
+h3 { font-size: 17px; font-weight: 600; color: var(--text); margin: 32px 0 12px; }
+h4 { font-size: 15px; font-weight: 600; color: var(--text); margin: 24px 0 8px; }
+p { margin-bottom: 16px; color: var(--text-secondary); }
+strong { color: var(--text); font-weight: 600; }
+em { font-style: italic; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+ul, ol { margin: 0 0 16px 24px; color: var(--text-secondary); }
+li { margin-bottom: 6px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+/* ── Code ── */
+code {
+  font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 500;
+  background: var(--bg-subtle); padding: 2px 6px; border-radius: 4px; color: var(--red);
+}
+pre {
+  background: var(--bg-code); color: #e2e8f0; padding: 20px 24px; border-radius: 8px;
+  overflow-x: auto; margin: 16px 0 20px; font-size: 13.5px; line-height: 1.6;
+}
+pre code { background: none; padding: 0; color: inherit; }
+
+/* ── Tables ── */
+table { width: 100%; border-collapse: collapse; margin: 16px 0 20px; font-size: 14px; }
+th { text-align: left; padding: 10px 16px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); border-bottom: 2px solid var(--border); background: var(--bg-subtle); }
+td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+
+/* ── Callouts ── */
+.callout { padding: 14px 18px; border-radius: 6px; margin: 20px 0; font-size: 14.5px; line-height: 1.6; border-left: 3px solid; }
+.callout-info { background: var(--blue-light); border-color: var(--blue); }
+.callout-warn { background: var(--amber-light); border-color: var(--amber); }
+.callout-danger { background: var(--red-light); border-color: var(--red); }
+.callout p { margin: 0; color: var(--text-secondary); }
+
+/* ── Footer nav ── */
+.footer-nav { display: flex; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+.footer-nav a { flex: 1; padding: 16px; border: 1px solid var(--border); border-radius: 8px; text-decoration: none; transition: border-color .2s; }
+.footer-nav a:hover { border-color: var(--blue); }
+.fn-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+.fn-title { font-size: 14px; color: var(--text); font-weight: 600; margin-top: 2px; }
+
+/* ── Search ── */
+.search-trigger { display:flex; align-items:center; gap:8px; margin:0 12px 12px; padding:8px 12px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:13px; color:var(--text-muted); transition:border-color .15s; }
+.search-trigger:hover { border-color:var(--blue); color:var(--text-secondary); }
+.search-trigger kbd { margin-left:auto; font-family:'Inter',sans-serif; font-size:11px; padding:2px 6px; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text-muted); }
+.search-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:200; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+.search-overlay.open { display:flex; align-items:flex-start; justify-content:center; padding-top:min(20vh,160px); }
+.search-box { background:var(--bg); border:1px solid var(--border); border-radius:12px; width:560px; max-height:480px; display:flex; flex-direction:column; box-shadow:0 16px 48px rgba(0,0,0,.15); overflow:hidden; }
+.search-input-wrap { display:flex; align-items:center; gap:8px; padding:14px 18px; border-bottom:1px solid var(--border); }
+.search-input-wrap svg { flex-shrink:0; color:var(--text-muted); }
+.search-input { flex:1; border:none; outline:none; font-size:15px; font-family:'Inter',sans-serif; color:var(--text); background:transparent; }
+.search-input::placeholder { color:var(--text-muted); }
+.search-results { overflow-y:auto; max-height:380px; padding:8px; }
+.search-results:empty::after { content:'Type to search...'; display:block; padding:24px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-result { display:block; padding:10px 14px; border-radius:6px; text-decoration:none; cursor:pointer; transition:background .1s; }
+.search-result:hover, .search-result.selected { background:var(--blue-light); }
+.search-result-title { font-size:14px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.search-result-context { font-size:12.5px; color:var(--text-muted); line-height:1.4; }
+.search-result-context mark { background:#fef08a; color:var(--text); border-radius:2px; padding:0 1px; }
+.search-empty { padding:32px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-footer { padding:8px 14px; border-top:1px solid var(--border); display:flex; gap:12px; font-size:11px; color:var(--text-muted); }
+.search-footer kbd { font-family:'Inter',sans-serif; font-size:10px; padding:1px 5px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:3px; }
+
+/* ── Responsive ── */
+@media (max-width: 1100px) { .toc { display: none; } }
+@media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 24px 20px 80px; } .search-box { width:calc(100% - 32px); } }
+@media print { .sidebar, .toc, .search-overlay { display: none; } .main { margin-left: 0; max-width: 100%; } }
+</style>
+</head>
+<body>
+
+<!-- Left sidebar -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <img src="https://www.fieldproxy.ai/images/design-mode/Favicon.png" alt="FP">
+    <span>FieldProxy Docs</span>
+  </div>
+  <div class="search-trigger" onclick="openSearch()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    Search...
+    <kbd>⌘K</kbd>
+  </div>
+  <div class="sb-label">Mobile Element Library</div>
+  <nav class="sb-nav">
+    <a href="#overview">1. Overview</a>
+    <a href="#app-level-structure">2. App-Level Structure</a>
+    <a href="#screen-view-structure">3. Screen (View) Structure</a>
+    <a href="#input-elements">4. Input Elements</a>
+    <a href="#display-components">5. Display Components</a>
+    <a href="#layout-components">6. Layout Components</a>
+    <a href="#data-components">7. Data Components</a>
+    <a href="#interactive-action-components">8. Interactive / Action Components</a>
+    <a href="#all-action-types">9. All Action Types</a>
+    <a href="#data-binding-system">10. Data Binding System</a>
+    <a href="#conditional-logic-system">11. Conditional &amp; Logic System</a>
+    <a href="#mobile-specific-features">12. Mobile-Specific Features</a>
+    <a href="#navigation-patterns">13. Navigation Patterns</a>
+    <a href="#quick-reference-cheat-sheet">14. Quick Reference Cheat Sheet</a>
+    <a href="#building-a-mobile-screen">15. Building a Mobile Screen</a>
+    <a href="#changelog">16. Changelog</a>
+  </nav>
+  <div class="sb-label" style="margin-top:24px;">All Docs</div>
+  <nav class="sb-nav">
+    <a href="../onboarding-guide.html">Home</a>
+    <a href="../1-getting-started.html">Getting Started</a>
+    <a href="../2-build-guide.html">Build Guide</a>
+    <a href="../3-quick-reference.html">Quick Reference</a>
+    <a href="fieldproxy web reference.html">Web Library</a>
+    <a href="fieldproxy mobile reference.html" class="active">Mobile Library</a>
+  </nav>
+</aside>
+
+<!-- Right TOC -->
+<nav class="toc">
+  <div class="toc-title">On this page</div>
+  <a href="#overview">Overview</a>
+  <a href="#app-level-structure">App-Level Structure</a>
+  <a href="#screen-view-structure">Screen (View) Structure</a>
+  <a href="#input-elements">Input Elements</a>
+  <a href="#display-components">Display Components</a>
+  <a href="#layout-components">Layout Components</a>
+  <a href="#data-components">Data Components</a>
+  <a href="#interactive-action-components">Interactive / Action</a>
+  <a href="#all-action-types">All Action Types</a>
+  <a href="#data-binding-system">Data Binding System</a>
+  <a href="#conditional-logic-system">Conditional &amp; Logic</a>
+  <a href="#mobile-specific-features">Mobile-Specific</a>
+  <a href="#navigation-patterns">Navigation Patterns</a>
+  <a href="#quick-reference-cheat-sheet">Quick Reference</a>
+  <a href="#building-a-mobile-screen">Building a Screen</a>
+  <a href="#changelog">Changelog</a>
+</nav>
+
+<!-- Main content -->
+<main class="main">
+
+<h1>V4 Mobile App Builder &mdash; Complete UI Element Library</h1>
+<p class="page-desc"><strong>Source Files:</strong> <code>1.Technician App.json</code> (sample), Flutter element <code>.dart</code> files, <code>view_controller.dart</code><br><strong>Version:</strong> V4 Mobile &nbsp;|&nbsp; <strong>Platform:</strong> Flutter (iOS &amp; Android)<br><strong>Classification:</strong> NORMAL = found in sample JSON &nbsp;|&nbsp; &#x1F195; NEW = found only in Flutter code</p>
+
+<!-- ─────────────────────── 1. Overview ─────────────────────── -->
+<h2 id="overview">1. Overview</h2>
+
+<h3>What is Fieldproxy Mobile</h3>
+
+<p>Fieldproxy Mobile is a Flutter-based, low-code mobile application platform. Screens (&ldquo;views&rdquo;) are defined entirely in JSON and rendered natively on iOS and Android. The same JSON-driven philosophy as the web platform is used, but the mobile runtime adds native capabilities: camera, GPS, barcode scanning, offline SQLite evaluation, push notifications, and background geolocation.</p>
+
+<h3>Key Differences from Web Version</h3>
+
+<table>
+  <thead><tr><th>Feature</th><th>Web</th><th>Mobile</th></tr></thead>
+  <tbody>
+    <tr><td>Root <code>type</code></td><td><code>"web"</code></td><td><code>"homescreen"</code></td></tr>
+    <tr><td>Renderer</td><td>Browser/WebView</td><td>Flutter native</td></tr>
+    <tr><td>Scroll</td><td>CSS-driven</td><td><code>SingleChildScrollView</code></td></tr>
+    <tr><td>Camera / image capture</td><td>Upload only</td><td>Full camera, watermark, OCR</td></tr>
+    <tr><td>GPS</td><td>Not native</td><td>Background geolocation</td></tr>
+    <tr><td>Barcode / QR</td><td>Not native</td><td>Native scanner</td></tr>
+    <tr><td>Signature</td><td>Canvas</td><td>Native signature pad</td></tr>
+    <tr><td>Condition evaluation</td><td>Server</td><td>On-device SQLite via <code>DatabaseHelper</code></td></tr>
+    <tr><td>Offline support</td><td>Limited</td><td>SQLite local queries</td></tr>
+    <tr><td>Push notifications</td><td>Browser push</td><td>FCM / APNs</td></tr>
+    <tr><td>PDF rendering</td><td>Browser</td><td>Native PDF viewer</td></tr>
+    <tr><td>Map widget</td><td>Web tiles</td><td>flutter_map (Azure Maps / OSM)</td></tr>
+  </tbody>
+</table>
+
+<h3>How JSON Configs Drive Native Mobile UI</h3>
+
+<p>Every view is a JSON object inside the <code>views</code> dictionary. When a screen is navigated to, the <code>ViewController</code> loads the view definition, runs SQL queries listed in <code>data{}</code>, fires <code>onload{}</code> actions, then passes the <code>ui[]</code> array to <code>getChildren()</code> which recursively creates Flutter widgets.</p>
+
+<hr>
+
+<!-- ─────────────────────── 2. App-Level Structure ─────────────────────── -->
+<h2 id="app-level-structure">2. App-Level Structure</h2>
+
+<h3>Root JSON Schema</h3>
+
+<pre><code>{
+  "type": "homescreen",
+  "label": "Technician Mobile App",
+  "views": {
+    "homescreen": { ... },
+    "job_list": { ... },
+    "job_detail": { ... }
+  }
+}</code></pre>
+
+<h3>Root Properties</h3>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>type</code></td><td>string</td><td>NORMAL</td><td>Always <code>"homescreen"</code> for mobile apps</td></tr>
+    <tr><td><code>label</code></td><td>string</td><td>NORMAL</td><td>App display name</td></tr>
+    <tr><td><code>views</code></td><td>object</td><td>NORMAL</td><td>Dictionary of all views keyed by <code>view_id</code></td></tr>
+  </tbody>
+</table>
+
+<h3>View Dictionary Pattern</h3>
+
+<p>All screen definitions live inside <code>views</code>. Navigation uses the key as the <code>view_id</code>.</p>
+
+<pre><code>"views": {
+  "job_detail": {
+    "label": "Job Details",
+    "ui": [ ... ],
+    "data": { ... },
+    "onload": { ... }
+  }
+}</code></pre>
+
+<hr>
+
+<!-- ─────────────────────── 3. Screen (View) Structure ─────────────────────── -->
+<h2 id="screen-view-structure">3. Screen (View) Structure</h2>
+
+<h3>Top-Level View JSON</h3>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>ui</code></td><td>array</td><td>NORMAL</td><td>Root list of UI elements to render</td></tr>
+    <tr><td><code>data</code></td><td>object</td><td>NORMAL</td><td>Named SQL queries auto-executed on load; keys become data source names</td></tr>
+    <tr><td><code>onload</code></td><td>object</td><td>NORMAL</td><td>Action map executed immediately after data is fetched</td></tr>
+    <tr><td><code>label</code></td><td>string</td><td>NORMAL</td><td>Screen title shown in the AppBar</td></tr>
+    <tr><td><code>view_id</code></td><td>string</td><td>NORMAL</td><td>Self-referential view identifier</td></tr>
+    <tr><td><code>background_color</code></td><td>string</td><td>NORMAL</td><td>Hex color for screen background</td></tr>
+    <tr><td><code>margin</code></td><td>object</td><td>&#x1F195; NEW</td><td>Outer margin: <code>{"left":x,"top":x,"right":x,"bottom":x}</code></td></tr>
+    <tr><td><code>base_layout</code></td><td>string</td><td>&#x1F195; NEW</td><td>Set to <code>"stack"</code> for non-scrollable stack layout; default is scrollable</td></tr>
+    <tr><td><code>back_confirmation</code></td><td>object</td><td>&#x1F195; NEW</td><td>Show dialog when user taps back &mdash; see below</td></tr>
+  </tbody>
+</table>
+
+<h3>How Data Queries Work</h3>
+
+<p>Each key in <code>data</code> is a SQL string. The runtime calls the backend API with that SQL, stores results in <code>viewData[key]</code>, and makes them available via <code>{{key.data.[index].column_name}}</code> templates.</p>
+
+<pre><code>"data": {
+  "jobs_list": "SELECT id, title, status FROM jobs WHERE assigned_to = '&lt;!getUserId()!&gt;'",
+  "customer_info": "SELECT * FROM customers WHERE id = {{arguments.customer_id}}"
+}</code></pre>
+
+<h3>onload Actions</h3>
+
+<p>Executed once after all <code>data</code> queries complete. Uses the same ordered action map format as <code>onclick</code>.</p>
+
+<pre><code>"onload": {
+  "1": {
+    "type": "update_value",
+    "element_id": "date_field",
+    "value": "&lt;!getCurrentDate()!&gt;"
+  }
+}</code></pre>
+
+<h3>Back Confirmation (&#x1F195; NEW)</h3>
+
+<p>Intercepts the system back gesture / button with a confirmation dialog.</p>
+
+<pre><code>"back_confirmation": {
+  "enabled": true,
+  "title": "Confirm Navigation",
+  "message": "Are you sure you want to go back? Unsaved changes will be lost."
+}</code></pre>
+
+<p>To dismiss programmatically after a successful save, add <code>"disable_back_confirmation": true</code> to an <code>execute_query</code> or <code>api</code> action.</p>
+
+<hr>
+
+<!-- ─────────────────────── 4. Input Elements ─────────────────────── -->
+<h2 id="input-elements">4. Input Elements</h2>
+
+<p>All input elements share <code>type: "input"</code> and distinguish themselves with <code>input_type</code>.</p>
+
+<h3>Common Input Properties (All Types)</h3>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>type</code></td><td>string</td><td>NORMAL</td><td>Always <code>"input"</code></td></tr>
+    <tr><td><code>input_type</code></td><td>string</td><td>NORMAL</td><td>One of the types listed below</td></tr>
+    <tr><td><code>element_id</code></td><td>string</td><td>NORMAL</td><td>Unique ID; used for data binding and conditions</td></tr>
+    <tr><td><code>label</code></td><td>string</td><td>NORMAL</td><td>Label text shown above the field</td></tr>
+    <tr><td><code>hint</code> / <code>placeholder</code></td><td>string</td><td>NORMAL</td><td>Ghost text inside the field</td></tr>
+    <tr><td><code>required</code></td><td>boolean</td><td>NORMAL</td><td>Show error if field is empty on submit</td></tr>
+    <tr><td><code>required_condition</code></td><td>string</td><td>&#x1F195; NEW</td><td>Dynamic required: SQL expression returning 0 or 1</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>SQL expression; hides element if returns 0</td></tr>
+    <tr><td><code>disabled_condition</code></td><td>string</td><td>&#x1F195; NEW</td><td>SQL expression; disables element if returns 1</td></tr>
+    <tr><td><code>init</code></td><td>any</td><td>NORMAL</td><td>Initial / pre-filled value; supports <code>{{}}</code> templates</td></tr>
+    <tr><td><code>read_only</code></td><td>boolean</td><td>NORMAL</td><td>Prevents editing (text/number inputs)</td></tr>
+    <tr><td><code>description</code></td><td>string</td><td>&#x1F195; NEW</td><td>Helper text shown below label with &#x24D8; prefix</td></tr>
+    <tr><td><code>margin_left/right/top/bottom</code></td><td>number</td><td>&#x1F195; NEW</td><td>Element-level spacing</td></tr>
+    <tr><td><code>width</code></td><td>number</td><td>&#x1F195; NEW</td><td>Override element width in logical pixels</td></tr>
+    <tr><td><code>onchange</code></td><td>array</td><td>NORMAL</td><td>Actions fired on value change (see onchange section)</td></tr>
+    <tr><td><code>logic</code></td><td>string</td><td>NORMAL</td><td>Developer annotation; not rendered</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>4.1 Text Input (<code>input_type: "text"</code>)</h3>
+
+<p>Single or multiline free-text input.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>max_lines</code></td><td>number</td><td>NORMAL</td><td>Lines visible; <code>&gt;1</code> makes multiline textarea</td></tr>
+    <tr><td><code>multiline</code></td><td>boolean</td><td>NORMAL</td><td>Explicitly enable multiline mode</td></tr>
+    <tr><td><code>prefix_icon</code></td><td>string</td><td>&#x1F195; NEW</td><td>Feather icon name shown inside left of field</td></tr>
+    <tr><td><code>search_query</code></td><td>string</td><td>&#x1F195; NEW</td><td>SQL with <code>search_term</code> placeholder; fires a debounced data fetch</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "text",
+  "element_id": "job_notes",
+  "label": "Job Notes",
+  "hint": "Describe work performed",
+  "required": true,
+  "max_lines": 5,
+  "visibility_condition": "'{{input_data.show_notes.[0]}}' = 'yes'"
+}</code></pre>
+
+<hr>
+
+<h3>4.2 Number Input (<code>input_type: "number"</code>)</h3>
+
+<p>Numeric keyboard with validation and formatting.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>min</code></td><td>number/string</td><td>&#x1F195; NEW</td><td>Minimum allowed value (supports <code>{{}}</code> templates)</td></tr>
+    <tr><td><code>max</code></td><td>number/string</td><td>&#x1F195; NEW</td><td>Maximum allowed value</td></tr>
+    <tr><td><code>integer_digits</code></td><td>number</td><td>&#x1F195; NEW</td><td>Max digits before decimal (default 10)</td></tr>
+    <tr><td><code>decimal_digits</code></td><td>number</td><td>&#x1F195; NEW</td><td>Max decimal places (default 2)</td></tr>
+    <tr><td><code>decimal_separator</code></td><td>string</td><td>&#x1F195; NEW</td><td>Decimal char, default <code>"."</code></td></tr>
+    <tr><td><code>group_digits</code></td><td>number</td><td>&#x1F195; NEW</td><td>Digit grouping size (e.g. 3 for thousands)</td></tr>
+    <tr><td><code>group_separator</code></td><td>string</td><td>&#x1F195; NEW</td><td>Thousands separator, default <code>","</code></td></tr>
+    <tr><td><code>allow_negative</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Allow negative numbers (default false)</td></tr>
+    <tr><td><code>insert_decimal_point</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Auto-insert decimal point</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "number",
+  "element_id": "quantity",
+  "label": "Quantity",
+  "hint": "0",
+  "required": true,
+  "min": "1",
+  "max": "{{input_data.max_stock.[0]}}",
+  "decimal_digits": 0
+}</code></pre>
+
+<hr>
+
+<h3>4.3 Date / Time Input (<code>input_type: "date"</code>)</h3>
+
+<p>Date picker, time picker, or combined date-time picker.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>format</code></td><td>string</td><td>NORMAL</td><td><code>"date"</code> (default), <code>"date_time"</code>, or <code>"time"</code></td></tr>
+    <tr><td><code>date_format</code></td><td>string</td><td>NORMAL</td><td>Display format string (e.g. <code>"dd MMM yyyy"</code>)</td></tr>
+    <tr><td><code>output_format</code></td><td>string</td><td>&#x1F195; NEW</td><td>Storage format string (default <code>"yyyy-MM-dd"</code>)</td></tr>
+    <tr><td><code>enable_range</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Enable date range picker (stores array of 2 ISO strings)</td></tr>
+    <tr><td><code>is_min</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Enable minimum date bound</td></tr>
+    <tr><td><code>min_from</code></td><td>number</td><td>&#x1F195; NEW</td><td>Days/weeks/months relative offset for minimum</td></tr>
+    <tr><td><code>is_max</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Enable maximum date bound</td></tr>
+    <tr><td><code>max_to</code></td><td>number</td><td>&#x1F195; NEW</td><td>Days/weeks/months relative offset for maximum</td></tr>
+    <tr><td><code>bound_format</code></td><td>string</td><td>&#x1F195; NEW</td><td>Unit for bounds: <code>"DAY"</code>, <code>"WEEK"</code>, <code>"MONTH"</code></td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "date",
+  "element_id": "scheduled_date",
+  "label": "Scheduled Date",
+  "format": "date",
+  "date_format": "dd MMM yyyy",
+  "is_min": true,
+  "min_from": 0,
+  "bound_format": "DAY",
+  "required": true
+}</code></pre>
+
+<hr>
+
+<h3>4.4 Dropdown Input (<code>input_type: "dropdown"</code>)</h3>
+
+<p>Single or multi-select searchable dropdown.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>data</code></td><td>array or string</td><td>NORMAL</td><td>Static array of strings/objects, or dot-path to view data (e.g. <code>"customer_list.data"</code>)</td></tr>
+    <tr><td><code>show</code></td><td>array</td><td>NORMAL</td><td>Which keys to display when data items are objects</td></tr>
+    <tr><td><code>show_key</code></td><td>boolean</td><td>NORMAL</td><td>Whether to prefix display with key name (default true)</td></tr>
+    <tr><td><code>store</code></td><td>array</td><td>NORMAL</td><td>Which key(s) to store as input value when item is selected</td></tr>
+    <tr><td><code>is_multi</code></td><td>boolean</td><td>NORMAL</td><td>Multi-select mode</td></tr>
+    <tr><td><code>min_count</code></td><td>number</td><td>NORMAL</td><td>Minimum selections required (multi mode)</td></tr>
+    <tr><td><code>max_count</code></td><td>number</td><td>NORMAL</td><td>Maximum selections allowed (multi mode)</td></tr>
+    <tr><td><code>onchange</code></td><td>array</td><td>NORMAL</td><td>Actions on selection change; supports <code>update_value</code> and <code>update_data</code></td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "dropdown",
+  "element_id": "technician_assigned",
+  "label": "Assign Technician",
+  "data": "technician_list.data",
+  "show": ["name", "team"],
+  "show_key": false,
+  "store": ["id"],
+  "required": true,
+  "onchange": [
+    {
+      "type": "update_value",
+      "element_id": "tech_name_display",
+      "value": "dropdown.name"
+    }
+  ]
+}</code></pre>
+
+<hr>
+
+<h3>4.5 Image Input (<code>input_type: "image"</code>)</h3>
+
+<p>Camera / gallery image capture with optional OCR and watermarking.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>upload_mode</code></td><td>string</td><td>NORMAL</td><td><code>"DEFAULT"</code> (show choice), <code>"CAMERA"</code>, <code>"GALLERY"</code></td></tr>
+    <tr><td><code>is_multi</code></td><td>boolean</td><td>NORMAL</td><td>Allow multiple images</td></tr>
+    <tr><td><code>max_count</code></td><td>number</td><td>NORMAL</td><td>Maximum images when multi is true</td></tr>
+    <tr><td><code>min_count</code></td><td>number</td><td>&#x1F195; NEW</td><td>Minimum images required</td></tr>
+    <tr><td><code>isOcr</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Enable OCR on captured image</td></tr>
+    <tr><td><code>ocrType</code></td><td>string</td><td>&#x1F195; NEW</td><td>OCR mode: <code>"custom"</code> or <code>"pan"</code></td></tr>
+    <tr><td><code>ocrLinkedQuestions</code></td><td>object</td><td>&#x1F195; NEW</td><td>Maps OCR field names to element IDs for auto-fill</td></tr>
+    <tr><td><code>isWatermark</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Apply watermark to captured image</td></tr>
+    <tr><td><code>watermarkType</code></td><td>array</td><td>&#x1F195; NEW</td><td>Watermark elements: <code>["timestamp","userId","location"]</code></td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "image",
+  "element_id": "job_photos",
+  "label": "Site Photos",
+  "upload_mode": "CAMERA",
+  "is_multi": true,
+  "max_count": 10,
+  "required": true,
+  "isWatermark": true,
+  "watermarkType": ["timestamp", "location", "userId"]
+}</code></pre>
+
+<p><strong>Stored Value Shape:</strong></p>
+<pre><code>{
+  "path": [{"path": "/local/path.jpg", "url": "https://cdn.../file.jpg"}],
+  "url": ["https://cdn.../file.jpg"]
+}</code></pre>
+
+<hr>
+
+<h3>4.6 File Input (<code>input_type: "file"</code>)</h3>
+
+<p>Document / file upload (PDF, DOCX, etc.).</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>is_multi</code></td><td>boolean</td><td>NORMAL</td><td>Allow multiple file uploads</td></tr>
+    <tr><td><code>max_count</code></td><td>number</td><td>NORMAL</td><td>Maximum files allowed</td></tr>
+    <tr><td><code>isVoice</code></td><td>boolean</td><td>NORMAL</td><td>Enable voice recording (audio file)</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "file",
+  "element_id": "warranty_doc",
+  "label": "Warranty Document",
+  "is_multi": false,
+  "required": true
+}</code></pre>
+
+<hr>
+
+<h3>4.7 Signature Input (<code>input_type: "signature"</code>)</h3>
+
+<p>Opens a full-screen signature pad; stores the captured PNG.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>label</code></td><td>string</td><td>NORMAL</td><td>Label above signature area</td></tr>
+    <tr><td><code>required</code></td><td>boolean</td><td>NORMAL</td><td>Validate presence before submit</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "signature",
+  "element_id": "customer_signature",
+  "label": "Customer Signature",
+  "required": true,
+  "margin_bottom": 16
+}</code></pre>
+
+<p><strong>Stored Value Shape:</strong></p>
+<pre><code>{"path": "/local/sig.png", "url": "https://cdn.../sig.png"}</code></pre>
+
+<hr>
+
+<h3>4.8 Location Input (<code>input_type: "location"</code>)</h3>
+
+<p>GPS location picker with map pin selection and geofencing.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>fenceRadius</code></td><td>number</td><td>&#x1F195; NEW</td><td>Geofence radius in meters (min 300, max 3000)</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "location",
+  "element_id": "site_location",
+  "label": "Site Location",
+  "required": true
+}</code></pre>
+
+<p><strong>Stored Value Shape:</strong></p>
+<pre><code>{
+  "coordinates": [77.5946, 12.9716],
+  "address": "123 Main St, Bangalore"
+}</code></pre>
+
+<hr>
+
+<h3>4.9 Scan Input (<code>input_type: "scan"</code>)</h3>
+
+<p>Opens a barcode / QR code scanner.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>label</code></td><td>string</td><td>NORMAL</td><td>Label above scan button</td></tr>
+    <tr><td><code>hint</code></td><td>string</td><td>NORMAL</td><td>Descriptive text</td></tr>
+    <tr><td><code>onchange</code></td><td>array</td><td>NORMAL</td><td>Actions after scan result is received</td></tr>
+    <tr><td><code>width</code></td><td>number</td><td>NORMAL</td><td>Override element width</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "scan",
+  "element_id": "asset_barcode",
+  "label": "Scan Asset Barcode",
+  "hint": "Tap to scan barcode",
+  "onchange": [
+    {
+      "type": "update_value",
+      "element_id": "asset_code_display",
+      "value": "{{input_data.asset_barcode.[0]}}"
+    }
+  ]
+}</code></pre>
+
+<hr>
+
+<h3>4.10 Rating Input (<code>input_type: "rating"</code>)</h3>
+
+<p>Star rating (1 to N stars, supports half ratings).</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>max_rating</code></td><td>number</td><td>&#x1F195; NEW</td><td>Maximum stars (default 5)</td></tr>
+    <tr><td><code>init</code></td><td>string</td><td>NORMAL</td><td>Pre-set rating value via template</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "rating",
+  "element_id": "service_quality",
+  "label": "Service Quality Rating",
+  "init": "{{job_rating.data.[0].quality_score}}"
+}</code></pre>
+
+<hr>
+
+<h3>4.11 MCQ / Radio / Checklist Input (<code>input_type: "mcq"</code>)</h3>
+
+<p>Single-select radio buttons or multi-select checkbox list.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>data</code></td><td>array or string</td><td>NORMAL</td><td>Option strings, or dot-path to view data</td></tr>
+    <tr><td><code>is_multi</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Enable multi-select checkbox mode</td></tr>
+    <tr><td><code>is_checklist</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Renders numbered checklist with checkboxes; stores <code>{value:{}, formatted_value:{}}</code></td></tr>
+    <tr><td><code>min_count</code></td><td>number</td><td>&#x1F195; NEW</td><td>Minimum selections required</td></tr>
+    <tr><td><code>max_count</code></td><td>number</td><td>&#x1F195; NEW</td><td>Maximum selections allowed</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "mcq",
+  "element_id": "job_type_select",
+  "label": "Job Type",
+  "data": ["Repair", "Maintenance", "Installation", "Inspection"],
+  "required": true
+}</code></pre>
+
+<hr>
+
+<h3>4.12 Step Counter Input (<code>input_type: "step_counter"</code>)</h3>
+
+<p>Increment/decrement counter with editable number field.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>init</code></td><td>string</td><td>&#x1F195; NEW</td><td>Initial count value (template supported)</td></tr>
+    <tr><td><code>width</code></td><td>number</td><td>&#x1F195; NEW</td><td>Width of the number display field</td></tr>
+    <tr><td><code>margin_left/right/top/bottom</code></td><td>number</td><td>&#x1F195; NEW</td><td>Element spacing</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "step_counter",
+  "element_id": "part_quantity",
+  "label": "Quantity",
+  "init": "1"
+}</code></pre>
+
+<hr>
+
+<h3>4.13 Checkbox Input (<code>input_type: "checkbox"</code>)</h3>
+
+<p>Single toggle checkbox.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>label</code></td><td>string</td><td>NORMAL</td><td>Checkbox label text</td></tr>
+    <tr><td><code>init</code></td><td>boolean</td><td>NORMAL</td><td>Initial checked state</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "checkbox",
+  "element_id": "terms_agreed",
+  "label": "I agree to the terms",
+  "init": false
+}</code></pre>
+
+<hr>
+
+<h3>4.14 Email Input (<code>input_type: "email"</code>)</h3>
+
+<p>Text input with email keyboard and format validation.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>hint</code></td><td>string</td><td>NORMAL</td><td>Placeholder text</td></tr>
+    <tr><td><code>required</code></td><td>boolean</td><td>NORMAL</td><td>Required validation</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "email",
+  "element_id": "contact_email",
+  "label": "Customer Email",
+  "hint": "email@example.com",
+  "required": false
+}</code></pre>
+
+<hr>
+
+<h3>4.15 Phone Input (<code>input_type: "phone"</code>)</h3>
+
+<p>Text input with phone number keyboard.</p>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "phone",
+  "element_id": "contact_phone",
+  "label": "Phone Number",
+  "hint": "+1 (555) 000-0000",
+  "required": true
+}</code></pre>
+
+<hr>
+
+<h3>4.16 Table Input (<code>input_type: "table"</code>)</h3>
+
+<p>Editable data table for entering multiple rows of structured data.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>columns</code></td><td>array</td><td>&#x1F195; NEW</td><td>Column name strings</td></tr>
+    <tr><td><code>inputs_ui</code></td><td>array</td><td>&#x1F195; NEW</td><td>UI element array for the row-edit dialog</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "table",
+  "element_id": "expense_rows",
+  "label": "Expense Items",
+  "columns": ["Description", "Amount", "Category"],
+  "inputs_ui": [
+    {"type": "input", "input_type": "text", "element_id": "desc_input", "label": "Description"},
+    {"type": "input", "input_type": "number", "element_id": "amt_input", "label": "Amount"},
+    {"type": "input", "input_type": "dropdown", "element_id": "cat_input", "label": "Category", "data": ["Travel","Materials","Labor"]}
+  ]
+}</code></pre>
+
+<hr>
+
+<h3>4.17 Catalogue Input (<code>input_type: "catalogue"</code>)</h3>
+
+<p>Product / item catalogue selector (typically for inventory or parts selection).</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td>Configured via <code>catalogue.dart</code></td><td>&mdash;</td><td>&#x1F195; NEW</td><td>Uses the <code>CatalogueInput</code> widget</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>4.18 Map Widget Input (<code>input_type: "map_widget"</code>)</h3>
+
+<p>Interactive map embedded inside a form (as a display-only or interactive element within input context).</p>
+
+<hr>
+
+<h3>4.19 Excel File Input (<code>input_type: "excel_file"</code>)</h3>
+
+<p>Upload and parse Excel spreadsheets.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td>Handled by <code>excel_file.dart</code></td><td>&mdash;</td><td>&#x1F195; NEW</td><td>Parses <code>.xlsx</code>/<code>.csv</code> files</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>onchange Actions for Inputs</h3>
+
+<p>The <code>onchange</code> array fires when an input value changes. Supported action types within <code>onchange</code>:</p>
+
+<table>
+  <thead><tr><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>update_value</code></td><td>NORMAL</td><td>Copy a derived value to another element (e.g. from dropdown selection: <code>"value": "dropdown.field_name"</code>)</td></tr>
+    <tr><td><code>update_data</code></td><td>NORMAL</td><td>Re-fetch a named data source (e.g. cascade dropdowns)</td></tr>
+  </tbody>
+</table>
+
+<pre><code>"onchange": [
+  {
+    "type": "update_value",
+    "element_id": "price_display",
+    "value": "dropdown.unit_price"
+  },
+  {
+    "type": "update_data",
+    "data": {
+      "filtered_parts": "SELECT * FROM parts WHERE category_id = {{input_data.category_id.[0]}}"
+    }
+  }
+]</code></pre>
+
+<hr>
+
+<!-- ─────────────────────── 5. Display Components ─────────────────────── -->
+<h2 id="display-components">5. Display Components</h2>
+
+<h3>5.1 Text (<code>type: "text"</code>)</h3>
+
+<p>Renders static or dynamic text. Supports links, dynamic colors, and query-driven text content.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>text</code></td><td>string</td><td>NORMAL</td><td>The text content; supports <code>{{}}</code> templates</td></tr>
+    <tr><td><code>color</code></td><td>string</td><td>NORMAL</td><td>Hex color (e.g. <code>"#1E293B"</code>)</td></tr>
+    <tr><td><code>font_size</code></td><td>number</td><td>NORMAL</td><td>Font size in logical pixels (default 14)</td></tr>
+    <tr><td><code>font_weight</code></td><td>string</td><td>NORMAL</td><td><code>"100"</code> through <code>"900"</code></td></tr>
+    <tr><td><code>font_style</code></td><td>string</td><td>NORMAL</td><td><code>"italic"</code> or omit</td></tr>
+    <tr><td><code>expanded</code></td><td>boolean</td><td>NORMAL</td><td>Wrap in <code>Expanded</code> for flex fill</td></tr>
+    <tr><td><code>is_link</code></td><td>boolean</td><td>NORMAL</td><td>Tapping launches the URL in the text</td></tr>
+    <tr><td><code>mask</code></td><td>string</td><td>NORMAL</td><td>Display this text instead of actual URL when <code>is_link</code> is true</td></tr>
+    <tr><td><code>text_align</code></td><td>string</td><td>NORMAL</td><td><code>"left"</code>, <code>"center"</code>, <code>"right"</code></td></tr>
+    <tr><td><code>text_transform</code></td><td>string</td><td>NORMAL</td><td>Text transformation hint</td></tr>
+    <tr><td><code>letter_spacing</code></td><td>number</td><td>NORMAL</td><td>Letter spacing in logical pixels</td></tr>
+    <tr><td><code>line_height</code></td><td>number</td><td>NORMAL</td><td>Line height multiplier</td></tr>
+    <tr><td><code>margin_left/right/top/bottom</code></td><td>number</td><td>NORMAL</td><td>Spacing</td></tr>
+    <tr><td><code>padding_left/right/top/bottom</code></td><td>number</td><td>NORMAL</td><td>Inner padding</td></tr>
+    <tr><td><code>onclick</code></td><td>object</td><td>NORMAL</td><td>Action map; makes text tappable</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>SQL expression for conditional visibility</td></tr>
+    <tr><td><code>color_query</code></td><td>string</td><td>&#x1F195; NEW</td><td>SQL <code>CASE</code> expression returning a color hex string; evaluated via local SQLite</td></tr>
+    <tr><td><code>text_color_query</code></td><td>string</td><td>&#x1F195; NEW</td><td>Alias for <code>color_query</code> on text elements</td></tr>
+    <tr><td><code>background_color</code></td><td>string</td><td>NORMAL</td><td>Text background color</td></tr>
+    <tr><td><code>background_color_query</code></td><td>string</td><td>NORMAL</td><td>SQL expression for dynamic background color</td></tr>
+    <tr><td><code>width</code></td><td>number</td><td>NORMAL</td><td>Override text width</td></tr>
+    <tr><td><code>border_radius</code></td><td>number</td><td>NORMAL</td><td>Border radius if background is set</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "text",
+  "element_id": "status_badge",
+  "text": "{{jobs_list.data.[index].status}}",
+  "font_size": 12,
+  "font_weight": "600",
+  "color_query": "CASE WHEN '{{jobs_list.data.[index].status}}' = 'completed' THEN '#059669' WHEN '{{jobs_list.data.[index].status}}' = 'in_progress' THEN '#D97706' ELSE '#6B7280' END"
+}</code></pre>
+
+<hr>
+
+<h3>5.2 Icon (<code>type: "icon"</code>)</h3>
+
+<p>Renders a Feather icon with optional background shape.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>icon</code></td><td>string</td><td>NORMAL</td><td>Feather icon name (e.g. <code>"briefcase"</code>, <code>"map-pin"</code>)</td></tr>
+    <tr><td><code>size</code></td><td>number</td><td>NORMAL</td><td>Icon size in logical pixels</td></tr>
+    <tr><td><code>color</code></td><td>string</td><td>NORMAL</td><td>Icon color hex</td></tr>
+    <tr><td><code>background_color</code></td><td>string</td><td>&#x1F195; NEW</td><td>Background fill color (requires <code>background_shape</code>)</td></tr>
+    <tr><td><code>background_shape</code></td><td>string</td><td>&#x1F195; NEW</td><td><code>"none"</code>, <code>"circle"</code>, <code>"square"</code>, <code>"rounded"</code></td></tr>
+    <tr><td><code>border_radius</code></td><td>number</td><td>&#x1F195; NEW</td><td>Corner radius when <code>background_shape</code> is <code>"rounded"</code></td></tr>
+    <tr><td><code>padding</code></td><td>number</td><td>&#x1F195; NEW</td><td>Padding between icon and background edge</td></tr>
+    <tr><td><code>onclick</code></td><td>object</td><td>NORMAL</td><td>Action map; makes icon tappable</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>Conditional visibility</td></tr>
+    <tr><td><code>color_query</code></td><td>string</td><td>NORMAL</td><td>SQL expression for dynamic color</td></tr>
+    <tr><td><code>bg_color_query</code></td><td>string</td><td>NORMAL</td><td>SQL expression for dynamic background color</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "icon",
+  "element_id": "status_icon",
+  "icon": "check-circle",
+  "size": 24,
+  "color": "#10B981",
+  "background_shape": "circle",
+  "background_color": "#D1FAE5",
+  "padding": 8
+}</code></pre>
+
+<hr>
+
+<h3>5.3 Image Display (<code>type: "image"</code>)</h3>
+
+<p>Renders one or more images from URLs in a horizontal scrollable list.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>data</code></td><td>string</td><td>NORMAL</td><td>Template/dot-path expression resolving to a URL or array of URLs</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "image",
+  "element_id": "receipt_images",
+  "data": "{{expenses.data.[index].receipt_urls}}"
+}</code></pre>
+
+<hr>
+
+<h3>5.4 PDF Viewer (<code>type: "pdf"</code>)</h3>
+
+<p>Embeds a PDF viewer inline.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>link</code></td><td>string</td><td>NORMAL</td><td>Dot-path or template resolving to a PDF URL</td></tr>
+    <tr><td><code>bytes</code></td><td>string</td><td>&#x1F195; NEW</td><td>Dot-path resolving to raw PDF bytes (from API call result)</td></tr>
+    <tr><td><code>height</code></td><td>number</td><td>NORMAL</td><td>Fraction of screen height (e.g. <code>0.8</code> = 80%)</td></tr>
+    <tr><td><code>label</code></td><td>string</td><td>NORMAL</td><td>Title shown in viewer</td></tr>
+    <tr><td><code>save_file</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Allow saving PDF locally</td></tr>
+    <tr><td><code>is_html</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Treat content as HTML (convert to PDF)</td></tr>
+    <tr><td><code>file_name</code></td><td>string</td><td>&#x1F195; NEW</td><td>File name for save/download</td></tr>
+    <tr><td><code>download_enabled</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Show download button</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>Conditional visibility</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "pdf",
+  "element_id": "service_report_pdf",
+  "link": "{{report_data.data.[0].pdf_url}}",
+  "height": 0.85,
+  "label": "Service Report",
+  "download_enabled": true,
+  "save_file": true,
+  "file_name": "service_report"
+}</code></pre>
+
+<hr>
+
+<h3>5.5 Web View (<code>type: "webview"</code>)</h3>
+
+<p>Embeds a web URL in a native in-app browser.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>link</code></td><td>string</td><td>&#x1F195; NEW</td><td>URL or template expression</td></tr>
+    <tr><td><code>height</code></td><td>number</td><td>&#x1F195; NEW</td><td>Fraction of screen height</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "webview",
+  "element_id": "external_portal",
+  "link": "https://portal.example.com?token={{arguments.auth_token}}",
+  "height": 0.9
+}</code></pre>
+
+<hr>
+
+<h3>5.6 Date/Time Display (<code>type: "date_time"</code>)</h3>
+
+<p>Renders a formatted date/time string from a raw datetime value.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>text</code></td><td>string</td><td>&#x1F195; NEW</td><td>Template expression resolving to ISO datetime string</td></tr>
+    <tr><td><code>format</code></td><td>string</td><td>&#x1F195; NEW</td><td>Display format (e.g. <code>"dd MMM yyyy, hh:mm a"</code>)</td></tr>
+    <tr><td><code>color</code></td><td>string</td><td>&#x1F195; NEW</td><td>Text color</td></tr>
+    <tr><td><code>font_size</code></td><td>number</td><td>&#x1F195; NEW</td><td>Font size</td></tr>
+    <tr><td><code>font_weight</code></td><td>string</td><td>&#x1F195; NEW</td><td>Font weight</td></tr>
+    <tr><td><code>convert_to_local</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Convert UTC datetime to device local time before formatting</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "date_time",
+  "element_id": "created_at_display",
+  "text": "{{job_detail.data.[0].created_at}}",
+  "format": "dd MMM yyyy",
+  "convert_to_local": true,
+  "color": "#64748B",
+  "font_size": 13
+}</code></pre>
+
+<hr>
+
+<h3>5.7 Map Widget Display (<code>type: "input"</code> with <code>input_type: "map_widget"</code> or standalone)</h3>
+
+<p>Interactive map with markers and polylines.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>data</code></td><td>string</td><td>&#x1F195; NEW</td><td>Dot-path to array of marker objects</td></tr>
+    <tr><td><code>marker_label</code></td><td>string</td><td>&#x1F195; NEW</td><td>Field name in data used as marker label</td></tr>
+    <tr><td><code>marker_color</code></td><td>string</td><td>&#x1F195; NEW</td><td>Static hex color for all markers</td></tr>
+    <tr><td><code>marker_color_field</code></td><td>string</td><td>&#x1F195; NEW</td><td>Data field that contains per-marker color</td></tr>
+    <tr><td><code>marker_status_field</code></td><td>string</td><td>&#x1F195; NEW</td><td>Data field for status-based color (<code>active</code>=green, etc.)</td></tr>
+    <tr><td><code>marker_overlay_text_field</code></td><td>string</td><td>&#x1F195; NEW</td><td>Field value shown as text overlay on pin icon</td></tr>
+    <tr><td><code>marker_onclick</code></td><td>object</td><td>&#x1F195; NEW</td><td>Global onclick action for all markers</td></tr>
+    <tr><td><code>marker_onclick_field</code></td><td>string</td><td>&#x1F195; NEW</td><td>Data field containing per-marker onclick config</td></tr>
+    <tr><td><code>polylines</code></td><td>string or array</td><td>&#x1F195; NEW</td><td>Dot-path or inline array of polyline objects</td></tr>
+    <tr><td><code>title</code></td><td>string</td><td>&#x1F195; NEW</td><td>Section title shown above map</td></tr>
+    <tr><td><code>show_title</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Show/hide title and border (default true)</td></tr>
+    <tr><td><code>map_provider</code></td><td>string</td><td>&#x1F195; NEW</td><td><code>"azure"</code> (default) or <code>"openstreetmap"</code></td></tr>
+    <tr><td><code>map_style</code></td><td>string</td><td>&#x1F195; NEW</td><td>Azure style: <code>"road"</code>, <code>"satellite"</code>, <code>"hybrid"</code>, <code>"terrain"</code>, <code>"dark"</code>, <code>"light"</code></td></tr>
+    <tr><td><code>custom_aspect_ratio</code></td><td>number</td><td>&#x1F195; NEW</td><td>Aspect ratio override (default 1.5)</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Polyline Object Structure:</strong></p>
+<pre><code>{
+  "encoded_polyline": "abc123...",
+  "color": "#3B82F6",
+  "width": 3
+}</code></pre>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "input",
+  "input_type": "map_widget",
+  "element_id": "technician_map",
+  "data": "technician_locations.data",
+  "marker_label": "name",
+  "marker_status_field": "status",
+  "title": "Technician Locations",
+  "map_provider": "azure",
+  "map_style": "road",
+  "custom_aspect_ratio": 1.8
+}</code></pre>
+
+<hr>
+
+<h3>5.8 Calendar (<code>type: "calendar"</code>)</h3>
+
+<p>Monthly/weekly calendar with event markers.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>events</code></td><td>string</td><td>NORMAL</td><td>SQL query returning event data</td></tr>
+    <tr><td><code>first_day</code></td><td>string</td><td>NORMAL</td><td>Template for start of calendar range</td></tr>
+    <tr><td><code>last_day</code></td><td>string</td><td>NORMAL</td><td>Template for end of calendar range</td></tr>
+    <tr><td><code>onchange</code></td><td>array</td><td>NORMAL</td><td>Actions on date selection</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "calendar",
+  "element_id": "job_calendar",
+  "events": "SELECT id, title, scheduled_date as date FROM jobs WHERE assigned_to = '&lt;!getUserId()!&gt;'",
+  "first_day": "&lt;!getCurrentDate()!&gt;",
+  "last_day": "2025-12-31"
+}</code></pre>
+
+<hr>
+
+<h3>5.9 Chat (<code>type: "chat"</code>)</h3>
+
+<p>Full-featured chat bubble interface.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>data</code></td><td>string</td><td>NORMAL</td><td>Dot-path to array of message objects</td></tr>
+    <tr><td><code>current_user_id</code></td><td>string</td><td>NORMAL</td><td>Template for current user&rsquo;s ID</td></tr>
+    <tr><td><code>current_user_name</code></td><td>string</td><td>NORMAL</td><td>Template for current user&rsquo;s display name</td></tr>
+    <tr><td><code>height</code></td><td>number</td><td>NORMAL</td><td>Fixed height of chat container</td></tr>
+    <tr><td><code>sender_color</code></td><td>string</td><td>NORMAL</td><td>Bubble color for sent messages (default <code>"#DCF8C6"</code>)</td></tr>
+    <tr><td><code>receiver_color</code></td><td>string</td><td>NORMAL</td><td>Bubble color for received messages (default <code>"#FFFFFF"</code>)</td></tr>
+    <tr><td><code>background_color</code></td><td>string</td><td>NORMAL</td><td>Chat background (default <code>"#F5F5F5"</code>)</td></tr>
+    <tr><td><code>show_timestamps</code></td><td>boolean</td><td>NORMAL</td><td>Show time on each message (default true)</td></tr>
+    <tr><td><code>timestamp_format</code></td><td>string</td><td>NORMAL</td><td>Time format string (default <code>"hh:mm a"</code>)</td></tr>
+    <tr><td><code>show_sender_names</code></td><td>boolean</td><td>NORMAL</td><td>Show sender name for group chats</td></tr>
+    <tr><td><code>show_date_dividers</code></td><td>boolean</td><td>NORMAL</td><td>Show Today / Yesterday dividers (default true)</td></tr>
+    <tr><td><code>date_divider_format</code></td><td>string</td><td>NORMAL</td><td>Date format for old messages</td></tr>
+    <tr><td><code>hint</code></td><td>string</td><td>NORMAL</td><td>Input hint text</td></tr>
+    <tr><td><code>send_button_text</code></td><td>string</td><td>NORMAL</td><td>Send button label</td></tr>
+    <tr><td><code>send_button_color</code></td><td>string</td><td>NORMAL</td><td>Send button background color</td></tr>
+    <tr><td><code>send_button_icon</code></td><td>string</td><td>NORMAL</td><td>Feather icon for send button</td></tr>
+    <tr><td><code>send_button_shape</code></td><td>string</td><td>NORMAL</td><td><code>"circle"</code> or <code>"square"</code></td></tr>
+    <tr><td><code>sender_id_field</code></td><td>string</td><td>NORMAL</td><td>Data field name for sender ID (default <code>"sender_id"</code>)</td></tr>
+    <tr><td><code>sender_name_field</code></td><td>string</td><td>NORMAL</td><td>Data field for sender name (default <code>"sender_name"</code>)</td></tr>
+    <tr><td><code>message_field</code></td><td>string</td><td>NORMAL</td><td>Data field for message text (default <code>"message"</code>)</td></tr>
+    <tr><td><code>timestamp_field</code></td><td>string</td><td>NORMAL</td><td>Data field for timestamp (default <code>"timestamp"</code>)</td></tr>
+    <tr><td><code>bubble_border_radius</code></td><td>number</td><td>NORMAL</td><td>Bubble corner radius</td></tr>
+    <tr><td><code>onclick</code></td><td>object</td><td>NORMAL</td><td>Actions when send is triggered</td></tr>
+    <tr><td><code>header</code></td><td>object</td><td>NORMAL</td><td>Optional chat header: <code>{title, icon, icon_color, background_color, border_color, font_size, text_color}</code></td></tr>
+    <tr><td><code>empty_text</code></td><td>string</td><td>NORMAL</td><td>Text when no messages</td></tr>
+    <tr><td><code>border</code></td><td>object</td><td>NORMAL</td><td>Chat container border: <code>{color, width}</code></td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- ─────────────────────── 6. Layout Components ─────────────────────── -->
+<h2 id="layout-components">6. Layout Components</h2>
+
+<h3>6.1 Container (<code>type: "container"</code>)</h3>
+
+<p>The universal layout wrapper. Supports colors, borders, padding, and onclick.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>ui</code></td><td>array</td><td>NORMAL</td><td>Child elements</td></tr>
+    <tr><td><code>color</code></td><td>string</td><td>NORMAL</td><td>Background color hex</td></tr>
+    <tr><td><code>background_color</code></td><td>string</td><td>NORMAL</td><td>Alias for <code>color</code></td></tr>
+    <tr><td><code>color_query</code></td><td>string</td><td>NORMAL</td><td>SQL expression for dynamic background color</td></tr>
+    <tr><td><code>background_color_query</code></td><td>string</td><td>NORMAL</td><td>Alias for <code>color_query</code></td></tr>
+    <tr><td><code>width</code></td><td>number</td><td>NORMAL</td><td>Fixed width</td></tr>
+    <tr><td><code>height</code></td><td>number</td><td>NORMAL</td><td>Fixed height</td></tr>
+    <tr><td><code>border_radius</code></td><td>number</td><td>NORMAL</td><td>Corner radius</td></tr>
+    <tr><td><code>border_width</code></td><td>number</td><td>NORMAL</td><td>Border width</td></tr>
+    <tr><td><code>border_color</code></td><td>string</td><td>NORMAL</td><td>Border color</td></tr>
+    <tr><td><code>border_left_width</code></td><td>number</td><td>NORMAL</td><td>Left border width</td></tr>
+    <tr><td><code>border_left_color_query</code></td><td>string</td><td>NORMAL</td><td>SQL expression for left border color</td></tr>
+    <tr><td><code>border_bottom_width</code></td><td>number</td><td>NORMAL</td><td>Bottom border width</td></tr>
+    <tr><td><code>box_shadow</code></td><td>string</td><td>NORMAL</td><td>CSS-style shadow hint</td></tr>
+    <tr><td><code>padding</code></td><td>number</td><td>NORMAL</td><td>Uniform padding</td></tr>
+    <tr><td><code>padding_left/right/top/bottom</code></td><td>number</td><td>NORMAL</td><td>Per-side padding</td></tr>
+    <tr><td><code>margin</code></td><td>number</td><td>NORMAL</td><td>Uniform margin</td></tr>
+    <tr><td><code>margin_left/right/top/bottom</code></td><td>number</td><td>NORMAL</td><td>Per-side margin</td></tr>
+    <tr><td><code>onclick</code></td><td>object</td><td>NORMAL</td><td>Action map; makes container tappable</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>Conditional visibility</td></tr>
+    <tr><td><code>expanded</code></td><td>boolean</td><td>NORMAL</td><td>Fill available flex space</td></tr>
+    <tr><td><code>aspect_ratio</code></td><td>number</td><td>NORMAL</td><td>Constrain aspect ratio</td></tr>
+    <tr><td><code>fixed_width</code></td><td>boolean</td><td>NORMAL</td><td>Prevent width from stretching</td></tr>
+    <tr><td><code>alignment</code></td><td>string</td><td>NORMAL</td><td>Internal alignment hint</td></tr>
+    <tr><td><code>align_items</code></td><td>string</td><td>NORMAL</td><td>Child cross-axis alignment</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "container",
+  "element_id": "status_chip",
+  "background_color_query": "CASE WHEN '{{jobs.data.[index].status}}' = 'completed' THEN '#D1FAE5' ELSE '#FEE2E2' END",
+  "border_radius": 6,
+  "padding_top": 6, "padding_bottom": 6, "padding_left": 12, "padding_right": 12,
+  "ui": [
+    {
+      "type": "text",
+      "element_id": "status_text",
+      "text": "{{jobs.data.[index].status}}",
+      "color_query": "CASE WHEN '{{jobs.data.[index].status}}' = 'completed' THEN '#059669' ELSE '#DC2626' END",
+      "font_size": 12, "font_weight": "600", "element_id": "status_label"
+    }
+  ]
+}</code></pre>
+
+<hr>
+
+<h3>6.2 Card (<code>type: "card"</code>)</h3>
+
+<p>Pre-styled container with white background, rounded corners, border, and drop shadow.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>ui</code></td><td>array</td><td>NORMAL</td><td>Child elements</td></tr>
+    <tr><td><code>color</code></td><td>string</td><td>NORMAL</td><td>Override card background</td></tr>
+    <tr><td><code>border_radius</code></td><td>number</td><td>NORMAL</td><td>Corner radius (default 12)</td></tr>
+    <tr><td><code>margin_left/right/top/bottom</code></td><td>number</td><td>NORMAL</td><td>Card spacing</td></tr>
+    <tr><td><code>padding_left/right/top/bottom</code></td><td>number</td><td>NORMAL</td><td>Inner padding</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>6.3 Row (<code>type: "row"</code>)</h3>
+
+<p>Horizontal layout, wraps <code>Row</code> widget.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>ui</code></td><td>array</td><td>NORMAL</td><td>Child elements (side by side)</td></tr>
+    <tr><td><code>main_axis_alignment</code></td><td>string</td><td>NORMAL</td><td><code>"start"</code>, <code>"end"</code>, <code>"center"</code>, <code>"space_between"</code>, <code>"space_around"</code>, <code>"space_evenly"</code></td></tr>
+    <tr><td><code>cross_axis_alignment</code></td><td>string</td><td>NORMAL</td><td><code>"start"</code>, <code>"end"</code>, <code>"center"</code> (also <code>crossAxis</code>)</td></tr>
+    <tr><td><code>main_axis_size</code></td><td>string</td><td>&#x1F195; NEW</td><td><code>"max"</code> (default) or <code>"min"</code></td></tr>
+    <tr><td><code>horizontal_scroll</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Wrap in horizontal <code>SingleChildScrollView</code></td></tr>
+    <tr><td><code>expanded</code></td><td>boolean</td><td>NORMAL</td><td>Fill available width</td></tr>
+    <tr><td><code>justify_content</code></td><td>string</td><td>NORMAL</td><td>Alias for <code>main_axis_alignment</code> (JSON-friendly)</td></tr>
+    <tr><td><code>align_items</code></td><td>string</td><td>NORMAL</td><td>Alias for <code>cross_axis_alignment</code></td></tr>
+    <tr><td><code>flex_wrap</code></td><td>string</td><td>NORMAL</td><td>Wrap mode hint</td></tr>
+    <tr><td><code>onclick</code></td><td>object</td><td>NORMAL</td><td>Makes row tappable</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>Conditional visibility</td></tr>
+    <tr><td><code>color</code></td><td>string</td><td>NORMAL</td><td>Background color</td></tr>
+    <tr><td><code>border_radius</code></td><td>number</td><td>NORMAL</td><td>Corner radius</td></tr>
+    <tr><td><code>padding_left/right/top/bottom</code></td><td>number</td><td>NORMAL</td><td>Inner padding</td></tr>
+    <tr><td><code>margin_left/top/bottom</code></td><td>number</td><td>NORMAL</td><td>Outer margin</td></tr>
+    <tr><td><code>border_bottom_width</code></td><td>number</td><td>NORMAL</td><td>Bottom border</td></tr>
+    <tr><td><code>border_top_width</code></td><td>number</td><td>NORMAL</td><td>Top border</td></tr>
+    <tr><td><code>border_color</code></td><td>string</td><td>NORMAL</td><td>Border color</td></tr>
+    <tr><td><code>box_shadow</code></td><td>string</td><td>NORMAL</td><td>Shadow hint</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>6.4 Column (<code>type: "column"</code>)</h3>
+
+<p>Vertical layout, wraps <code>Column</code> widget.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>ui</code></td><td>array</td><td>NORMAL</td><td>Child elements (stacked vertically)</td></tr>
+    <tr><td><code>cross_axis_alignment</code></td><td>string</td><td>NORMAL</td><td><code>"start"</code>, <code>"end"</code>, <code>"center"</code></td></tr>
+    <tr><td><code>expanded</code></td><td>boolean</td><td>NORMAL</td><td>Fill available height</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>Conditional visibility</td></tr>
+    <tr><td><code>align_items</code></td><td>string</td><td>NORMAL</td><td>Alias for cross_axis_alignment</td></tr>
+    <tr><td><code>justify_content</code></td><td>string</td><td>NORMAL</td><td>Layout hint</td></tr>
+    <tr><td><code>margin_left/right/bottom</code></td><td>number</td><td>NORMAL</td><td>Margin</td></tr>
+    <tr><td><code>padding_top/bottom</code></td><td>number</td><td>NORMAL</td><td>Padding</td></tr>
+    <tr><td><code>padding</code></td><td>number</td><td>NORMAL</td><td>Uniform padding</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>6.5 Space / Spacer</h3>
+
+<p>Three variants for inserting whitespace.</p>
+
+<p><strong><code>type: "space_widget"</code></strong> &mdash; Fixed-size spacer:</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>space</code></td><td>number</td><td>NORMAL</td><td>Size in logical pixels</td></tr>
+    <tr><td><code>alignment</code></td><td>string</td><td>NORMAL</td><td><code>"vertical"</code> (default) or <code>"horizontal"</code></td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>Conditional visibility</td></tr>
+  </tbody>
+</table>
+
+<p><strong><code>type: "spacer"</code></strong> &mdash; Flex spacer (fills remaining space):</p>
+<pre><code>{"type": "spacer", "element_id": "flex_gap"}</code></pre>
+
+<p><strong><code>type: "space"</code></strong> &mdash; Simple height/width block:</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>height</code></td><td>number</td><td>NORMAL</td><td>Fixed height</td></tr>
+    <tr><td><code>width</code></td><td>number</td><td>NORMAL</td><td>Fixed width</td></tr>
+    <tr><td><code>color</code></td><td>string</td><td>NORMAL</td><td>Background color</td></tr>
+  </tbody>
+</table>
+
+<p><strong><code>type: "gutter"</code></strong> &mdash; Platform-specific gutter spacing.</p>
+
+<hr>
+
+<h3>6.6 Tab Group (<code>type: "tab_group"</code>)</h3>
+
+<p>Horizontal tab bar with swipeable content panels.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>ui</code></td><td>array</td><td>NORMAL</td><td>Array of tab objects <code>{title, ui[]}</code></td></tr>
+    <tr><td><code>height</code></td><td>number</td><td>NORMAL</td><td>Total height including tab bar (default 500)</td></tr>
+    <tr><td><code>margin_left/right/top/bottom</code></td><td>number</td><td>&#x1F195; NEW</td><td>Outer margins</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>Conditional visibility</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "tab_group",
+  "element_id": "job_tabs",
+  "height": 600,
+  "ui": [
+    {
+      "title": "Details",
+      "ui": [
+        {"type": "text", "element_id": "job_title_t", "text": "{{job_detail.data.[0].title}}"}
+      ]
+    },
+    {
+      "title": "History",
+      "ui": [
+        {"type": "list", "element_id": "history_list", "data": "job_history.data", "ui": [...]}
+      ]
+    }
+  ]
+}</code></pre>
+
+<hr>
+
+<h3>6.7 Tab Bar (<code>type: "tab_bar"</code>) &#x1F195; NEW</h3>
+
+<p>Advanced tab bar component with per-tab icons and onclick actions.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>tabs</code></td><td>array</td><td>&#x1F195; NEW</td><td>Tab objects: <code>{text, icon}</code> or plain strings</td></tr>
+    <tr><td><code>initial_index</code></td><td>number</td><td>&#x1F195; NEW</td><td>Default selected tab (default 0)</td></tr>
+    <tr><td><code>selected_color</code></td><td>string</td><td>&#x1F195; NEW</td><td>Label color for selected tab</td></tr>
+    <tr><td><code>unselected_color</code></td><td>string</td><td>&#x1F195; NEW</td><td>Label color for unselected tabs</td></tr>
+    <tr><td><code>indicator_color</code></td><td>string</td><td>&#x1F195; NEW</td><td>Underline indicator color</td></tr>
+    <tr><td><code>indicator_weight</code></td><td>number</td><td>&#x1F195; NEW</td><td>Indicator line thickness</td></tr>
+    <tr><td><code>background_color</code></td><td>string</td><td>&#x1F195; NEW</td><td>Tab bar background color</td></tr>
+    <tr><td><code>font_size</code></td><td>number</td><td>&#x1F195; NEW</td><td>Tab label font size</td></tr>
+    <tr><td><code>font_weight</code></td><td>string</td><td>&#x1F195; NEW</td><td>Tab label font weight</td></tr>
+    <tr><td><code>scrollable</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Horizontally scrollable tabs</td></tr>
+    <tr><td><code>height</code></td><td>number</td><td>&#x1F195; NEW</td><td>Tab bar height</td></tr>
+    <tr><td><code>show_border</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Show bottom border on tab bar</td></tr>
+    <tr><td><code>show_content</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Show tab content panes below bar</td></tr>
+    <tr><td><code>content</code></td><td>array</td><td>&#x1F195; NEW</td><td>Array of content UI arrays indexed by tab</td></tr>
+    <tr><td><code>content_padding</code></td><td>number</td><td>&#x1F195; NEW</td><td>Padding inside content pane</td></tr>
+    <tr><td><code>onclick</code></td><td>object</td><td>&#x1F195; NEW</td><td>Action map fired on tab selection</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>6.8 Stack (<code>type: "stack"</code>) &#x1F195; NEW</h3>
+
+<p>Overlapping layout (Flutter <code>Stack</code>).</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>ui</code></td><td>array</td><td>&#x1F195; NEW</td><td>Children to overlap</td></tr>
+    <tr><td><code>alignment</code></td><td>string</td><td>&#x1F195; NEW</td><td><code>"top_start"</code>, <code>"center"</code>, <code>"bottom_end"</code>, etc.</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>&#x1F195; NEW</td><td>Conditional visibility</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>6.9 Align (<code>type: "align"</code>) &#x1F195; NEW</h3>
+
+<p>Aligns children within available space.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>ui</code></td><td>array</td><td>&#x1F195; NEW</td><td>Child elements</td></tr>
+    <tr><td><code>alignment</code></td><td>string</td><td>&#x1F195; NEW</td><td>Alignment value: <code>"center"</code>, <code>"top_left"</code>, etc.</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>&#x1F195; NEW</td><td>Conditional visibility</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>6.10 Single Child Scroll View (<code>type: "single_child_scroll_view"</code>) &#x1F195; NEW</h3>
+
+<p>Wraps children in a scrollable container.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>ui</code></td><td>array</td><td>&#x1F195; NEW</td><td>Child elements</td></tr>
+    <tr><td><code>scroll_direction</code></td><td>string</td><td>&#x1F195; NEW</td><td><code>"vertical"</code> (default) or <code>"horizontal"</code></td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>&#x1F195; NEW</td><td>Conditional visibility</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- ─────────────────────── 7. Data Components ─────────────────────── -->
+<h2 id="data-components">7. Data Components</h2>
+
+<h3>7.1 List (<code>type: "list"</code>)</h3>
+
+<p>Renders a data-bound vertical list of repeating UI elements.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>data</code></td><td>string</td><td>NORMAL</td><td>Dot-path to array in viewData (e.g. <code>"jobs_list.data"</code>)</td></tr>
+    <tr><td><code>ui</code></td><td>array</td><td>NORMAL</td><td>Template UI elements; each renders once per row; use <code>[index]</code> for row data</td></tr>
+    <tr><td><code>onclick</code></td><td>object</td><td>NORMAL</td><td>Action map fired when any list item is tapped</td></tr>
+    <tr><td><code>separator</code></td><td>number</td><td>&#x1F195; NEW</td><td>Gap in pixels between items (default 16)</td></tr>
+    <tr><td><code>is_timeline</code></td><td>boolean</td><td>NORMAL</td><td>Render as vertical timeline with connector line</td></tr>
+    <tr><td><code>search</code></td><td>boolean</td><td>NORMAL</td><td>Show search bar above list</td></tr>
+    <tr><td><code>search_query</code></td><td>string</td><td>NORMAL</td><td>SQL with <code>search_term</code> placeholder for list filtering</td></tr>
+    <tr><td><code>search_hint</code></td><td>string</td><td>NORMAL</td><td>Placeholder text for search field</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>Conditional visibility</td></tr>
+    <tr><td><code>empty_message</code></td><td>string</td><td>NORMAL</td><td>Text shown when list has no items</td></tr>
+    <tr><td><code>height</code></td><td>number</td><td>NORMAL</td><td>Fixed height override</td></tr>
+    <tr><td><code>margin_bottom</code></td><td>number</td><td>NORMAL</td><td>Bottom margin</td></tr>
+    <tr><td><code>pagination</code></td><td>boolean</td><td>NORMAL</td><td>Enable pagination</td></tr>
+    <tr><td><code>page_size</code></td><td>number</td><td>NORMAL</td><td>Items per page</td></tr>
+  </tbody>
+</table>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "list",
+  "element_id": "jobs_list_view",
+  "data": "jobs_list.data",
+  "onclick": {
+    "1": {
+      "type": "navigation",
+      "app_id": "{{app_id}}",
+      "view_id": "job_detail",
+      "arguments": {"job_id": "{{jobs_list.data.[index].id}}"}
+    }
+  },
+  "empty_message": "No jobs assigned",
+  "ui": [
+    {
+      "type": "card",
+      "element_id": "job_card",
+      "ui": [
+        {"type": "text", "element_id": "job_title", "text": "{{jobs_list.data.[index].title}}", "font_size": 16, "font_weight": "600"},
+        {"type": "text", "element_id": "job_status", "text": "{{jobs_list.data.[index].status}}", "font_size": 13, "color": "#6B7280"}
+      ]
+    }
+  ]
+}</code></pre>
+
+<hr>
+
+<h3>7.2 Table (<code>type: "table"</code>)</h3>
+
+<p>Displays tabular data using the PlutoGrid library with sorting, filtering, and optional inline editing.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>data</code></td><td>string</td><td>&#x1F195; NEW</td><td>Dot-path to array data source</td></tr>
+    <tr><td><code>columns</code></td><td>array</td><td>&#x1F195; NEW</td><td>Column definition objects: <code>{title, field, type, readOnly, enableRowChecked, options}</code></td></tr>
+    <tr><td><code>isMap</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Source data is a keyed map rather than an array</td></tr>
+    <tr><td><code>saveAll</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Auto-store all rows into <code>inputData</code> for later submission</td></tr>
+    <tr><td><code>saveData</code></td><td>boolean</td><td>&#x1F195; NEW</td><td>Show &ldquo;Save Data&rdquo; button</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Column Types:</strong> <code>"text"</code>, <code>"number"</code>, <code>"select"</code>, <code>"date"</code>, <code>"time"</code></p>
+
+<p><strong>JSON Example:</strong></p>
+<pre><code>{
+  "type": "table",
+  "element_id": "parts_table",
+  "data": "parts_list.data",
+  "columns": [
+    {"title": "Part Name", "field": "part_name", "type": "text", "readOnly": true},
+    {"title": "Qty", "field": "quantity", "type": "number"},
+    {"title": "Status", "field": "status", "type": "select", "options": ["Available","Used","Missing"]}
+  ]
+}</code></pre>
+
+<hr>
+
+<!-- ─────────────────────── 8. Interactive / Action Components ─────────────────────── -->
+<h2 id="interactive-action-components">8. Interactive / Action Components</h2>
+
+<h3>8.1 Button (<code>type: "button"</code>)</h3>
+
+<p>Four visual variants via <code>btn_type</code>.</p>
+
+<h4>filled_button</h4>
+
+<p>Solid primary action button.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>text</code></td><td>string</td><td>NORMAL</td><td>Button label (supports templates)</td></tr>
+    <tr><td><code>background_color</code></td><td>string</td><td>NORMAL</td><td>Button fill color (default <code>"#00121B"</code>)</td></tr>
+    <tr><td><code>text_color</code></td><td>string</td><td>NORMAL</td><td>Label color (default <code>"#FFFFFF"</code>)</td></tr>
+    <tr><td><code>font_size</code></td><td>number</td><td>NORMAL</td><td>Label font size</td></tr>
+    <tr><td><code>font_weight</code></td><td>string</td><td>NORMAL</td><td>Label font weight</td></tr>
+    <tr><td><code>width</code></td><td>number</td><td>NORMAL</td><td>Override button width</td></tr>
+    <tr><td><code>height</code></td><td>number</td><td>NORMAL</td><td>Override button height</td></tr>
+    <tr><td><code>onclick</code></td><td>object</td><td>NORMAL</td><td>Ordered action map</td></tr>
+    <tr><td><code>check_required</code></td><td>boolean</td><td>NORMAL</td><td>Validate all required inputs before executing</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>Conditional visibility</td></tr>
+    <tr><td><code>margin_left/right/top/bottom</code></td><td>number</td><td>NORMAL</td><td>Spacing</td></tr>
+    <tr><td><code>padding_top/bottom</code></td><td>number</td><td>NORMAL</td><td>Padding</td></tr>
+    <tr><td><code>border_radius</code></td><td>number</td><td>NORMAL</td><td>Corner radius</td></tr>
+  </tbody>
+</table>
+
+<pre><code>{
+  "type": "button",
+  "btn_type": "filled_button",
+  "element_id": "submit_btn",
+  "text": "Submit Job",
+  "background_color": "#1C77FF",
+  "text_color": "#FFFFFF",
+  "check_required": true,
+  "onclick": {
+    "1": {"type": "execute_query", "query": "INSERT INTO job_logs ..."},
+    "2": {"type": "navigation", "app_id": "...", "view_id": "homescreen", "back": false}
+  }
+}</code></pre>
+
+<h4>outlined_button</h4>
+
+<p>Bordered button (supports <code>disabled_condition</code>).</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>text</code></td><td>string</td><td>NORMAL</td><td>Button label</td></tr>
+    <tr><td><code>background_color</code></td><td>string</td><td>NORMAL</td><td>Fill color (default <code>"#FFF5EB"</code>)</td></tr>
+    <tr><td><code>text_color</code></td><td>string</td><td>NORMAL</td><td>Label color</td></tr>
+    <tr><td><code>border_width</code></td><td>number</td><td>NORMAL</td><td>Border thickness (default 0.4)</td></tr>
+    <tr><td><code>disabled_condition</code></td><td>string</td><td>NORMAL</td><td>SQL expression; greys out button if returns 1</td></tr>
+    <tr><td><code>onclick</code></td><td>object</td><td>NORMAL</td><td>Action map</td></tr>
+  </tbody>
+</table>
+
+<h4>text_button</h4>
+
+<p>Minimal text-only button.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>text</code></td><td>string</td><td>NORMAL</td><td>Button label</td></tr>
+    <tr><td><code>color</code></td><td>string</td><td>NORMAL</td><td>Text color (default <code>"#1C77FF"</code>)</td></tr>
+    <tr><td><code>onclick</code></td><td>object</td><td>NORMAL</td><td>Action map</td></tr>
+  </tbody>
+</table>
+
+<h4>icon_button</h4>
+
+<p>Circular icon button with colored background.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>icon</code></td><td>string</td><td>NORMAL</td><td>Feather icon name</td></tr>
+    <tr><td><code>size</code></td><td>number</td><td>NORMAL</td><td>Icon and circle radius</td></tr>
+    <tr><td><code>color</code></td><td>string</td><td>NORMAL</td><td>Icon color (default <code>"#FFFFFF"</code>)</td></tr>
+    <tr><td><code>bg_color</code></td><td>string</td><td>NORMAL</td><td>Circle background color (default <code>"#FFFFFF"</code>)</td></tr>
+    <tr><td><code>onclick</code></td><td>object</td><td>NORMAL</td><td>Action map</td></tr>
+    <tr><td><code>visibility_condition</code></td><td>string</td><td>NORMAL</td><td>Conditional visibility</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>8.2 Popup (<code>type: "popup"</code> in actions)</h3>
+
+<p>Opens a dialog with custom UI content.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>ui</code></td><td>array</td><td>NORMAL</td><td>Children rendered inside the dialog</td></tr>
+    <tr><td><code>fullscreen</code></td><td>boolean</td><td>NORMAL</td><td>Display as full-screen dialog</td></tr>
+    <tr><td><code>auto_close</code></td><td>boolean</td><td>NORMAL</td><td>Auto-dismiss after <code>delay</code> seconds</td></tr>
+    <tr><td><code>delay</code></td><td>number</td><td>NORMAL</td><td>Auto-close delay in seconds</td></tr>
+    <tr><td><code>title</code></td><td>string</td><td>NORMAL</td><td>Dialog title annotation</td></tr>
+    <tr><td><code>width</code></td><td>number</td><td>NORMAL</td><td>Dialog width override</td></tr>
+    <tr><td><code>condition</code></td><td>object</td><td>NORMAL</td><td>Guard condition before showing popup</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- ─────────────────────── 9. All Action Types ─────────────────────── -->
+<h2 id="all-action-types">9. All Action Types</h2>
+
+<p>Actions are defined as ordered maps (numeric string keys <code>"1"</code>, <code>"2"</code>, &hellip;). All actions inside <code>onclick</code>, <code>onload</code>, and <code>onchange</code> follow the same structure. The <code>ViewController.elementClicked()</code> method processes each in sequence.</p>
+
+<h3>Action Ordering and Conditions</h3>
+
+<pre><code>"onclick": {
+  "1": {
+    "type": "execute_query",
+    "condition": {
+      "type": "expression",
+      "condition": "'{{input_data.status.[0]}}' != ''"
+    },
+    "query": "UPDATE jobs SET ..."
+  },
+  "2": {
+    "type": "navigation",
+    "app_id": "...",
+    "view_id": "homescreen"
+  }
+}</code></pre>
+
+<p>Each action can have:</p>
+<ul>
+  <li><code>condition.type</code>: <code>"expression"</code> (evaluate inline expression) or <code>"query"</code> (run SQL and check result)</li>
+  <li><code>condition.condition</code>: the expression or SQL string</li>
+</ul>
+
+<h3>Action Reference Table</h3>
+
+<table>
+  <thead><tr><th>Action Type</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>navigation</code></td><td>NORMAL</td><td>Navigate to another view</td></tr>
+    <tr><td><code>execute_query</code></td><td>NORMAL</td><td>Run a SQL query (INSERT/UPDATE/DELETE)</td></tr>
+    <tr><td><code>update_data</code></td><td>NORMAL</td><td>Re-fetch a named view data source</td></tr>
+    <tr><td><code>add_data</code></td><td>&#x1F195; NEW</td><td>Append/merge data into an existing view data source</td></tr>
+    <tr><td><code>update_value</code></td><td>NORMAL</td><td>Set a specific element&rsquo;s value programmatically</td></tr>
+    <tr><td><code>clear_input_data</code></td><td>&#x1F195; NEW</td><td>Reset specified input elements to empty</td></tr>
+    <tr><td><code>api</code></td><td>NORMAL</td><td>Call an external API endpoint</td></tr>
+    <tr><td><code>popup</code></td><td>NORMAL</td><td>Open a dialog with custom UI</td></tr>
+    <tr><td><code>close_popup</code></td><td>NORMAL</td><td>Dismiss the currently open dialog</td></tr>
+    <tr><td><code>notification</code></td><td>NORMAL</td><td>Send email or in-app push notification</td></tr>
+    <tr><td><code>toast</code> / <code>show_toast</code></td><td>NORMAL</td><td>Show a brief toast/snackbar message</td></tr>
+    <tr><td><code>open_url</code></td><td>NORMAL</td><td>Open a URL in the system browser or in-app</td></tr>
+    <tr><td><code>launcher</code></td><td>NORMAL</td><td>Launch phone call, email, or URL</td></tr>
+    <tr><td><code>refresh_data</code></td><td>NORMAL</td><td>Refresh specific data source (alias: <code>update_data</code>)</td></tr>
+    <tr><td><code>otp</code></td><td>&#x1F195; NEW</td><td>Send OTP to a phone number and show PIN verification dialog</td></tr>
+    <tr><td><code>generate_pdf</code></td><td>&#x1F195; NEW</td><td>Generate PDF via Fieldproxy PDF service</td></tr>
+    <tr><td><code>wait_for_uploads</code></td><td>&#x1F195; NEW</td><td>Block action chain until file uploads complete</td></tr>
+    <tr><td><code>encrypt</code></td><td>&#x1F195; NEW</td><td>Encrypt a data payload using AES</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>9.1 navigation</h3>
+
+<p>Navigates to another view, optionally passing arguments.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>app_id</code></td><td>NORMAL</td><td>Target app ID (supports templates)</td></tr>
+    <tr><td><code>view_id</code></td><td>NORMAL</td><td>Target view key (supports templates)</td></tr>
+    <tr><td><code>arguments</code></td><td>NORMAL</td><td>Object of key-value pairs passed to destination screen</td></tr>
+    <tr><td><code>back</code></td><td>NORMAL</td><td>If <code>true</code>, pops the navigation stack and returns arguments to caller</td></tr>
+    <tr><td><code>replace</code></td><td>NORMAL</td><td>If <code>true</code>, replaces current screen (no back button)</td></tr>
+    <tr><td><code>navigation_type</code></td><td>NORMAL</td><td>Set to <code>"url"</code> for external URL navigation</td></tr>
+    <tr><td><code>url</code></td><td>NORMAL</td><td>URL when <code>navigation_type</code> is <code>"url"</code></td></tr>
+    <tr><td><code>is_pdf</code></td><td>NORMAL</td><td>Open URL as PDF viewer</td></tr>
+    <tr><td><code>is_location</code></td><td>NORMAL</td><td>Open latitude/longitude in maps</td></tr>
+    <tr><td><code>latitude</code> / <code>longitude</code></td><td>NORMAL</td><td>Coordinate templates for directions</td></tr>
+    <tr><td><code>disable_back_confirmation</code></td><td>&#x1F195; NEW</td><td>Disable the back confirmation dialog after navigating</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Returning data from a pushed screen:</strong> When <code>back: true</code> is used, include <code>"refresh": ["data_key1"]</code> in arguments to trigger a re-fetch on the calling screen.</p>
+
+<pre><code>{
+  "type": "navigation",
+  "app_id": "myApp123",
+  "view_id": "job_detail",
+  "arguments": {
+    "job_id": "{{jobs_list.data.[index].id}}",
+    "job_title": "{{jobs_list.data.[index].title}}"
+  }
+}</code></pre>
+
+<hr>
+
+<h3>9.2 execute_query</h3>
+
+<p>Runs an INSERT, UPDATE, or DELETE SQL query.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>query</code></td><td>NORMAL</td><td>SQL string with <code>{{}}</code> template interpolation</td></tr>
+    <tr><td><code>async</code></td><td>&#x1F195; NEW</td><td>If <code>true</code>, does not wait for result before continuing chain</td></tr>
+    <tr><td><code>disable_back_confirmation</code></td><td>&#x1F195; NEW</td><td>Disable back confirmation after successful execution</td></tr>
+  </tbody>
+</table>
+
+<pre><code>{
+  "type": "execute_query",
+  "query": "UPDATE jobs SET status = 'completed', completed_at = NOW() WHERE id = {{arguments.job_id}}"
+}</code></pre>
+
+<hr>
+
+<h3>9.3 update_data</h3>
+
+<p>Re-fetches a named data source defined in the view&rsquo;s <code>data{}</code> block.</p>
+
+<pre><code>{
+  "type": "update_data",
+  "key": "job_detail",
+  "query": "SELECT * FROM jobs WHERE id = {{arguments.job_id}}"
+}</code></pre>
+
+<hr>
+
+<h3>9.4 add_data (&#x1F195; NEW)</h3>
+
+<p>Appends new query results into an existing view data source (deduplicates by <code>unique_field</code>).</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>key</code></td><td>&#x1F195; NEW</td><td>View data key to append into</td></tr>
+    <tr><td><code>query</code></td><td>&#x1F195; NEW</td><td>SQL to fetch new items</td></tr>
+    <tr><td><code>unique_field</code></td><td>&#x1F195; NEW</td><td>Field used for deduplication (default <code>"id"</code>)</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>9.5 update_value</h3>
+
+<p>Sets an input element&rsquo;s value without user interaction.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>element_id</code></td><td>NORMAL</td><td>Target element</td></tr>
+    <tr><td><code>value</code></td><td>NORMAL</td><td>New value (supports templates)</td></tr>
+  </tbody>
+</table>
+
+<pre><code>{
+  "type": "update_value",
+  "element_id": "timestamp_field",
+  "value": "&lt;!getCurrentDateTime()!&gt;"
+}</code></pre>
+
+<hr>
+
+<h3>9.6 clear_input_data (&#x1F195; NEW)</h3>
+
+<p>Resets one or more input elements back to empty state.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>elements</code></td><td>&#x1F195; NEW</td><td>Array of element IDs to clear</td></tr>
+  </tbody>
+</table>
+
+<pre><code>{
+  "type": "clear_input_data",
+  "elements": ["part_search", "part_qty", "part_notes"]
+}</code></pre>
+
+<hr>
+
+<h3>9.7 api</h3>
+
+<p>Calls an external REST API endpoint.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>url</code></td><td>NORMAL</td><td>Endpoint URL (supports templates)</td></tr>
+    <tr><td><code>headers</code></td><td>NORMAL</td><td>HTTP headers object (supports templates)</td></tr>
+    <tr><td><code>body</code></td><td>NORMAL</td><td>Request body (string or object; supports templates)</td></tr>
+    <tr><td><code>api_type</code></td><td>NORMAL</td><td>HTTP method hint</td></tr>
+    <tr><td><code>is_pdf</code></td><td>NORMAL</td><td>Response is PDF bytes</td></tr>
+    <tr><td><code>recursive</code></td><td>&#x1F195; NEW</td><td>If <code>true</code>, calls the API <code>count</code> times (iterates 0..count-1)</td></tr>
+    <tr><td><code>count</code></td><td>&#x1F195; NEW</td><td>Number of iterations when <code>recursive</code> is true</td></tr>
+    <tr><td><code>server_side_run</code></td><td>&#x1F195; NEW</td><td>Route call through Fieldproxy server</td></tr>
+    <tr><td><code>disable_back_confirmation</code></td><td>&#x1F195; NEW</td><td>Disable back dialog after API completes</td></tr>
+  </tbody>
+</table>
+
+<p>Results are stored in <code>functions.[action_key]</code> and accessible via templates.</p>
+
+<hr>
+
+<h3>9.8 popup</h3>
+
+<p>Displays a modal dialog with custom UI.</p>
+
+<pre><code>{
+  "type": "popup",
+  "fullscreen": false,
+  "auto_close": false,
+  "ui": [
+    {"type": "text", "element_id": "popup_msg", "text": "Are you sure?"},
+    {"type": "button", "btn_type": "filled_button", "element_id": "confirm_btn", "text": "Confirm",
+     "onclick": {"1": {"type": "close_popup"}}}
+  ]
+}</code></pre>
+
+<hr>
+
+<h3>9.9 notification</h3>
+
+<p>Send communications.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>notification_type</code></td><td>NORMAL</td><td><code>"email"</code> or <code>"app"</code></td></tr>
+    <tr><td colspan="3"><strong>Email fields:</strong></td></tr>
+    <tr><td><code>email_ids</code></td><td>NORMAL</td><td>Template resolving to comma-separated email addresses</td></tr>
+    <tr><td><code>subject</code></td><td>NORMAL</td><td>Email subject (supports templates)</td></tr>
+    <tr><td><code>cc</code></td><td>NORMAL</td><td>CC addresses</td></tr>
+    <tr><td><code>body</code></td><td>NORMAL</td><td>Plain text body</td></tr>
+    <tr><td><code>html</code></td><td>NORMAL</td><td>HTML body</td></tr>
+    <tr><td colspan="3"><strong>App push fields:</strong></td></tr>
+    <tr><td><code>user_ids</code></td><td>NORMAL</td><td>Template resolving to comma-separated user IDs</td></tr>
+    <tr><td><code>title</code></td><td>NORMAL</td><td>Push notification title</td></tr>
+    <tr><td><code>message</code></td><td>NORMAL</td><td>Push notification body</td></tr>
+    <tr><td><code>app_notification_type</code></td><td>&#x1F195; NEW</td><td><code>"info"</code>, <code>"success"</code>, <code>"warning"</code>, <code>"error"</code></td></tr>
+    <tr><td><code>category</code></td><td>&#x1F195; NEW</td><td>Notification category (e.g. <code>"web"</code>)</td></tr>
+    <tr><td><code>data</code></td><td>&#x1F195; NEW</td><td>Extra payload object</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>9.10 toast / show_toast</h3>
+
+<p>Brief dismissible notification.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>message</code></td><td>NORMAL</td><td>Toast message text (supports templates)</td></tr>
+    <tr><td><code>toast_type</code></td><td>NORMAL</td><td><code>"info"</code>, <code>"success"</code>, <code>"error"</code>, <code>"warning"</code></td></tr>
+    <tr><td><code>duration</code></td><td>NORMAL</td><td>Display seconds</td></tr>
+  </tbody>
+</table>
+
+<pre><code>{"type": "toast", "message": "Job saved successfully!", "toast_type": "success", "duration": 3}</code></pre>
+
+<hr>
+
+<h3>9.11 open_url</h3>
+
+<p>Opens a URL in the external browser or in-app.</p>
+
+<pre><code>{"type": "open_url", "url": "https://maps.google.com?q={{arguments.address}}"}</code></pre>
+
+<hr>
+
+<h3>9.12 launcher</h3>
+
+<p>Smart launcher &mdash; auto-detects email, phone, or URL.</p>
+
+<pre><code>{"type": "launcher", "text": "{{customer.data.[0].email}}"}</code></pre>
+
+<hr>
+
+<h3>9.13 otp (&#x1F195; NEW)</h3>
+
+<p>Sends an OTP to a mobile number and shows a 4-digit PIN verification dialog.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>mobile</code></td><td>&#x1F195; NEW</td><td>Template resolving to phone number</td></tr>
+  </tbody>
+</table>
+
+<p>Result stored as <code>functions.[action_key]</code> = <code>true</code> (verified) or <code>false</code> (failed/cancelled).</p>
+
+<hr>
+
+<h3>9.14 generate_pdf (&#x1F195; NEW)</h3>
+
+<p>Calls the Fieldproxy PDF generation service.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>pdf_group_id</code></td><td>&#x1F195; NEW</td><td>PDF template group identifier</td></tr>
+    <tr><td><code>arguments</code></td><td>&#x1F195; NEW</td><td>Data arguments passed to template</td></tr>
+  </tbody>
+</table>
+
+<p>Result stored in <code>functions.[action_key]</code> as PDF bytes.</p>
+
+<hr>
+
+<h3>9.15 wait_for_uploads (&#x1F195; NEW)</h3>
+
+<p>Pauses the action chain until file/image uploads complete.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>element_id</code></td><td>&#x1F195; NEW</td><td>Wait for a specific element&rsquo;s uploads only</td></tr>
+    <tr><td><code>index</code></td><td>&#x1F195; NEW</td><td>Specific row index</td></tr>
+    <tr><td><code>timeout_seconds</code></td><td>&#x1F195; NEW</td><td>Maximum wait time (default 30)</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>9.16 encrypt (&#x1F195; NEW)</h3>
+
+<p>Encrypts a data payload using AES encryption.</p>
+
+<table>
+  <thead><tr><th>Property</th><th>Status</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>data</code></td><td>&#x1F195; NEW</td><td>Object to encrypt (supports templates)</td></tr>
+  </tbody>
+</table>
+
+<p>Result stored in <code>functions.[action_key]</code>.</p>
+
+<hr>
+
+<h3>show_progress</h3>
+
+<p>Controls the loading spinner shown during action execution.</p>
+
+<p>Add <code>"show_progress": false</code> to any button <code>onclick</code> object to suppress the default progress dialog.</p>
+
+<hr>
+
+<!-- ─────────────────────── 10. Data Binding System ─────────────────────── -->
+<h2 id="data-binding-system">10. Data Binding System</h2>
+
+<h3>Named Data Sources</h3>
+
+<p>Defined in view&rsquo;s <code>data{}</code> block. Each key maps to a SQL query string.</p>
+
+<pre><code>"data": {
+  "job_detail": "SELECT * FROM jobs WHERE id = {{arguments.job_id}}",
+  "parts_list": "SELECT * FROM parts WHERE job_id = {{arguments.job_id}} ORDER BY created_at"
+}</code></pre>
+
+<p>Results are accessed as: <code>{{key.data.[index].column_name}}</code></p>
+
+<h3>Template Syntax</h3>
+
+<p>All strings support <code>{{}}</code> template interpolation. The runtime resolves paths against internal data stores.</p>
+
+<h4>Path Namespaces</h4>
+
+<table>
+  <thead><tr><th>Prefix</th><th>Status</th><th>Resolves To</th></tr></thead>
+  <tbody>
+    <tr><td><code>{{viewDataKey.data.[index].field}}</code></td><td>NORMAL</td><td>Row data from a named SQL query result</td></tr>
+    <tr><td><code>{{viewDataKey.data.[0].field}}</code></td><td>NORMAL</td><td>First row of a named query</td></tr>
+    <tr><td><code>{{input_data.element_id.[0]}}</code></td><td>NORMAL</td><td>Value of an input field at index 0</td></tr>
+    <tr><td><code>{{input_data.element_id.[index]}}</code></td><td>NORMAL</td><td>Value of input field at current list row index</td></tr>
+    <tr><td><code>{{arguments.key}}</code></td><td>NORMAL</td><td>Argument passed via navigation</td></tr>
+    <tr><td><code>{{functions.action_key}}</code></td><td>&#x1F195; NEW</td><td>Result of an <code>api</code>, <code>execute_query</code>, or <code>otp</code> action</td></tr>
+    <tr><td><code>{{functions.action_key.[index].field}}</code></td><td>&#x1F195; NEW</td><td>Indexed result from a recursive API call</td></tr>
+  </tbody>
+</table>
+
+<h4>Special Function Syntax <code>&lt;!...!&gt;</code></h4>
+
+<p>These are evaluated at render time, not via database lookup.</p>
+
+<table>
+  <thead><tr><th>Function</th><th>Status</th><th>Returns</th></tr></thead>
+  <tbody>
+    <tr><td><code>&lt;!getUserId()!&gt;</code></td><td>NORMAL</td><td>Current logged-in user&rsquo;s ID</td></tr>
+    <tr><td><code>&lt;!getUserName()!&gt;</code></td><td>NORMAL</td><td>Current user&rsquo;s display name</td></tr>
+    <tr><td><code>&lt;!getUserTeams()!&gt;</code></td><td>&#x1F195; NEW</td><td>Comma-separated team IDs for current user</td></tr>
+    <tr><td><code>&lt;!getDeviceId()!&gt;</code></td><td>&#x1F195; NEW</td><td>Device unique identifier</td></tr>
+    <tr><td><code>&lt;!getCurrentDate()!&gt;</code></td><td>NORMAL</td><td>Today&rsquo;s date in UTC (<code>YYYY-MM-DD</code>)</td></tr>
+    <tr><td><code>&lt;!getCurrentDate().local!&gt;</code></td><td>&#x1F195; NEW</td><td>Today&rsquo;s date in device local time</td></tr>
+    <tr><td><code>&lt;!getCurrentTime()!&gt;</code></td><td>NORMAL</td><td>Current UTC time (<code>HH:MM:SS</code>)</td></tr>
+    <tr><td><code>&lt;!getCurrentTime().local!&gt;</code></td><td>&#x1F195; NEW</td><td>Current local time</td></tr>
+    <tr><td><code>&lt;!getCurrentDateTime()!&gt;</code></td><td>NORMAL</td><td>UTC datetime (<code>YYYY-MM-DD HH:MM</code>)</td></tr>
+    <tr><td><code>&lt;!getCurrentDateTime().local!&gt;</code></td><td>&#x1F195; NEW</td><td>Local datetime</td></tr>
+    <tr><td><code>&lt;!getLocation().latitude!&gt;</code></td><td>&#x1F195; NEW</td><td>Current GPS latitude</td></tr>
+    <tr><td><code>&lt;!getLocation().longitude!&gt;</code></td><td>&#x1F195; NEW</td><td>Current GPS longitude</td></tr>
+    <tr><td><code>&lt;!getAddress()!&gt;</code></td><td>&#x1F195; NEW</td><td>Reverse-geocoded address from current location</td></tr>
+    <tr><td><code>&lt;!expression!&gt;</code></td><td>&#x1F195; NEW</td><td>Math expression (e.g. <code>&lt;!{{input_data.qty.[0]}} * {{input_data.price.[0]}}!&gt;</code>)</td></tr>
+  </tbody>
+</table>
+
+<h3>color_key + color_map</h3>
+
+<p>Used to map a status value to a display color without SQL.</p>
+
+<pre><code>{
+  "type": "text",
+  "text": "{{status}}",
+  "color_key": "{{status}}",
+  "color_map": {
+    "active": "#10B981",
+    "inactive": "#EF4444",
+    "pending": "#F59E0B"
+  }
+}</code></pre>
+
+<h3>color_query / text_color_query</h3>
+
+<p>SQL <code>CASE</code> expression returning a hex color, evaluated against the local SQLite database.</p>
+
+<pre><code>{
+  "color_query": "CASE WHEN '{{jobs.data.[index].priority}}' = 'urgent' THEN '#DC2626' WHEN '{{jobs.data.[index].priority}}' = 'normal' THEN '#059669' ELSE '#6B7280' END"
+}</code></pre>
+
+<h3>background_color_query</h3>
+
+<p>Same pattern applied to background color of containers or text.</p>
+
+<hr>
+
+<!-- ─────────────────────── 11. Conditional & Logic System ─────────────────────── -->
+<h2 id="conditional-logic-system">11. Conditional &amp; Logic System</h2>
+
+<h3>visibility_condition</h3>
+
+<p>SQL expression string. The element is hidden when the expression evaluates to <code>0</code> (or falsy). The expression is wrapped in <code>SELECT ... AS result</code> and run against local SQLite.</p>
+
+<pre><code>"visibility_condition": "'{{input_data.show_signature.[0]}}' = 'yes'"</code></pre>
+
+<pre><code>"visibility_condition": "{{job_detail.data.[0].status}} != 'completed'"</code></pre>
+
+<h3>disabled_condition</h3>
+
+<p>When the expression evaluates to <code>1</code>, the element is greyed out and non-interactive.</p>
+
+<pre><code>"disabled_condition": "'{{input_data.is_locked.[0]}}' = 'true'"</code></pre>
+
+<h3>required_condition</h3>
+
+<p>Element is required only when this expression evaluates to <code>1</code>.</p>
+
+<pre><code>"required_condition": "'{{input_data.service_type.[0]}}' = 'warranty'"</code></pre>
+
+<h3>Action Condition Guards</h3>
+
+<p>Any action in the onclick map can be conditionally skipped.</p>
+
+<pre><code>{
+  "type": "execute_query",
+  "condition": {
+    "type": "expression",
+    "condition": "'{{input_data.notes.[0]}}' != ''"
+  },
+  "query": "INSERT INTO notes ..."
+}</code></pre>
+
+<table>
+  <thead><tr><th>Condition Type</th><th>Status</th><th>Behavior</th></tr></thead>
+  <tbody>
+    <tr><td><code>"expression"</code></td><td>NORMAL</td><td>Evaluates inline expression against local SQLite</td></tr>
+    <tr><td><code>"query"</code></td><td>NORMAL</td><td>Runs SQL and checks if result has data / result is <code>true</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Condition Operators</h3>
+
+<p>Conditions are evaluated as SQLite expressions:</p>
+
+<table>
+  <thead><tr><th>Pattern</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><code>'{{x}}' = 'value'</code></td><td>String equality</td></tr>
+    <tr><td><code>'{{x}}' != ''</code></td><td>Not empty</td></tr>
+    <tr><td><code>{{x}} &gt; 0</code></td><td>Numeric comparison</td></tr>
+    <tr><td><code>{{x}} IS NULL</code></td><td>Null check</td></tr>
+    <tr><td><code>'{{x}}' LIKE '%term%'</code></td><td>Contains text</td></tr>
+  </tbody>
+</table>
+
+<h3>Automatic Condition Refresh</h3>
+
+<p>Conditions that reference <code>{{input_data.element_id}}</code> are automatically re-evaluated whenever that element&rsquo;s value changes. Conditions referencing view data keys are re-evaluated when <code>update_data</code> or <code>add_data</code> fires for that key.</p>
+
+<hr>
+
+<!-- ─────────────────────── 12. Mobile-Specific Features ─────────────────────── -->
+<h2 id="mobile-specific-features">12. Mobile-Specific Features</h2>
+
+<h3>Camera &amp; Image</h3>
+
+<p>The <code>image</code> input type has three <code>upload_mode</code> values:</p>
+<ul>
+  <li><code>"DEFAULT"</code> &mdash; presents a dialog letting user choose Camera or Gallery</li>
+  <li><code>"CAMERA"</code> &mdash; goes directly to camera</li>
+  <li><code>"GALLERY"</code> &mdash; opens device photo library</li>
+</ul>
+
+<p><strong>Internal Camera vs External:</strong></p>
+<ul>
+  <li>By default uses the in-app <code>CameraView</code> (Fieldproxy custom camera)</li>
+  <li>Can be configured to use the device&rsquo;s native camera app</li>
+</ul>
+
+<p><strong>Multi-Image Capture:</strong> When <code>is_multi: true</code> and camera mode, the app uses <code>MultiCaptureCameraView</code> to capture multiple images in one session.</p>
+
+<p><strong>Watermarking:</strong> When <code>isWatermark: true</code>, the runtime burns the following into the image before upload:</p>
+<ul>
+  <li><code>"timestamp"</code> &mdash; current date/time text</li>
+  <li><code>"userId"</code> &mdash; current user ID</li>
+  <li><code>"location"</code> &mdash; current GPS coordinates</li>
+</ul>
+
+<p><strong>OCR:</strong> When <code>isOcr: true</code>, the captured image is processed by Google ML Kit text recognition. With <code>ocrType: "pan"</code>, it parses PAN card fields automatically.</p>
+
+<p><strong>Auto-Compression:</strong> Images over 2MB are automatically compressed to 70% quality at 1920x1080 resolution before uploading.</p>
+
+<p><strong>Upload Progress:</strong> Upload status is tracked per file (states: <code>uploading</code>, <code>completed</code>, <code>error</code>). Users can see progress overlays and retry failed uploads.</p>
+
+<hr>
+
+<h3>GPS / Location</h3>
+
+<ul>
+  <li>Background geolocation via <code>flutter_background_geolocation</code></li>
+  <li>Current location is always available via <code>&lt;!getLocation().latitude!&gt;</code> / <code>&lt;!getLocation().longitude!&gt;</code></li>
+  <li><code>LocationInput</code> opens an interactive map where user pins their location</li>
+  <li>Geofencing is configurable via <code>fenceRadius</code> property</li>
+</ul>
+
+<hr>
+
+<h3>Barcode / QR Scanning</h3>
+
+<ul>
+  <li><code>ScanInput</code> opens <code>Scanner</code> widget which uses the device camera for real-time scanning</li>
+  <li>Supports all standard 1D and 2D barcodes</li>
+  <li>Scanned value stored as plain string in <code>inputData</code></li>
+</ul>
+
+<hr>
+
+<h3>Signature Capture</h3>
+
+<ul>
+  <li>Opens a full-screen drawing canvas (<code>Routes.SIGNATURE</code>)</li>
+  <li>PNG file is saved locally, then uploaded to CDN in the background</li>
+  <li><code>inputData</code> stores <code>{path, url}</code> &mdash; use <code>url</code> for database insertion</li>
+</ul>
+
+<hr>
+
+<h3>Offline Mode / Local SQLite</h3>
+
+<p>All condition expressions (<code>visibility_condition</code>, <code>disabled_condition</code>, <code>required_condition</code>), and <code>color_query</code> evaluation are run against a local SQLite database via <code>DatabaseHelper</code>. This means conditions work even without network connectivity.</p>
+
+<hr>
+
+<h3>Pull-to-Refresh</h3>
+
+<p>Every view has a refresh button (&orarr;) in the AppBar. Tapping it:</p>
+<ol>
+  <li>Clears all <code>inputData</code></li>
+  <li>Re-fetches all <code>data</code> queries</li>
+  <li>Re-runs <code>onload</code> actions</li>
+</ol>
+
+<p>Additionally, when the app returns to foreground, screens auto-refresh (controllable per session).</p>
+
+<hr>
+
+<h3>Push Notifications</h3>
+
+<p>Sent via <code>notification</code> action with <code>notification_type: "app"</code>. FCM (Firebase Cloud Messaging) handles delivery on Android; APNs on iOS.</p>
+
+<hr>
+
+<h3>OTP Verification (&#x1F195; NEW)</h3>
+
+<p>The <code>otp</code> action sends a 4-digit OTP via the Fieldproxy Task API and shows a native PIN input dialog with:</p>
+<ul>
+  <li>2.5-minute countdown timer</li>
+  <li>Resend button (activates after timer expires)</li>
+  <li>Returns <code>true</code> on successful verification, <code>false</code> on failure/dismiss</li>
+</ul>
+
+<hr>
+
+<h3>Deep Linking</h3>
+
+<p>External navigation via <code>navigation_type: "url"</code> opens URLs using <code>ChromeSafariBrowser</code> (Custom Chrome Tab on Android, Safari View Controller on iOS).</p>
+
+<hr>
+
+<!-- ─────────────────────── 13. Navigation Patterns ─────────────────────── -->
+<h2 id="navigation-patterns">13. Navigation Patterns</h2>
+
+<h3>Stack Navigation (Push / Pop)</h3>
+
+<pre><code>{
+  "type": "navigation",
+  "app_id": "myApp",
+  "view_id": "job_detail",
+  "arguments": {"job_id": "{{jobs.data.[index].id}}"}
+}</code></pre>
+
+<p>The destination screen is pushed onto the navigation stack. The AppBar automatically shows a back chevron (&larr;).</p>
+
+<h3>Pop and Return Data</h3>
+
+<pre><code>{
+  "type": "navigation",
+  "app_id": "myApp",
+  "view_id": "job_list",
+  "back": true,
+  "arguments": {
+    "refresh": ["jobs_list"]
+  }
+}</code></pre>
+
+<p>When <code>back: true</code>, the current screen is popped. If <code>refresh</code> array is present, the calling screen re-fetches the listed data sources.</p>
+
+<h3>Replace Navigation</h3>
+
+<pre><code>{
+  "type": "navigation",
+  "replace": true,
+  "app_id": "myApp",
+  "view_id": "login_screen"
+}</code></pre>
+
+<p>Replaces current screen in the stack (no back navigation).</p>
+
+<h3>Arguments Between Views</h3>
+
+<p>Arguments passed via <code>navigation</code> are accessible in the destination view as <code>{{arguments.key_name}}</code>. They can be used in:</p>
+<ul>
+  <li>SQL data queries in <code>data{}</code></li>
+  <li>Template strings anywhere in <code>ui[]</code></li>
+  <li>Condition expressions</li>
+</ul>
+
+<h3>Back Navigation Guard (&#x1F195; NEW)</h3>
+
+<p>Prevent accidental back navigation with unsaved form data:</p>
+<pre><code>"back_confirmation": {
+  "enabled": true,
+  "title": "Unsaved Changes",
+  "message": "You have unsaved changes. Do you want to discard them?"
+}</code></pre>
+
+<hr>
+
+<!-- ─────────────────────── 14. Quick Reference Cheat Sheet ─────────────────────── -->
+<h2 id="quick-reference-cheat-sheet">14. Quick Reference Cheat Sheet</h2>
+
+<h3>All Component Types</h3>
+
+<table>
+  <thead><tr><th>Type</th><th>Category</th><th>Status</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>text</code></td><td>Display</td><td>NORMAL</td><td>Static or dynamic text</td></tr>
+    <tr><td><code>icon</code></td><td>Display</td><td>NORMAL</td><td>Feather icon with optional background</td></tr>
+    <tr><td><code>image</code></td><td>Display</td><td>NORMAL</td><td>Network image viewer</td></tr>
+    <tr><td><code>pdf</code></td><td>Display</td><td>NORMAL</td><td>Inline PDF viewer</td></tr>
+    <tr><td><code>webview</code></td><td>Display</td><td>&#x1F195; NEW</td><td>In-app web browser</td></tr>
+    <tr><td><code>date_time</code></td><td>Display</td><td>&#x1F195; NEW</td><td>Formatted date/time renderer</td></tr>
+    <tr><td><code>calendar</code></td><td>Display</td><td>NORMAL</td><td>Monthly/weekly calendar</td></tr>
+    <tr><td><code>chat</code></td><td>Display</td><td>NORMAL</td><td>Chat bubble interface</td></tr>
+    <tr><td><code>container</code></td><td>Layout</td><td>NORMAL</td><td>Universal wrapper</td></tr>
+    <tr><td><code>card</code></td><td>Layout</td><td>NORMAL</td><td>Pre-styled white card</td></tr>
+    <tr><td><code>row</code></td><td>Layout</td><td>NORMAL</td><td>Horizontal layout</td></tr>
+    <tr><td><code>column</code></td><td>Layout</td><td>NORMAL</td><td>Vertical layout</td></tr>
+    <tr><td><code>space_widget</code></td><td>Layout</td><td>NORMAL</td><td>Fixed spacer</td></tr>
+    <tr><td><code>spacer</code></td><td>Layout</td><td>NORMAL</td><td>Flex spacer</td></tr>
+    <tr><td><code>space</code></td><td>Layout</td><td>NORMAL</td><td>Simple width/height block</td></tr>
+    <tr><td><code>gutter</code></td><td>Layout</td><td>NORMAL</td><td>Platform gutter</td></tr>
+    <tr><td><code>tab_group</code></td><td>Layout</td><td>NORMAL</td><td>Horizontal tabs</td></tr>
+    <tr><td><code>tab_bar</code></td><td>Layout</td><td>&#x1F195; NEW</td><td>Advanced tab bar</td></tr>
+    <tr><td><code>stack</code></td><td>Layout</td><td>&#x1F195; NEW</td><td>Overlapping layout</td></tr>
+    <tr><td><code>align</code></td><td>Layout</td><td>&#x1F195; NEW</td><td>Alignment wrapper</td></tr>
+    <tr><td><code>single_child_scroll_view</code></td><td>Layout</td><td>&#x1F195; NEW</td><td>Scrollable container</td></tr>
+    <tr><td><code>list</code></td><td>Data</td><td>NORMAL</td><td>Data-bound repeating list</td></tr>
+    <tr><td><code>table</code></td><td>Data</td><td>&#x1F195; NEW</td><td>Sortable data grid (PlutoGrid)</td></tr>
+    <tr><td><code>button</code></td><td>Interactive</td><td>NORMAL</td><td>Tappable action button</td></tr>
+    <tr><td><code>input</code></td><td>Input</td><td>NORMAL</td><td>All form inputs (see <code>input_type</code>)</td></tr>
+  </tbody>
+</table>
+
+<h3>All input_type Values</h3>
+
+<table>
+  <thead><tr><th>input_type</th><th>Status</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>text</code></td><td>NORMAL</td><td>Free text</td></tr>
+    <tr><td><code>number</code></td><td>NORMAL</td><td>Numeric with validation</td></tr>
+    <tr><td><code>date</code></td><td>NORMAL</td><td>Date / time / date-time picker</td></tr>
+    <tr><td><code>dropdown</code></td><td>NORMAL</td><td>Searchable single/multi select</td></tr>
+    <tr><td><code>image</code></td><td>NORMAL</td><td>Camera/gallery image capture</td></tr>
+    <tr><td><code>file</code></td><td>NORMAL</td><td>Document upload</td></tr>
+    <tr><td><code>signature</code></td><td>NORMAL</td><td>Signature pad</td></tr>
+    <tr><td><code>location</code></td><td>NORMAL</td><td>GPS location picker</td></tr>
+    <tr><td><code>scan</code></td><td>NORMAL</td><td>Barcode/QR scanner</td></tr>
+    <tr><td><code>rating</code></td><td>NORMAL</td><td>Star rating</td></tr>
+    <tr><td><code>mcq</code></td><td>NORMAL</td><td>Radio / checkbox group</td></tr>
+    <tr><td><code>checkbox</code></td><td>NORMAL</td><td>Single checkbox</td></tr>
+    <tr><td><code>email</code></td><td>NORMAL</td><td>Email input</td></tr>
+    <tr><td><code>phone</code></td><td>NORMAL</td><td>Phone number input</td></tr>
+    <tr><td><code>step_counter</code></td><td>&#x1F195; NEW</td><td>Increment/decrement counter</td></tr>
+    <tr><td><code>table</code></td><td>&#x1F195; NEW</td><td>Editable inline table</td></tr>
+    <tr><td><code>catalogue</code></td><td>&#x1F195; NEW</td><td>Product catalogue selector</td></tr>
+    <tr><td><code>map_widget</code></td><td>&#x1F195; NEW</td><td>Interactive map</td></tr>
+    <tr><td><code>excel_file</code></td><td>&#x1F195; NEW</td><td>Excel file upload/parse</td></tr>
+  </tbody>
+</table>
+
+<h3>All btn_type Values</h3>
+
+<table>
+  <thead><tr><th>btn_type</th><th>Status</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>filled_button</code></td><td>NORMAL</td><td>Solid color primary button</td></tr>
+    <tr><td><code>outlined_button</code></td><td>NORMAL</td><td>Bordered secondary button</td></tr>
+    <tr><td><code>text_button</code></td><td>NORMAL</td><td>Text-only minimal button</td></tr>
+    <tr><td><code>icon_button</code></td><td>NORMAL</td><td>Circular icon button</td></tr>
+  </tbody>
+</table>
+
+<h3>All Action Types</h3>
+
+<table>
+  <thead><tr><th>Action</th><th>Status</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>navigation</code></td><td>NORMAL</td><td>Push/pop/replace screen</td></tr>
+    <tr><td><code>execute_query</code></td><td>NORMAL</td><td>Run SQL INSERT/UPDATE/DELETE</td></tr>
+    <tr><td><code>update_data</code></td><td>NORMAL</td><td>Re-fetch view data source</td></tr>
+    <tr><td><code>add_data</code></td><td>&#x1F195; NEW</td><td>Append to view data source</td></tr>
+    <tr><td><code>update_value</code></td><td>NORMAL</td><td>Set element value</td></tr>
+    <tr><td><code>clear_input_data</code></td><td>&#x1F195; NEW</td><td>Reset input elements</td></tr>
+    <tr><td><code>api</code></td><td>NORMAL</td><td>External REST API call</td></tr>
+    <tr><td><code>popup</code></td><td>NORMAL</td><td>Open dialog</td></tr>
+    <tr><td><code>close_popup</code></td><td>NORMAL</td><td>Close dialog</td></tr>
+    <tr><td><code>notification</code></td><td>NORMAL</td><td>Email or push notification</td></tr>
+    <tr><td><code>toast</code> / <code>show_toast</code></td><td>NORMAL</td><td>Toast message</td></tr>
+    <tr><td><code>open_url</code></td><td>NORMAL</td><td>Open URL</td></tr>
+    <tr><td><code>launcher</code></td><td>NORMAL</td><td>Smart URL/email/phone launcher</td></tr>
+    <tr><td><code>otp</code></td><td>&#x1F195; NEW</td><td>OTP send + verify</td></tr>
+    <tr><td><code>generate_pdf</code></td><td>&#x1F195; NEW</td><td>Generate PDF</td></tr>
+    <tr><td><code>wait_for_uploads</code></td><td>&#x1F195; NEW</td><td>Wait for file uploads</td></tr>
+    <tr><td><code>encrypt</code></td><td>&#x1F195; NEW</td><td>AES encrypt data</td></tr>
+  </tbody>
+</table>
+
+<h3>Key Differences: Mobile vs Web</h3>
+
+<table>
+  <thead><tr><th>Feature</th><th>Mobile</th><th>Web</th></tr></thead>
+  <tbody>
+    <tr><td>Root <code>type</code></td><td><code>"homescreen"</code></td><td><code>"web"</code></td></tr>
+    <tr><td><code>base_layout</code></td><td><code>"stack"</code> supported</td><td>Not present</td></tr>
+    <tr><td>Condition evaluation</td><td>Local SQLite</td><td>Server-side</td></tr>
+    <tr><td><code>color_query</code></td><td>Yes (local SQLite)</td><td>Server SQL</td></tr>
+    <tr><td>Image input <code>upload_mode</code></td><td><code>DEFAULT/CAMERA/GALLERY</code></td><td>Upload only</td></tr>
+    <tr><td><code>isOcr</code>, <code>isWatermark</code></td><td>Yes</td><td>No</td></tr>
+    <tr><td><code>location</code> input</td><td>GPS + map pin</td><td>Not native</td></tr>
+    <tr><td><code>scan</code> input</td><td>Native barcode/QR</td><td>Not native</td></tr>
+    <tr><td><code>signature</code> input</td><td>Native pad</td><td>Canvas</td></tr>
+    <tr><td><code>step_counter</code></td><td>Yes</td><td>Not present</td></tr>
+    <tr><td><code>excel_file</code></td><td>Yes</td><td>Not present</td></tr>
+    <tr><td>OTP action</td><td>Yes</td><td>Not present</td></tr>
+    <tr><td><code>generate_pdf</code> action</td><td>Yes</td><td>Not present</td></tr>
+    <tr><td><code>wait_for_uploads</code></td><td>Yes</td><td>Not present</td></tr>
+    <tr><td><code>date_time</code> display</td><td>Yes</td><td>Not present</td></tr>
+    <tr><td><code>tab_bar</code> (advanced)</td><td>Yes</td><td><code>tab_group</code> only</td></tr>
+    <tr><td><code>stack</code>, <code>align</code> layout</td><td>Yes</td><td>Not present</td></tr>
+    <tr><td><code>chat</code> widget</td><td>Yes</td><td>Not present</td></tr>
+    <tr><td><code>map_widget</code></td><td>Azure/OSM flutter_map</td><td>Web map</td></tr>
+    <tr><td>Back confirmation</td><td>Yes</td><td>Not present</td></tr>
+    <tr><td>Pull-to-refresh</td><td>AppBar button</td><td>Page refresh</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<!-- ─────────────────────── 15. Building a Mobile Screen ─────────────────────── -->
+<h2 id="building-a-mobile-screen">15. Building a Mobile Screen &mdash; Step by Step</h2>
+
+<p>Here is a complete, working view definition for a &ldquo;Job Check-In&rdquo; screen that demonstrates the full system.</p>
+
+<pre><code>{
+  "label": "Job Check-In",
+  "view_id": "job_checkin",
+  "background_color": "#F8FAFC",
+  "back_confirmation": {
+    "enabled": true,
+    "title": "Leave Check-In?",
+    "message": "Your check-in is not complete. Are you sure?"
+  },
+  "data": {
+    "job_info": "SELECT j.id, j.title, j.address, j.customer_name, j.priority FROM jobs j WHERE j.id = {{arguments.job_id}}",
+    "checkin_status": "SELECT id, checked_in_at FROM job_checkins WHERE job_id = {{arguments.job_id}} AND technician_id = '&lt;!getUserId()!&gt;' ORDER BY checked_in_at DESC LIMIT 1"
+  },
+  "onload": {
+    "1": {
+      "type": "update_value",
+      "element_id": "checkin_time_field",
+      "value": "&lt;!getCurrentDateTime()!&gt;"
+    }
+  },
+  "ui": [
+    {
+      "type": "container",
+      "element_id": "header_card",
+      "background_color": "#1C77FF",
+      "border_radius": 0,
+      "padding_top": 20, "padding_bottom": 20,
+      "padding_left": 16, "padding_right": 16,
+      "ui": [
+        {
+          "type": "text",
+          "element_id": "header_title",
+          "text": "{{job_info.data.[0].title}}",
+          "font_size": 20,
+          "font_weight": "700",
+          "color": "#FFFFFF"
+        },
+        {
+          "type": "text",
+          "element_id": "header_address",
+          "text": "{{job_info.data.[0].address}}",
+          "font_size": 14,
+          "color": "#BFDBFE",
+          "margin_top": 4
+        }
+      ]
+    },
+    {
+      "type": "container",
+      "element_id": "already_checked_in_banner",
+      "background_color": "#D1FAE5",
+      "border_radius": 8,
+      "padding_top": 12, "padding_bottom": 12,
+      "padding_left": 16, "padding_right": 16,
+      "margin_top": 16, "margin_left": 16, "margin_right": 16,
+      "visibility_condition": "(SELECT COUNT(*) FROM (SELECT 1 WHERE '{{checkin_status.data.[0].id}}' != '')) &gt; 0",
+      "ui": [
+        {
+          "type": "text",
+          "element_id": "already_in_text",
+          "text": "You are already checked in for this job.",
+          "color": "#059669",
+          "font_size": 14,
+          "font_weight": "600"
+        }
+      ]
+    },
+    {
+      "type": "container",
+      "element_id": "form_card",
+      "background_color": "#FFFFFF",
+      "border_radius": 12,
+      "margin_top": 16, "margin_left": 16, "margin_right": 16,
+      "padding_top": 16, "padding_bottom": 16,
+      "padding_left": 16, "padding_right": 16,
+      "visibility_condition": "(SELECT COUNT(*) FROM (SELECT 1 WHERE '{{checkin_status.data.[0].id}}' = '')) &gt; 0",
+      "ui": [
+        {
+          "type": "text",
+          "element_id": "form_heading",
+          "text": "Check-In Details",
+          "font_size": 16,
+          "font_weight": "700",
+          "color": "#1E293B"
+        },
+        {
+          "type": "space_widget",
+          "element_id": "form_spacer_1",
+          "space": 16,
+          "alignment": "vertical"
+        },
+        {
+          "type": "input",
+          "input_type": "location",
+          "element_id": "site_location",
+          "label": "Current Location",
+          "required": true
+        },
+        {
+          "type": "input",
+          "input_type": "image",
+          "element_id": "site_photo",
+          "label": "Site Photo",
+          "upload_mode": "CAMERA",
+          "required": true,
+          "isWatermark": true,
+          "watermarkType": ["timestamp", "location"],
+          "margin_bottom": 16
+        },
+        {
+          "type": "input",
+          "input_type": "text",
+          "element_id": "checkin_notes",
+          "label": "Arrival Notes",
+          "hint": "Any notes about site condition...",
+          "max_lines": 3
+        },
+        {
+          "type": "input",
+          "input_type": "text",
+          "element_id": "checkin_time_field",
+          "label": "Check-In Time",
+          "read_only": true
+        }
+      ]
+    },
+    {
+      "type": "space_widget",
+      "element_id": "bottom_spacer",
+      "space": 24,
+      "alignment": "vertical"
+    },
+    {
+      "type": "button",
+      "btn_type": "filled_button",
+      "element_id": "checkin_submit_btn",
+      "text": "Confirm Check-In",
+      "background_color": "#10B981",
+      "text_color": "#FFFFFF",
+      "margin_left": 16, "margin_right": 16,
+      "check_required": true,
+      "visibility_condition": "(SELECT COUNT(*) FROM (SELECT 1 WHERE '{{checkin_status.data.[0].id}}' = '')) &gt; 0",
+      "onclick": {
+        "1": {
+          "type": "wait_for_uploads",
+          "timeout_seconds": 30
+        },
+        "2": {
+          "type": "execute_query",
+          "disable_back_confirmation": true,
+          "query": "INSERT INTO job_checkins (job_id, technician_id, checked_in_at, location_lat, location_lng, location_address, notes, site_photo_url) VALUES ({{arguments.job_id}}, '&lt;!getUserId()!&gt;', '{{input_data.checkin_time_field.[0]}}', '{{input_data.site_location.[0].coordinates.[1]}}', '{{input_data.site_location.[0].coordinates.[0]}}', '{{input_data.site_location.[0].address}}', '{{input_data.checkin_notes.[0]}}', '{{input_data.site_photo.[0].url.[0]}}')"
+        },
+        "3": {
+          "type": "toast",
+          "message": "Check-in confirmed!",
+          "toast_type": "success",
+          "duration": 2
+        },
+        "4": {
+          "type": "navigation",
+          "app_id": "{{arguments.app_id}}",
+          "view_id": "job_detail",
+          "back": true,
+          "arguments": {
+            "refresh": ["job_detail", "checkin_status"],
+            "job_id": "{{arguments.job_id}}"
+          }
+        }
+      }
+    }
+  ]
+}</code></pre>
+
+<hr>
+
+<!-- ─────────────────────── 16. Changelog ─────────────────────── -->
+<h2 id="changelog">16. Changelog &mdash; Features Found in Flutter Code (NOT in Sample JSONs)</h2>
+
+<p>These are properties and components discovered exclusively in the Flutter source code. They are marked &#x1F195; NEW throughout this document.</p>
+
+<h3>New Component Types</h3>
+
+<table>
+  <thead><tr><th>Component</th><th>Source File</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>tab_bar</code></td><td><code>view_controller.dart</code></td><td>Advanced tab bar with icons, colors, onclick, scrollable</td></tr>
+    <tr><td><code>stack</code></td><td><code>view_controller.dart</code></td><td>Overlapping widget layout</td></tr>
+    <tr><td><code>align</code></td><td><code>view_controller.dart</code></td><td>Alignment wrapper</td></tr>
+    <tr><td><code>single_child_scroll_view</code></td><td><code>view_controller.dart</code></td><td>Scrollable container with direction control</td></tr>
+    <tr><td><code>date_time</code></td><td><code>view_controller.dart</code></td><td>Formatted date/time display widget</td></tr>
+    <tr><td><code>webview</code></td><td><code>web_view_screen.dart</code></td><td>In-app web browser</td></tr>
+  </tbody>
+</table>
+
+<h3>New Properties on Existing Components</h3>
+
+<table>
+  <thead><tr><th>Component</th><th>Property</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>View</td><td><code>base_layout</code></td><td>Set <code>"stack"</code> to use non-scrollable stack layout</td></tr>
+    <tr><td>View</td><td><code>margin</code></td><td>Per-side margin object <code>{left,top,right,bottom}</code></td></tr>
+    <tr><td>View</td><td><code>back_confirmation</code></td><td>Back navigation confirmation dialog</td></tr>
+    <tr><td><code>container</code></td><td><code>color_query</code></td><td>SQL expression for dynamic background</td></tr>
+    <tr><td><code>container</code></td><td><code>background_color_query</code></td><td>Alias for <code>color_query</code></td></tr>
+    <tr><td><code>container</code></td><td><code>border_left_width</code></td><td>Left-side border</td></tr>
+    <tr><td><code>container</code></td><td><code>border_left_color_query</code></td><td>SQL expression for left border color</td></tr>
+    <tr><td><code>container</code></td><td><code>border_bottom_width</code></td><td>Bottom border</td></tr>
+    <tr><td><code>container</code></td><td><code>aspect_ratio</code></td><td>Aspect ratio constraint</td></tr>
+    <tr><td><code>container</code></td><td><code>fixed_width</code></td><td>Prevent width stretching</td></tr>
+    <tr><td><code>text</code></td><td><code>color_query</code></td><td>SQL expression for dynamic text color</td></tr>
+    <tr><td><code>text</code></td><td><code>text_color_query</code></td><td>Alias for <code>color_query</code> on text</td></tr>
+    <tr><td><code>text</code></td><td><code>background_color_query</code></td><td>SQL expression for text background</td></tr>
+    <tr><td><code>text</code></td><td><code>is_link</code></td><td>Makes text tappable as URL</td></tr>
+    <tr><td><code>text</code></td><td><code>mask</code></td><td>Display text different from actual URL</td></tr>
+    <tr><td><code>text</code></td><td><code>letter_spacing</code></td><td>Letter spacing</td></tr>
+    <tr><td><code>text</code></td><td><code>line_height</code></td><td>Line height multiplier</td></tr>
+    <tr><td><code>text</code></td><td><code>font_style</code></td><td>Italic support</td></tr>
+    <tr><td><code>text</code></td><td><code>text_transform</code></td><td>Text case transform</td></tr>
+    <tr><td><code>icon</code></td><td><code>background_color</code></td><td>Icon background fill</td></tr>
+    <tr><td><code>icon</code></td><td><code>background_shape</code></td><td><code>circle</code>, <code>square</code>, <code>rounded</code>, <code>none</code></td></tr>
+    <tr><td><code>icon</code></td><td><code>border_radius</code></td><td>Rounded background corner radius</td></tr>
+    <tr><td><code>icon</code></td><td><code>padding</code></td><td>Padding around icon</td></tr>
+    <tr><td><code>icon</code></td><td><code>color_query</code></td><td>SQL expression for dynamic icon color</td></tr>
+    <tr><td><code>icon</code></td><td><code>bg_color_query</code></td><td>SQL expression for dynamic background</td></tr>
+    <tr><td><code>row</code></td><td><code>main_axis_size</code></td><td><code>"max"</code> or <code>"min"</code></td></tr>
+    <tr><td><code>row</code></td><td><code>horizontal_scroll</code></td><td>Horizontal scroll wrapping</td></tr>
+    <tr><td><code>list</code></td><td><code>separator</code></td><td>Gap between items</td></tr>
+    <tr><td><code>list</code></td><td><code>empty_message</code></td><td>Text when no data</td></tr>
+    <tr><td><code>list</code></td><td><code>pagination</code></td><td>Enable pagination</td></tr>
+    <tr><td><code>list</code></td><td><code>page_size</code></td><td>Items per page</td></tr>
+    <tr><td><code>input:text</code></td><td><code>search_query</code></td><td>Debounced search mode</td></tr>
+    <tr><td><code>input:text</code></td><td><code>prefix_icon</code></td><td>Icon inside field</td></tr>
+    <tr><td><code>input:number</code></td><td><code>min</code> / <code>max</code></td><td>Value bounds</td></tr>
+    <tr><td><code>input:number</code></td><td><code>integer_digits</code></td><td>Digits before decimal</td></tr>
+    <tr><td><code>input:number</code></td><td><code>decimal_digits</code></td><td>Decimal places</td></tr>
+    <tr><td><code>input:number</code></td><td><code>group_digits</code></td><td>Thousands grouping</td></tr>
+    <tr><td><code>input:number</code></td><td><code>allow_negative</code></td><td>Allow negative values</td></tr>
+    <tr><td><code>input:image</code></td><td><code>isOcr</code></td><td>Enable OCR</td></tr>
+    <tr><td><code>input:image</code></td><td><code>ocrType</code></td><td><code>"custom"</code> or <code>"pan"</code></td></tr>
+    <tr><td><code>input:image</code></td><td><code>ocrLinkedQuestions</code></td><td>Map OCR fields to elements</td></tr>
+    <tr><td><code>input:image</code></td><td><code>isWatermark</code></td><td>Apply watermark</td></tr>
+    <tr><td><code>input:image</code></td><td><code>watermarkType</code></td><td>Watermark elements list</td></tr>
+    <tr><td><code>input:image</code></td><td><code>min_count</code></td><td>Minimum image count</td></tr>
+    <tr><td><code>input:date</code></td><td><code>output_format</code></td><td>Storage format string</td></tr>
+    <tr><td><code>input:date</code></td><td><code>enable_range</code></td><td>Date range picker</td></tr>
+    <tr><td><code>input:date</code></td><td><code>is_min/is_max</code></td><td>Enable date bounds</td></tr>
+    <tr><td><code>input:date</code></td><td><code>min_from/max_to</code></td><td>Relative bound offset</td></tr>
+    <tr><td><code>input:date</code></td><td><code>bound_format</code></td><td>Bound unit: <code>DAY/WEEK/MONTH</code></td></tr>
+    <tr><td><code>input:location</code></td><td><code>fenceRadius</code></td><td>Geofence radius</td></tr>
+    <tr><td><code>input:mcq</code></td><td><code>is_multi</code></td><td>Enable multi-select</td></tr>
+    <tr><td><code>input:mcq</code></td><td><code>is_checklist</code></td><td>Numbered checklist mode</td></tr>
+    <tr><td><code>input:mcq</code></td><td><code>min_count/max_count</code></td><td>Selection bounds</td></tr>
+    <tr><td><code>input:dropdown</code></td><td><code>min_count/max_count</code></td><td>Selection bounds (multi mode)</td></tr>
+    <tr><td><code>input:rating</code></td><td><code>max_rating</code></td><td>Max star count</td></tr>
+    <tr><td><code>input:step_counter</code></td><td><code>init/width/margin_*</code></td><td>All properties</td></tr>
+    <tr><td><code>pdf</code></td><td><code>bytes</code></td><td>Raw PDF bytes source</td></tr>
+    <tr><td><code>pdf</code></td><td><code>save_file</code></td><td>Enable save</td></tr>
+    <tr><td><code>pdf</code></td><td><code>is_html</code></td><td>HTML-to-PDF mode</td></tr>
+    <tr><td><code>pdf</code></td><td><code>file_name</code></td><td>File name for save</td></tr>
+    <tr><td><code>pdf</code></td><td><code>download_enabled</code></td><td>Show download button</td></tr>
+    <tr><td><code>table</code></td><td><code>columns</code></td><td>Column definitions</td></tr>
+    <tr><td><code>table</code></td><td><code>isMap</code></td><td>Data is a keyed map</td></tr>
+    <tr><td><code>table</code></td><td><code>saveAll</code></td><td>Auto-store all rows</td></tr>
+    <tr><td><code>map_widget</code></td><td>All properties</td><td>Full map configuration</td></tr>
+  </tbody>
+</table>
+
+<h3>New input_type Values</h3>
+
+<table>
+  <thead><tr><th>input_type</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>step_counter</code></td><td>+/- counter input</td></tr>
+    <tr><td><code>table</code></td><td>Editable data table</td></tr>
+    <tr><td><code>catalogue</code></td><td>Item catalogue selector</td></tr>
+    <tr><td><code>map_widget</code></td><td>Interactive map in form context</td></tr>
+    <tr><td><code>excel_file</code></td><td>Excel upload/parse</td></tr>
+  </tbody>
+</table>
+
+<h3>New Action Types</h3>
+
+<table>
+  <thead><tr><th>Action</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>add_data</code></td><td>Append to view data source with deduplication</td></tr>
+    <tr><td><code>clear_input_data</code></td><td>Reset multiple input elements</td></tr>
+    <tr><td><code>otp</code></td><td>Send + verify OTP via phone</td></tr>
+    <tr><td><code>generate_pdf</code></td><td>Call Fieldproxy PDF generation service</td></tr>
+    <tr><td><code>wait_for_uploads</code></td><td>Block action chain until uploads complete</td></tr>
+    <tr><td><code>encrypt</code></td><td>AES encrypt a data payload</td></tr>
+  </tbody>
+</table>
+
+<h3>New Expression Functions</h3>
+
+<table>
+  <thead><tr><th>Function</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>&lt;!getUserTeams()!&gt;</code></td><td>Current user&rsquo;s team IDs</td></tr>
+    <tr><td><code>&lt;!getDeviceId()!&gt;</code></td><td>Device unique ID</td></tr>
+    <tr><td><code>&lt;!getCurrentDate().local!&gt;</code></td><td>Local date (not UTC)</td></tr>
+    <tr><td><code>&lt;!getCurrentTime().local!&gt;</code></td><td>Local time</td></tr>
+    <tr><td><code>&lt;!getCurrentDateTime().local!&gt;</code></td><td>Local datetime</td></tr>
+    <tr><td><code>&lt;!getLocation().latitude!&gt;</code></td><td>GPS latitude</td></tr>
+    <tr><td><code>&lt;!getLocation().longitude!&gt;</code></td><td>GPS longitude</td></tr>
+    <tr><td><code>&lt;!getAddress()!&gt;</code></td><td>Reverse geocoded address</td></tr>
+    <tr><td><code>&lt;!mathExpression!&gt;</code></td><td>Arithmetic evaluation</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<p><em>Generated: 2026-03-19 | Source: v3v4/v3 Flutter codebase + fptickets sample JSON</em></p>
+
+<!-- Footer nav -->
+<div class="footer-nav">
+  <a href="fieldproxy web reference.html">
+    <div class="fn-label">&larr; Previous</div>
+    <div class="fn-title">Web Library</div>
+  </a>
+  <a href="../onboarding-guide.html">
+    <div class="fn-label">Next &rarr;</div>
+    <div class="fn-title">Home</div>
+  </a>
+</div>
+
+</main>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search elements, properties, actions..." autofocus>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+    <div class="search-footer">
+      <span><kbd>↑↓</kbd> Navigate</span>
+      <span><kbd>↵</kbd> Open</span>
+      <span><kbd>Esc</kbd> Close</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// Scrollspy
+const sections = document.querySelectorAll('h2[id]');
+const sideLinks = document.querySelectorAll('.sb-nav a[href^="#"]');
+const tocLinks = document.querySelectorAll('.toc a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  sideLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+  tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+});
+
+// Search
+let searchIndex = [];
+function buildIndex() {
+  const main = document.querySelector('.main');
+  let counter = 0;
+  main.querySelectorAll('h2, h3, h4').forEach(h => {
+    if (!h.id) {
+      h.id = 'search-' + (counter++);
+    }
+  });
+  const headings = main.querySelectorAll('h2, h3, h4');
+  headings.forEach(h => {
+    let text = '';
+    let el = h.nextElementSibling;
+    while (el && !['H2','H3','H4'].includes(el.tagName)) {
+      text += ' ' + el.textContent;
+      el = el.nextElementSibling;
+    }
+    searchIndex.push({
+      title: h.textContent.trim(),
+      content: text.trim().substring(0, 800),
+      id: h.id,
+      level: h.tagName
+    });
+  });
+}
+buildIndex();
+
+let selectedIdx = -1;
+function openSearch() {
+  document.getElementById('searchOverlay').classList.add('open');
+  const input = document.getElementById('searchInput');
+  input.value = '';
+  input.focus();
+  document.getElementById('searchResults').innerHTML = '';
+  selectedIdx = -1;
+}
+function closeSearch() { document.getElementById('searchOverlay').classList.remove('open'); }
+
+function navigateTo(id) {
+  closeSearch();
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    el.style.transition = 'background .3s';
+    el.style.background = 'rgba(37,99,235,0.1)';
+    el.style.borderRadius = '4px';
+    el.style.padding = '2px 6px';
+    el.style.margin = '-2px -6px';
+    setTimeout(() => { el.style.background = ''; el.style.padding = ''; el.style.margin = ''; }, 2000);
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+  if (e.key === 'Escape') closeSearch();
+  if (!document.getElementById('searchOverlay').classList.contains('open')) return;
+  const results = document.querySelectorAll('.search-result');
+  if (e.key === 'ArrowDown') { e.preventDefault(); selectedIdx = Math.min(selectedIdx + 1, results.length - 1); updateSelected(results); }
+  if (e.key === 'ArrowUp') { e.preventDefault(); selectedIdx = Math.max(selectedIdx - 1, 0); updateSelected(results); }
+  if (e.key === 'Enter' && selectedIdx >= 0 && results[selectedIdx]) {
+    const targetId = results[selectedIdx].getAttribute('data-target');
+    if (targetId) navigateTo(targetId);
+  }
+});
+
+function updateSelected(results) {
+  results.forEach((r, i) => r.classList.toggle('selected', i === selectedIdx));
+  if (results[selectedIdx]) results[selectedIdx].scrollIntoView({ block: 'nearest' });
+}
+
+document.getElementById('searchInput').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  const container = document.getElementById('searchResults');
+  selectedIdx = -1;
+  if (!q) { container.innerHTML = ''; return; }
+  const matches = searchIndex.filter(item =>
+    item.title.toLowerCase().includes(q) || item.content.toLowerCase().includes(q)
+  ).slice(0, 20);
+  if (!matches.length) { container.innerHTML = '<div class="search-empty">No results for "' + q.replace(/</g,'&lt;') + '"</div>'; return; }
+  const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp('(' + esc + ')', 'gi');
+  container.innerHTML = matches.map(m => {
+    let ctx = '';
+    const idx = m.content.toLowerCase().indexOf(q);
+    if (idx >= 0) {
+      const start = Math.max(0, idx - 50);
+      const end = Math.min(m.content.length, idx + q.length + 80);
+      ctx = (start > 0 ? '...' : '') + m.content.substring(start, end).replace(re, '<mark>$1</mark>') + (end < m.content.length ? '...' : '');
+    }
+    const levelBadge = m.level === 'H2' ? '<span style="font-size:10px;color:var(--text-muted);margin-left:6px;">Section</span>' :
+                       m.level === 'H3' ? '<span style="font-size:10px;color:var(--text-muted);margin-left:6px;">Sub</span>' : '';
+    return '<div class="search-result" data-target="' + m.id + '" onclick="navigateTo(\'' + m.id + '\')">' +
+      '<div class="search-result-title">' + m.title.replace(re, '<mark>$1</mark>') + levelBadge + '</div>' +
+      (ctx ? '<div class="search-result-context">' + ctx + '</div>' : '') +
+    '</div>';
+  }).join('');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Error Log — FieldProxy Docs</title>
+<link rel="icon" href="https://www.fieldproxy.ai/images/design-mode/Favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --text: #1a1a2e; --text-secondary: #4a5568; --text-muted: #718096; --border: #e2e8f0;
+  --bg: #ffffff; --bg-subtle: #f7fafc; --bg-code: #0f172a;
+  --blue: #2563eb; --blue-light: #eff6ff; --green: #059669; --green-light: #ecfdf5;
+  --amber: #d97706; --amber-light: #fffbeb; --red: #dc2626; --red-light: #fef2f2;
+  --sidebar-w: 240px; --toc-w: 200px; --content-max: 920px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 16px; line-height: 1.7; color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; }
+.sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); background: var(--bg); border-right: 1px solid var(--border); overflow-y: auto; padding: 24px 0; z-index: 50; font-size: 14px; }
+.sidebar::-webkit-scrollbar { width: 0; }
+.sb-brand { display: flex; align-items: center; gap: 8px; padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.sb-brand img { width: 20px; height: 20px; border-radius: 4px; }
+.sb-brand span { font-weight: 700; font-size: 13px; color: var(--text); letter-spacing: .3px; }
+.sb-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: 16px 20px 6px; }
+.sb-nav a { display: block; padding: 6px 20px; color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; transition: color .15s; }
+.sb-nav a:hover { color: var(--text); }
+.sb-nav a.active { color: var(--blue); font-weight: 600; }
+.toc { position: fixed; top: 80px; right: max(24px, calc((100vw - var(--sidebar-w) - var(--content-max) - var(--toc-w)) / 2)); width: var(--toc-w); font-size: 12.5px; z-index: 40; }
+.toc-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px; }
+.toc a { display: block; padding: 4px 0 4px 12px; color: var(--text-muted); text-decoration: none; border-left: 2px solid var(--border); transition: all .15s; font-weight: 500; }
+.toc a:hover { color: var(--text-secondary); }
+.toc a.active { color: var(--blue); border-left-color: var(--blue); font-weight: 600; }
+.main { margin-left: var(--sidebar-w); max-width: var(--content-max); padding: 48px 40px 120px; }
+h1 { font-size: 32px; font-weight: 800; letter-spacing: -.5px; color: var(--text); margin-bottom: 8px; }
+.page-desc { font-size: 16px; color: var(--text-muted); margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+h2 { font-size: 22px; font-weight: 700; color: var(--text); margin: 56px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); letter-spacing: -.3px; }
+p { margin-bottom: 16px; color: var(--text-secondary); }
+strong { color: var(--text); font-weight: 600; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+ul, ol { margin: 0 0 16px 24px; color: var(--text-secondary); }
+li { margin-bottom: 6px; }
+hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+code { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500; background: var(--bg-subtle); padding: 2px 5px; border-radius: 4px; color: var(--red); }
+.callout { padding: 14px 18px; border-radius: 6px; margin: 20px 0; font-size: 14.5px; line-height: 1.6; border-left: 3px solid; }
+.callout-info { background: var(--blue-light); border-color: var(--blue); }
+.callout p { margin: 0; color: var(--text-secondary); }
+.table-wrap { overflow-x: auto; margin: 16px 0 20px; border: 1px solid var(--border); border-radius: 8px; }
+.table-wrap table { width: max-content; min-width: 100%; border-collapse: collapse; font-size: 13px; }
+.table-wrap th { text-align: left; padding: 10px 14px; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); border-bottom: 2px solid var(--border); background: var(--bg-subtle); white-space: nowrap; position: sticky; top: 0; }
+.table-wrap td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+.table-wrap td:nth-child(1) { white-space: nowrap; font-size: 12px; color: var(--text-muted); }
+.table-wrap td:nth-child(2) { white-space: nowrap; font-weight: 600; }
+.table-wrap td:nth-child(3) { white-space: nowrap; }
+.table-wrap td:nth-child(4) { min-width: 180px; }
+.table-wrap td:nth-child(5) { min-width: 280px; }
+.table-wrap td:nth-child(6) { min-width: 140px; font-size: 12px; color: var(--blue); }
+.table-wrap tr:hover td { background: var(--blue-light); }
+.filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.filter-btn { padding: 6px 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); font-size: 12px; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: all .15s; font-family: inherit; }
+.filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+.filter-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+.entry-count { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+.footer-nav { display: flex; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+.footer-nav a { flex: 1; padding: 16px; border: 1px solid var(--border); border-radius: 8px; text-decoration: none; transition: border-color .2s; }
+.footer-nav a:hover { border-color: var(--blue); }
+.fn-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+.fn-title { font-size: 14px; color: var(--text); font-weight: 600; margin-top: 2px; }
+.search-trigger { display:flex; align-items:center; gap:8px; margin:0 12px 12px; padding:8px 12px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:6px; cursor:pointer; font-size:13px; color:var(--text-muted); transition:border-color .15s; }
+.search-trigger:hover { border-color:var(--blue); color:var(--text-secondary); }
+.search-trigger kbd { margin-left:auto; font-family:'Inter',sans-serif; font-size:11px; padding:2px 6px; background:var(--bg); border:1px solid var(--border); border-radius:4px; color:var(--text-muted); }
+.search-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:200; backdrop-filter:blur(4px); }
+.search-overlay.open { display:flex; align-items:flex-start; justify-content:center; padding-top:min(20vh,160px); }
+.search-box { background:var(--bg); border:1px solid var(--border); border-radius:12px; width:560px; max-height:480px; display:flex; flex-direction:column; box-shadow:0 16px 48px rgba(0,0,0,.15); overflow:hidden; }
+.search-input-wrap { display:flex; align-items:center; gap:8px; padding:14px 18px; border-bottom:1px solid var(--border); }
+.search-input-wrap svg { flex-shrink:0; color:var(--text-muted); }
+.search-input { flex:1; border:none; outline:none; font-size:15px; font-family:'Inter',sans-serif; color:var(--text); background:transparent; }
+.search-input::placeholder { color:var(--text-muted); }
+.search-results { overflow-y:auto; max-height:380px; padding:8px; }
+.search-results:empty::after { content:'Type to search bugs...'; display:block; padding:24px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-result { display:block; padding:10px 14px; border-radius:6px; cursor:pointer; transition:background .1s; }
+.search-result:hover, .search-result.selected { background:var(--blue-light); }
+.search-result-title { font-size:14px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.search-result-context { font-size:12.5px; color:var(--text-muted); line-height:1.4; }
+.search-result-context mark { background:#fef08a; color:var(--text); border-radius:2px; padding:0 1px; }
+.search-empty { padding:32px; text-align:center; color:var(--text-muted); font-size:14px; }
+.search-footer { padding:8px 14px; border-top:1px solid var(--border); display:flex; gap:12px; font-size:11px; color:var(--text-muted); }
+.search-footer kbd { font-family:'Inter',sans-serif; font-size:10px; padding:1px 5px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:3px; }
+@media (max-width: 1100px) { .toc { display: none; } }
+@media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 24px 16px 80px; } .search-box { width:calc(100% - 32px); } }
+@media print { .sidebar, .toc, .search-overlay, .filter-bar { display: none; } .main { margin-left: 0; max-width: 100%; } }
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sb-brand"><img src="https://www.fieldproxy.ai/images/design-mode/Favicon.png" alt="FP"><span>FieldProxy Docs</span></div>
+  <div class="search-trigger" onclick="openSearch()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Search...<kbd>⌘K</kbd>
+  </div>
+  <div class="sb-label">Error Log</div>
+  <nav class="sb-nav">
+    <a href="#how-to-use" class="active">How to Use</a>
+    <a href="#error-log">Error Log</a>
+    <a href="#pending">Pending Investigations</a>
+  </nav>
+  <div class="sb-label" style="margin-top:24px;">All Docs</div>
+  <nav class="sb-nav">
+    <a href="../onboarding-guide.html">Home</a>
+    <a href="../1-getting-started.html">Getting Started</a>
+    <a href="fieldproxy-widget-rules.html">Widget Rules</a>
+    <a href="fieldproxy-error-log.html" class="active">Error Log</a>
+    <a href="fieldproxy-mobile-spacing.html">Mobile Spacing</a>
+  </nav>
+</aside>
+<nav class="toc">
+  <div class="toc-title">On this page</div>
+  <a href="#how-to-use" class="active">How to Use</a>
+  <a href="#error-log">Error Log</a>
+  <a href="#pending">Pending Investigations</a>
+</nav>
+<main class="main">
+<h1>Error Log</h1>
+<p class="page-desc">Every bug the team has hit — date, symptom, root cause, and fix. Learn from others' mistakes.</p>
+
+<h2 id="how-to-use">How to Use</h2>
+<p>When a generated view has a bug:</p>
+<ol>
+  <li>Add a row below with the date, view, symptom, root cause, and which skill was updated</li>
+  <li>If a new rule is needed, add it to the relevant skill file</li>
+  <li>If an existing rule was insufficient, update it with the new edge case</li>
+</ol>
+<div class="callout callout-info"><p><strong>Tip:</strong> Use Cmd+K to search bugs by symptom, root cause, or project name. Use the filter buttons to narrow by project.</p></div>
+
+<hr>
+
+<h2 id="error-log">Error Log</h2>
+<div class="filter-bar" id="filterBar">
+  <button class="filter-btn active" onclick="filterProject('all')">All</button>
+  <button class="filter-btn" onclick="filterProject('Safegroup')">Safegroup</button>
+  <button class="filter-btn" onclick="filterProject('EFS')">EFS</button>
+  <button class="filter-btn" onclick="filterProject('Waterade')">Waterade</button>
+</div>
+<div class="entry-count" id="entryCount"></div>
+<div class="table-wrap"><table><thead><tr><th>Date</th><th>Project</th><th>View</th><th>Symptom</th><th>Root Cause</th><th>Skill Updated</th></tr></thead><tbody id="errorBody"></tbody></table></div>
+
+<hr>
+
+<h2 id="pending">Pending Investigations</h2>
+<div class="table-wrap"><table><thead><tr><th>Date</th><th>Project</th><th>View</th><th>Symptom</th><th>Status</th></tr></thead><tbody>
+  <tr><td>2026-03-20</td><td>Safegroup</td><td>edit_enquiry_view</td><td>Input fields overflow container</td><td>Fixed: use parent_grid_width x 2/3</td></tr>
+  <tr><td>2026-03-20</td><td>Safegroup</td><td>edit_enquiry_view</td><td>Dropdown init with display name causes ID mismatch</td><td>Fixed: don't prefill dropdowns on edit</td></tr>
+  <tr><td>2026-03-20</td><td>Safegroup</td><td>edit_enquiry_view</td><td>Popup scrolling doesn't work</td><td>Fixed: use separate view for long forms</td></tr>
+  <tr><td>2026-03-22</td><td>EFS</td><td>all cleaner screens</td><td><code>{{global.user_id}}</code> doesn't resolve</td><td>Fixed: use <code>&lt;!getUserId()!&gt;</code></td></tr>
+  <tr><td>2026-03-25</td><td>EFS</td><td>create_checklist_view</td><td>MCQ shows raw objects</td><td>Fixed: use plain string arrays</td></tr>
+  <tr><td>2026-03-25</td><td>EFS</td><td>checklists_list_view</td><td>Last list card stretches</td><td>Fixed: add height to list</td></tr>
+</tbody></table></div>
+
+<div class="footer-nav">
+  <a href="fieldproxy-widget-rules.html"><div class="fn-label">&larr; Previous</div><div class="fn-title">Widget Rules</div></a>
+  <a href="fieldproxy-mobile-spacing.html"><div class="fn-label">Next &rarr;</div><div class="fn-title">Mobile Spacing</div></a>
+</div>
+</main>
+
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search bugs, symptoms, root causes..." autofocus>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+    <div class="search-footer"><span><kbd>↑↓</kbd> Navigate</span><span><kbd>↵</kbd> Open</span><span><kbd>Esc</kbd> Close</span></div>
+  </div>
+</div>
+
+<script>
+const errors=[
+["2026-03-04","Safegroup","enquiry_detail","Empty state always visible","show_if not valid — use visibility_condition","Rule 11"],
+["2026-03-04","Safegroup","enquiry_detail","Template values failing in visibility","Unquoted {{...}} — wrap in single quotes","Rule 12"],
+["2026-03-04","Safegroup","enquiry_detail","Button too wide","fixed_width not valid — use grid width 1-12","Rule 13"],
+["2026-03-04","Safegroup","enquiry_detail","Input disappearing","textarea/select not valid — use text+max_lines/dropdown","Rule 14"],
+["2026-03-04","Safegroup","enquiry_detail","Wrong input value in popup",".[0] vs .0 confusion — brackets=int, no brackets=string","Rule 15"],
+["2026-03-04","Safegroup","create_quote","Screen blank on Add Line Item","Popup must be inline in onclick, not top-level","popup pattern"],
+["2026-03-05","Safegroup","create_quote","INSERT in data query fails silently","data queries are SELECT-only. Use execute_query","read-only data"],
+["2026-03-05","Safegroup","create_quote","Draft not available on load","Pre-create via execute_query before navigation","pre-create pattern"],
+["2026-03-05","Safegroup","create_quote","Table columns squished","width on text in row ignored — wrap in container","text width in row"],
+["2026-03-05","Safegroup","quote_detail","Cards collapse to content width","Need explicit width:12 on card containers","width on cards"],
+["2026-03-05","Safegroup","quote_detail","Fields run together in row","Columns in row need gutter between them","gutter between cols"],
+["2026-03-05","Safegroup","quote_detail","Status badge invisible","Color was NULL — use COALESCE fallback","COALESCE colors"],
+["2026-03-08","Waterade","service_detail","Machine columns not visible","Children widths overflow parent. Use type:wrap","Rule 2+16"],
+["2026-03-08","Waterade","service_detail","Icon buttons invisible","icon_button uses bg_color/color/size not background_color","Rule 17"],
+["2026-03-08","Waterade","service_detail","_[index] in element_ids broken","Framework doesn't replace _[index]. Remove from IDs","Rule 18"],
+["2026-03-09","Waterade","replacement_job","Dropdown value NULL in SQL","input_data keyed by element_id, NOT field_name","Rule 19"],
+["2026-03-09","Waterade","add_new_machine","INSERT inserts all NULLs","Missing .0 suffix on input_data references","Rule 19 (.0)"],
+["2026-03-12","EFS","admin_supply_requests","Search bar not visible","input_type:search not valid — use text","Rule 14 repeat"],
+["2026-03-12","EFS","facilities_list","5 icon buttons invisible","icon_button wrong properties silently ignored","Rule 17 repeat"],
+["2026-03-12","EFS","facilities_list","Sidebar nav broken","view_id mismatch with actual screens","nav consistency"],
+["2026-03-12","EFS","facilities_list","Container bg not showing","Use color not background_color on container","color vs bg_color"],
+["2026-03-12","EFS","cleaner screens","expanded:true on containers — 8x","expanded:true only works on type:text","Rule 4 repeat"],
+["2026-03-12","EFS","facilities_list","building icon shows star","Not a valid Feather icon — use home/map-pin","Rule 20"],
+["2026-03-12","EFS","facilities_list","Icon container oversized","width:1 in row = 120px. Remove width to shrink-wrap","Rule 21"],
+["2026-03-12","EFS","facilities_list","Text overlaps between columns","Nested rows with grid-widths overflow. Stack rows","Rule 22"],
+["2026-03-12","EFS","facilities_list","Circle icon is hollow","Feather circle is stroke. Use ● text character","Rule 23"],
+["2026-03-12","EFS","facilities_list","KPI cards not rendering","grouped_counter_1 needs 5 required props","Rule 24"],
+["2026-03-12","EFS","facilities_list","Popup overflows off-screen","Width uses screenWidth even in popup. Scale down","Rule 25"],
+["2026-03-13","Safegroup","enquiry_detail","Duplicate element_id","Check ALL existing IDs when modifying files","Rule 6 note"],
+["2026-03-13","Safegroup","enquiry_detail","CSS border ignored","Rule 3 — use border_color + border_width","Rule 3 repeat"],
+["2026-03-14","Safegroup","create_visit_job_form","visibility_condition on inputs ignored","Wrap input in container with the condition","Rule 26"],
+["2026-03-14","Safegroup","create_visit_job_form","List in container doesn't scroll","Set height on list widget directly, not parent","Rule 27"],
+["2026-03-14","Safegroup","create_visit_job_form","stretch distorts shorter card","Use start + padding_bottom instead","Rule 28"],
+["2026-03-14","Safegroup","create_visit_job_form","Empty state grey — wanted blue","Blue: #EFF6FF bg, #DBEAFE border, #2563EB icon","blue empty state"],
+["2026-03-15","Safegroup","visit_detail_web","Dividers not rendering","fixed_height not valid — use height","Rule 29"],
+["2026-03-15","Safegroup","visit_detail_web","space_widget not working between row children","Only gutter works between major row children","Rule 30"],
+["2026-03-15","Safegroup","visit_detail_web","Button overflows narrow container","Set explicit width on buttons in tight spaces","Rule 31"],
+["2026-03-15","Safegroup","visit_detail_web","View PDF navigates away","Use popup with pdf widget for inline viewing","PDF popup pattern"],
+["2026-03-16","Safegroup","quote_detail","type:divider not rendering","Not a widget type. Use container height:1","divider pattern"],
+["2026-03-17","Safegroup","enquiry_form_view","Dropdown broken/null error","fp_users: name not username, no is_active. Use show/store","fp_users fix"],
+["2026-03-18","Safegroup","enquiries_view","Buttons huge grey block","filled_button without width = full screen. Always set width","button width"],
+["2026-03-18","Safegroup","enquiries_view","Clear resets entire page","refresh_data is full reload. Use update_data instead","Rule 30 update"],
+["2026-03-19","Safegroup","create_quote_view","default_value doesn't prefill","Use init not default_value. default_value only in popups","Rule 33"],
+["2026-03-20","Safegroup","enquiry_detail","Status badges invisible in list","Dynamic colors fail in lists. Use visibility_condition per status","Rule 39"],
+["2026-03-22","EFS","all cleaner screens","{{global.user_id}} doesn't resolve","Not valid. Use <!getUserId()!>","system vars"],
+["2026-03-25","EFS","create_checklist_view","MCQ shows raw objects","Use plain string arrays, not {label,value}","Rule 42"],
+["2026-03-25","EFS","create_checklist_view","Edit popup prefills wrong row","init [index] always 0. Fetch by ID first via update_data","Rule 41"],
+["2026-03-25","EFS","checklists_list_view","Last card stretches full viewport","List without height causes flex stretch","Rule 40"],
+];
+
+const tbody=document.getElementById('errorBody');
+let currentFilter='all';
+function renderTable(){
+  const f=currentFilter==='all'?errors:errors.filter(e=>e[1]===currentFilter);
+  document.getElementById('entryCount').textContent=f.length+' entries'+(currentFilter!=='all'?' ('+currentFilter+')':'');
+  tbody.innerHTML=f.map((e,i)=>'<tr id="err-'+i+'"><td>'+e[0]+'</td><td>'+e[1]+'</td><td>'+e[2]+'</td><td>'+e[3]+'</td><td>'+e[4]+'</td><td>'+e[5]+'</td></tr>').join('');
+}
+renderTable();
+function filterProject(p){currentFilter=p;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b.textContent===(p==='all'?'All':p)));renderTable();}
+
+const sections=document.querySelectorAll('h2[id]');
+const sideLinks=document.querySelectorAll('.sb-nav a[href^="#"]');
+const tocLinks=document.querySelectorAll('.toc a');
+window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-100)c=s.id;});sideLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));tocLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));});
+
+let searchIndex=[];
+errors.forEach((e,i)=>{searchIndex.push({title:e[3],content:e[4]+' '+e[5]+' '+e[1]+' '+e[2]+' '+e[0],id:'err-'+i});});
+let selectedIdx=-1;
+function openSearch(){document.getElementById('searchOverlay').classList.add('open');const i=document.getElementById('searchInput');i.value='';i.focus();document.getElementById('searchResults').innerHTML='';selectedIdx=-1;}
+function closeSearch(){document.getElementById('searchOverlay').classList.remove('open');}
+function navigateTo(id){closeSearch();const el=document.getElementById(id);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.transition='background .3s';el.style.background='rgba(37,99,235,0.15)';setTimeout(()=>{el.style.background='';},2500);}}
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openSearch();}
+  if(e.key==='Escape')closeSearch();
+  if(!document.getElementById('searchOverlay').classList.contains('open'))return;
+  const r=document.querySelectorAll('.search-result');
+  if(e.key==='ArrowDown'){e.preventDefault();selectedIdx=Math.min(selectedIdx+1,r.length-1);upS(r);}
+  if(e.key==='ArrowUp'){e.preventDefault();selectedIdx=Math.max(selectedIdx-1,0);upS(r);}
+  if(e.key==='Enter'&&selectedIdx>=0&&r[selectedIdx]){const t=r[selectedIdx].getAttribute('data-target');if(t)navigateTo(t);}
+});
+function upS(r){r.forEach((x,i)=>x.classList.toggle('selected',i===selectedIdx));if(r[selectedIdx])r[selectedIdx].scrollIntoView({block:'nearest'});}
+document.getElementById('searchInput').addEventListener('input',function(){
+  const q=this.value.toLowerCase().trim(),box=document.getElementById('searchResults');selectedIdx=-1;
+  if(!q){box.innerHTML='';return;}
+  const m=searchIndex.filter(i=>i.title.toLowerCase().includes(q)||i.content.toLowerCase().includes(q)).slice(0,20);
+  if(!m.length){box.innerHTML='<div class="search-empty">No results</div>';return;}
+  const esc=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),re=new RegExp('('+esc+')','gi');
+  box.innerHTML=m.map(i=>{
+    let ctx='';const idx=i.content.toLowerCase().indexOf(q);
+    if(idx>=0){const s=Math.max(0,idx-50),e=Math.min(i.content.length,idx+q.length+80);ctx=(s>0?'...':'')+i.content.substring(s,e).replace(re,'<mark>$1</mark>')+(e<i.content.length?'...':'');}
+    return '<div class="search-result" data-target="'+i.id+'" onclick="navigateTo(\''+i.id+'\')"><div class="search-result-title">'+i.title.replace(re,'<mark>$1</mark>')+'</div>'+(ctx?'<div class="search-result-context">'+ctx+'</div>':'')+'</div>';
+  }).join('');
+});
+</script>
+</body>
+</html>
