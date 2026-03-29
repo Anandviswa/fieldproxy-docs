@@ -176,7 +176,7 @@ td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--te
     <a href="#day-4">Day 4 &mdash; Detail + CRUD</a>
     <a href="#day-5">Day 5 &mdash; Forms + API Actions</a>
     <a href="#day-6">Day 6 &mdash; Self-Debug</a>
-    <a href="#day-7">Day 7 &mdash; Polish + Present</a>
+    <a href="#day-7">Day 7 &mdash; N8N + Polish + Present</a>
     <a href="#week-1-summary">Week 1 Summary</a>
     <a href="#after-week-1">After Week 1</a>
     <a href="#html-widgets">HTML Widgets</a>
@@ -201,7 +201,7 @@ td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--te
   <a href="#day-4">Day 4 &mdash; Detail + CRUD</a>
   <a href="#day-5">Day 5 &mdash; Forms + API Actions</a>
   <a href="#day-6">Day 6 &mdash; Self-Debug</a>
-  <a href="#day-7">Day 7 &mdash; Polish + Present</a>
+  <a href="#day-7">Day 7 &mdash; N8N + Polish + Present</a>
   <a href="#week-1-summary">Week 1 Summary</a>
   <a href="#after-week-1">After Week 1</a>
   <a href="#html-widgets">HTML Widgets</a>
@@ -435,7 +435,7 @@ CREATE INDEX idx_my_items_is_active ON my_items(is_active);</code></pre>
   <li><strong>Web:</strong> Popup form &mdash; text inputs, dropdowns, confirm chain.</li>
   <li><strong>Mobile:</strong> Full-screen form &mdash; same fields, submit &rarr; <code>execute_query</code> &rarr; <code>toast</code> &rarr; <code>back: true</code>.</li>
   <li><strong>Both:</strong> API actions work identically on both platforms:
-    <pre><code>{ "type": "api_call", "url": "https://...", "method": "POST", "body": {...}, "element_id": "..." }</code></pre>
+    <pre><code>{ "type": "api", "url": "https://n8n.fieldproxy.com/webhook/...", "api_type": "POST", "headers": { "Content-Type": "application/json" }, "body": {...}, "element_id": "..." }</code></pre>
   </li>
 </ol>
 
@@ -494,9 +494,46 @@ CREATE INDEX idx_my_items_is_active ON my_items(is_active);</code></pre>
 <hr>
 
 <!-- ─────────────────────── -->
-<h2 id="day-7">Day 7 &mdash; Polish + Present</h2>
+<h2 id="day-7">Day 7 &mdash; N8N Workflow + Polish + Present</h2>
 
-<h3>Morning: Final touches</h3>
+<h3>Morning: Build your first N8N workflow</h3>
+
+<p>Every FieldProxy project needs at least one N8N workflow. Today you&rsquo;ll build a simple one.</p>
+
+<ol>
+  <li><strong>Open N8N</strong> &mdash; access the team N8N instance. Ask your lead for the URL and credentials.</li>
+  <li><strong>Create a webhook workflow</strong> with 3 nodes:
+    <ul>
+      <li><strong>Webhook node</strong> &mdash; POST trigger, path: <code>/my-first-workflow</code></li>
+      <li><strong>PostgreSQL node</strong> &mdash; query your project&rsquo;s database (e.g., <code>SELECT * FROM my_items WHERE id = {{ $json.body.item_id }}</code>)</li>
+      <li><strong>Respond to Webhook node</strong> &mdash; return the query result as JSON</li>
+    </ul>
+  </li>
+  <li><strong>Test it</strong> &mdash; activate the workflow, then trigger it from your FieldProxy view:
+<pre><code>// Add this to a button onclick in your web or mobile app
+{
+  "type": "api",
+  "url": "https://n8n.fieldproxy.com/webhook/my-first-workflow",
+  "api_type": "POST",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "item_id": "{{arguments.item_id}}"
+  },
+  "element_id": "trigger_my_workflow"
+}</code></pre>
+  </li>
+  <li><strong>Study a production workflow</strong> &mdash; open one of these in N8N and trace how it works:
+    <ul>
+      <li><code>generate_quote_pdf_n8n_workflow.json</code> &mdash; PDF generation (4 nodes)</li>
+      <li><code>ashp_checklist_n8n_workflow.json</code> &mdash; checklist report generation</li>
+      <li><code>n8n_inbound_email_workflow.json</code> &mdash; email processing (10+ nodes)</li>
+    </ul>
+  </li>
+</ol>
+
+<h3>Afternoon: Polish + Present (20 min)</h3>
 
 <ol>
   <li>Database schema review &mdash; indexes, standard columns present?</li>
@@ -504,13 +541,14 @@ CREATE INDEX idx_my_items_is_active ON my_items(is_active);</code></pre>
   <li>Add empty states if missing.</li>
 </ol>
 
-<h3>Afternoon: Present (20 min)</h3>
+<p><strong>Presentation format:</strong></p>
 
 <ol>
   <li><strong>Demo both apps</strong> (8 min) &mdash; same user flow on web then mobile</li>
-  <li><strong>Walk through shared vs different JSON</strong> (5 min)</li>
-  <li><strong>What you learned</strong> (4 min)</li>
-  <li><strong>Questions</strong> (3 min)</li>
+  <li><strong>Show your N8N workflow</strong> (3 min) &mdash; trigger it live from the app, show the data flow</li>
+  <li><strong>Walk through shared vs different JSON</strong> (4 min)</li>
+  <li><strong>What you learned</strong> (3 min)</li>
+  <li><strong>Questions</strong> (2 min)</li>
 </ol>
 
 <hr>
@@ -527,7 +565,7 @@ CREATE INDEX idx_my_items_is_active ON my_items(is_active);</code></pre>
     <tr><td>4</td><td>Web + Mobile: Detail pages + CRUD</td><td>Arguments, layouts, badges, edit/delete</td></tr>
     <tr><td>5</td><td>Web + Mobile: Forms + APIs + KPIs</td><td>Form inputs, INSERT queries, API actions</td></tr>
     <tr><td>6</td><td>Debug both + mobile deep dive</td><td>Self-debugging, camera, GPS, signatures</td></tr>
-    <tr><td>7</td><td>Polish + present</td><td>Cross-platform consistency</td></tr>
+    <tr><td>7</td><td>N8N workflow + polish + present</td><td>N8N webhooks, API action type, workflow patterns</td></tr>
   </tbody>
 </table>
 
@@ -591,17 +629,20 @@ CREATE INDEX idx_my_items_is_active ON my_items(is_active);</code></pre>
 
 <ol>
   <li>User clicks a button in a FieldProxy view (e.g., &ldquo;Generate PDF&rdquo;)</li>
-  <li>The button&rsquo;s <code>onclick</code> triggers an <code>api_call</code> action to an N8N webhook URL</li>
+  <li>The button&rsquo;s <code>onclick</code> triggers an <code>api</code> action to an N8N webhook URL</li>
   <li>N8N receives the request, runs the workflow (DB queries, HTML templating, API calls)</li>
   <li>N8N returns the result (PDF URL, success status) back to FieldProxy</li>
   <li>FieldProxy shows the result (opens PDF, shows toast, refreshes data)</li>
 </ol>
 
-<pre><code>// FieldProxy button onclick → triggers N8N
+<pre><code>// FieldProxy button onclick → triggers N8N webhook
 {
-  "type": "api_call",
-  "url": "https://your-n8n.com/webhook/generate-quote-pdf",
-  "method": "POST",
+  "type": "api",
+  "url": "https://n8n.fieldproxy.com/webhook/generate-quote-pdf",
+  "api_type": "POST",
+  "headers": {
+    "Content-Type": "application/json"
+  },
   "body": {
     "quote_id": "{{arguments.quote_id}}"
   },
